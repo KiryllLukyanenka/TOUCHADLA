@@ -1,0 +1,64 @@
+<apex:page standardController="Account" extensions="Account_OpportunityLicenses">
+<div style="border-width:2px;border-style:solid;border-color:blue;">
+    <apex:messages />
+    <apex:form >
+    <apex:pageBlock title="Total Number of Active Licenses: {!activeLicenseCount}">
+         
+        <!--<apex:repeat value="{!opportunities}" var="opp">-->
+                <apex:pageBlockTable value="{!licOpps}" var="licOpp" id="theTable" rendered="{!showLicOpps}">
+                    <apex:column headerValue="Opportunity">
+                        <apex:outputLink target="_parent" value="{!URLFOR($Action.Opportunity.View, licOpp.opportunity__r.Id)}">{!licOpp.opportunity__r.Name}</apex:outputLink>
+                    </apex:column>
+                    <apex:column headerValue="License ID">
+                        <apex:outputLink target="_parent" value="/{!licOpp.license__r.Id}">{!licOpp.license__r.Id}</apex:outputLink>
+                    </apex:column>
+                    <apex:column value="{!licOpp.license__r.License_Expiry_Date__c}">
+                    </apex:column>
+                    <apex:column value="{!licOpp.license__r.Product_Type__c}">
+                    </apex:column>
+                    <apex:column value="{!licOpp.license__r.Stage__c}">
+                    </apex:column>
+                    <apex:column value="{!licOpp.license__r.ProcessState__c}">
+                    </apex:column>
+                    <apex:column value="{!licOpp.license__r.Java_Agents_Rollup__c}">
+                    </apex:column>
+                    <apex:column value="{!licOpp.license__r.Net_Agents_Rollup__c}">
+                    </apex:column>
+                    <apex:column value="{!licOpp.license__r.PHP_Agents_Rollup__c}">
+                    </apex:column>
+                    <apex:column value="{!licOpp.license__r.MAC_Address__c}">
+                    </apex:column>
+                    <apex:column value="{!licOpp.license__r.Custom_URL_Name__c}">
+                    </apex:column>
+            </apex:pageBlockTable>
+            <apex:pageBlockTable value="{!licCts}" var="licCt" id="theLicCtTable" rendered="{!!showLicOpps}">
+                    <apex:column headerValue="Contact">
+                        <apex:outputLink target="_parent" value="{!URLFOR($Action.Contact.View, licCt.contact__r.Id)}">{!licCt.contact__r.Name}</apex:outputLink>
+                    </apex:column>
+                    <apex:column headerValue="License ID">
+                        <apex:outputLink target="_parent" value="/{!licCt.license__r.Id}">{!licCt.license__r.Id}</apex:outputLink>
+                    </apex:column>
+                    <apex:column value="{!licCt.license__r.License_Expiry_Date__c}">
+                    </apex:column>
+                    <apex:column value="{!licCt.license__r.Product_Type__c}">
+                    </apex:column>
+                    <apex:column value="{!licCt.license__r.Stage__c}">
+                    </apex:column>
+                    <apex:column value="{!licCt.license__r.ProcessState__c}">
+                    </apex:column>
+                    <apex:column value="{!licCt.license__r.Java_Agents_Rollup__c}">
+                    </apex:column>
+                    <apex:column value="{!licCt.license__r.Net_Agents_Rollup__c}">
+                    </apex:column>
+                    <apex:column value="{!licCt.license__r.PHP_Agents_Rollup__c}">
+                    </apex:column>
+                    <apex:column value="{!licCt.license__r.MAC_Address__c}">
+                    </apex:column>
+                    <apex:column value="{!licCt.license__r.Custom_URL_Name__c}">
+                    </apex:column>
+            </apex:pageBlockTable>
+<!--        </apex:repeat>-->
+    </apex:pageBlock>
+    </apex:form>
+    </div>
+</apex:page>

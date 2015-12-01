@@ -1,0 +1,141 @@
+<apex:page StandardController="Quote"  extensions="QuoteLinePageExt" >
+
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script>
+$(document).ready(function(){
+
+var s=	document.getElementsByName('edit')[0];
+	
+	$(s).prop("onclick", null);
+	$(s).click(function() { 
+		setValue();
+	
+	
+	}
+	
+	);
+	
+	
+	var s=	document.getElementsByName('cancel')[0];
+	
+	$(s).prop("onclick", null);
+	$(s).click(function() { 
+		  window.location.href='/{!recId}';
+	
+	
+	}
+	
+	
+	
+	);
+	
+	var s=	document.getElementsByName('edit')[1];
+	
+	$(s).prop("onclick", null);
+	$(s).click(function() { 
+		setValue();
+	
+	
+	}
+	
+	);
+	
+	
+	var s=	document.getElementsByName('cancel')[1];
+	
+	$(s).prop("onclick", null);
+	$(s).click(function() { 
+		  window.location.href='/{!recId}';
+	
+	
+	}
+	
+	
+	
+	);
+	
+	var t=	document.getElementById('save_filter_PricebookEntry');
+	
+	$(t).prop("onclick", null);
+	$(t).click(function() { 
+		  searchValue();
+	
+	
+	}
+	
+	
+	
+	);
+	
+
+
+});
+
+function searchValue()
+{
+
+
+var srch =document.getElementById('search').value;
+var field=document.getElementById('PricebookEntrycol0').value;
+var opera = document.getElementById('PricebookEntryoper0').value;
+var vl = document.getElementById('PricebookEntryfval0').value;
+if(field != null && field!='' && opera!=null && opera !='' && vl!=null && vl!='')
+{
+ window.location.href='/apex/SearchQuotePage?search='+srch+'&field='+field+'&opr='+opera+'&val='+vl+'&srch=true&Id={!recId}';
+ 
+}
+else
+{
+ window.location.href='/apex/SearchQuotePage?search='+srch+'&srch=true&Id={!recId}';
+ }
+
+
+}
+
+function setValue()
+	{
+	 var idArray= new Array();
+		var as=document.getElementById('PricebookEntry_body').getElementsByTagName('tr');
+		//alert(as.length);
+		var tag='';
+		for(i=1;i<as.length;i++)
+		{
+			if(as[i].childNodes[0].firstChild.checked==true)
+				{
+
+					var s= as[i].childNodes[1].getElementsByTagName('a').item(0).href;
+					s=s.split('%');
+					s=s[2];
+					s=s.substring(2,s.length);
+					tag=s+'-'+tag;
+					idArray.push(as[i].childNodes[0].firstChild.value)
+
+				}
+		}
+		//alert(tag);		
+			
+	if(idArray.length==0)
+	{
+	 alert('Please select atleast one row.');
+	}   
+	
+	else
+	{
+	 
+	 
+	  window.location.href='/apex/QuoteLinePageNew?ids='+tag+'&Id={!recId}&pbIds={!pbid}&recordType={!recordTypeId}';
+	 
+	 }
+	  
+	 
+	}
+</script>
+<apex:form >
+ <apex:inputhidden value="{!Quote.Pricebook2Id }"/>
+   <apex:inputhidden value="{!Quote.RecordTypeId }"/>
+<apex:outputtext value="{!val}"  escape="false" id="frm1"/>
+
+  
+</apex:form>
+
+</apex:page>

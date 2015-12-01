@@ -1,0 +1,63 @@
+<apex:component controller="PremiumCustomersSummaryController">
+    <apex:attribute name="currentYearAttr"  
+        description="True/False to indicate if the summary is for the current FY" 
+        type="Boolean" 
+        required="required" 
+        assignTo="{!currentYear}"/>
+    <apex:attribute name="durationAttr" 
+        description="Duration for which this summary should be loaded all/last3/last6/6plus" 
+        type="String" 
+        required="required"
+        assignTo="{!duration}" />
+        
+    <apex:attribute name="startDateAttr" 
+        description="Start Date of the quarter for which data has to be shown" 
+        type="String" 
+        required="optional"
+        assignTo="{!startDate}" />
+          
+    <apex:attribute name="endDateAttr" 
+        description="End Date of the quarter for which data has to be shown" 
+        type="String" 
+        required="optional"
+        assignTo="{!endDate}" />
+        
+    <apex:attribute name="reload" description="some description" type="boolean" 
+    required="required" assignTo="{!refreshData}"/>
+    <apex:pageBlock >
+    <apex:pageBlockSection columns="2" title="All Accounts closed in {!duration} period {!pageTitleSuffix}">
+        <apex:pageblockSection columns="1">
+        <apex:pageBlockTable value="{!premiumLevelsSupported}" var="premiumLevel" id="theTable" width="100%" style="width:100%;">
+            <apex:column width="250" headerValue="Premium Level" value="{!premiumLevel}" >
+            </apex:column>
+            <apex:column width="250" headerValue="Level-0" value="{!supportLevelAdoptionLevelCountMap[premiumLevel][0]}">
+            </apex:column>
+            <apex:column width="250" headerValue="Level-1" value="{!supportLevelAdoptionLevelCountMap[premiumLevel][1]}">
+            </apex:column>
+            <apex:column width="250" headerValue="Level-2" value="{!supportLevelAdoptionLevelCountMap[premiumLevel][2]}">
+            </apex:column>
+            <apex:column width="250" headerValue="Level-3" value="{!supportLevelAdoptionLevelCountMap[premiumLevel][3]}">
+            </apex:column>
+    </apex:pageBlockTable>
+        <apex:pageBlockSection columns="1">
+            <!-- apex:outputLabel value="Percentage of Accounts with Adoption Score of 2 and above: {!adoption2PlusPercentage}"/>-->
+            <apex:outputLabel rendered="{!showTrackingStatus}" value="Adoption Tracking Status : {!trackingStatus}" />
+            <apex:outputLabel rendered="{!showAdoptionLevel2Percentage}" value="Percentage of Accounts with Adoption Score of 2 : {!adoptionLevel2PlusPercentage}"/>
+            <apex:outputLabel rendered="{!showAdoptionLevel3Percentage}" value="Percentage of Accounts with Adoption Score of 3 : {!adoptionLevel3PlusPercentage}" />
+        </apex:pageBlockSection>
+        </apex:pageblockSection>
+        <apex:chart data="{!adoptionChartData}"  width="100%" height="200">
+            <apex:legend position="right"/>
+            <apex:axis type="Numeric" position="left" title="# of Accounts" grid="true"
+                fields="level0Count,level1Count,level2Count,level3Count" dashSize="2">
+                <apex:chartLabel />
+            </apex:axis>
+            <apex:axis type="Category" position="bottom" fields="premiumLevel" title="">
+                <apex:chartLabel rotate="315"/>
+            </apex:axis>
+            <apex:barSeries orientation="vertical" axis="left"  stacked="false"
+                xField="premiumLevel" yField="level0Count,level1Count,level2Count,level3Count" title="Level-0,Level-1,Level-2,Level-3"/>
+        </apex:chart>
+    </apex:pageBlockSection>
+    </apex:pageBlock>
+</apex:component>

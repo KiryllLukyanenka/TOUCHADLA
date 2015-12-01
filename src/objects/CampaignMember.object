@@ -1,0 +1,3673 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>ConvertLead</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Create_Opportunity</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <enableFeeds>false</enableFeeds>
+    <fieldSets>
+        <fullName>FC_Response_Reanimator_Fields_Set_To_Now</fullName>
+        <description>Datetime fields set to now when response is reanimated</description>
+        <label>Response Reanimator Fields Set To Now</label>
+    </fieldSets>
+    <fieldSets>
+        <fullName>FC_Response_Reanimator_Fields_To_Clear</fullName>
+        <description>Fields that will be cleared when a response is reanimated</description>
+        <displayedFields>
+            <field>CFCR_SRL__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>CFCR_SRL_Date__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <label>Response Reanimator Fields To Clear</label>
+    </fieldSets>
+    <fields>
+        <fullName>Account_ID__c</fullName>
+        <externalId>false</externalId>
+        <formula>Contact.Account.Id</formula>
+        <label>Account ID</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Activity_Score_Tier_On_Create__c</fullName>
+        <description>Synced from Lead or Contact Activity Score Tier On Create</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Synced from Lead or Contact Activity Score Tier On Create</inlineHelpText>
+        <label>Activity Score Tier (On Create)</label>
+        <precision>4</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Activity_Score_Tier_On_Update__c</fullName>
+        <description>Synced from Lead or Contact Activity Score Tier On Update</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Synced from Lead or Contact Activity Score Tier On Update</inlineHelpText>
+        <label>Activity Score Tier (On Update)</label>
+        <precision>4</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CFCR_Actionable__c</fullName>
+        <description>True if the response status was opened. Indicates response was actionable.</description>
+        <externalId>false</externalId>
+        <formula>AND(
+NOT(
+OR(
+ISPICKVAL(FCRM__FCR_Response_Status__c,&quot;Resolved - No Action Required&quot;), 
+ISPICKVAL(FCRM__FCR_Response_Status__c,&quot;Resolved - Already Engaged&quot;), 
+ISPICKVAL(FCRM__FCR_Response_Status__c,&quot;Not a Response&quot;),
+ISPICKVAL(FCRM__FCR_Response_Status__c,&quot;Legacy&quot;),  
+ISPICKVAL(FCRM__FCR_Response_Status__c,&quot;&quot;))
+))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>True if the response status was opened. Indicates response was actionable.</inlineHelpText>
+        <label>Actionable</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>CFCR_Count__c</fullName>
+        <description>Evaluates to 1. Use for reporting to count responses.</description>
+        <externalId>false</externalId>
+        <formula>1</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Evaluates to 1. Use for reporting to count responses.</inlineHelpText>
+        <label>Count</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CFCR_Created_By_Formula__c</fullName>
+        <description>Allows reporting visibility on who created the campaign member. The system field is not exposed in reports. Audit field.</description>
+        <externalId>false</externalId>
+        <formula>CreatedBy.FirstName &amp; &quot; &quot; &amp; CreatedBy.LastName</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Allows reporting visibility on who created the campaign member. The system field is not exposed in reports. Audit field.</inlineHelpText>
+        <label>Created By (Formula)</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CFCR_Current_Stage_In_Funnel_Date__c</fullName>
+        <description>Displays funnel date for current stage in the funnel. Used for report filters.</description>
+        <externalId>false</externalId>
+        <formula>IF ( 
+OR( 
+ISPICKVAL(FCRM__FCR_Response_Status__c, &quot;&quot; ), 
+ISPICKVAL(FCRM__FCR_Response_Status__c, &quot;Resolved - No Action Required&quot; ),
+ISPICKVAL(FCRM__FCR_Response_Status__c, &quot;Resolved - Merged&quot; ),  
+ISPICKVAL(FCRM__FCR_Response_Status__c, &quot;Unqualified Forever&quot; ),
+ISPICKVAL(FCRM__FCR_Response_Status__c, &quot;Pending&quot; ), 
+ISPICKVAL(FCRM__FCR_Response_Status__c, &quot;Recycled&quot; ),  
+ISPICKVAL(FCRM__FCR_Response_Status__c, &quot;Resolved - Already Engaged&quot; ), 
+ISPICKVAL(FCRM__FCR_Response_Status__c, &quot;Resolved - Opportunity Deleted&quot; ), 
+ISPICKVAL(FCRM__FCR_Response_Status__c, &quot;Resolved - Opportunity Lost&quot; ), 
+ISPICKVAL(FCRM__FCR_Response_Status__c, &quot;Resolved - Opportunity Won&quot; ), 
+ISPICKVAL(FCRM__FCR_Response_Status__c, &quot;Unmapped&quot; ), 
+ISPICKVAL(FCRM__FCR_Response_Status__c, &quot;Legacy&quot; ), 
+ISPICKVAL(FCRM__FCR_Response_Status__c, &quot;Not a Response&quot;)),NULL ,
+IF(VO__c = TRUE, VO_Date__c, 
+IF( 
+AND( VO__c = FALSE, FCRM__FCR_SQR__c = TRUE), FCRM__FCR_SQR_Date__c, 
+IF( 
+AND( VO__c = FALSE, FCRM__FCR_SQR__c = FALSE, FCRM__FCR_SAR__c = TRUE ),  FCRM__FCR_SAR_Date__c , 
+IF( 
+AND( VO__c = FALSE, FCRM__FCR_SQR__c = FALSE, FCRM__FCR_SAR__c = FALSE,FCRM__FCR_QR__c = TRUE ),  FCRM__FCR_QR_Date__c , 
+IF( 
+AND( VO__c = FALSE, FCRM__FCR_SQR__c = FALSE, FCRM__FCR_SAR__c = FALSE,FCRM__FCR_QR__c = FALSE, FCRM__FCR_Inquiry_Target__c = TRUE ),  FCRM__FCR_Inquiry_Target_Date__c , 
+ NULL ) 
+)))))</formula>
+        <inlineHelpText>Displays funnel date for current stage in the funnel. Used for report filters.</inlineHelpText>
+        <label>Current Stage In Funnel Date</label>
+        <required>false</required>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>CFCR_Current_Stage_in_Funnel__c</fullName>
+        <description>indicates if a response is active in the funnel or not.</description>
+        <externalId>false</externalId>
+        <formula>IF ( 
+OR( 
+ISPICKVAL(Status_Reason__c,&quot;SLA Expired - QL&quot; ), 
+ISPICKVAL(Status_Reason__c,&quot;SLA Expired - SAL&quot; ) 
+),&quot;SLA Expired&quot;, 
+IF( 
+OR( 
+ISPICKVAL(FCRM__FCR_Response_Status__c, &quot;&quot; ), 
+ISPICKVAL(FCRM__FCR_Response_Status__c, &quot;Resolved - No Action Required&quot; ), 
+ISPICKVAL(FCRM__FCR_Response_Status__c, &quot;Resolved - Merged&quot; ), 
+ISPICKVAL(FCRM__FCR_Response_Status__c, &quot;Pending&quot; ), 
+ISPICKVAL(FCRM__FCR_Response_Status__c, &quot;Unmapped&quot; ), 
+ISPICKVAL(FCRM__FCR_Response_Status__c, &quot;Legacy&quot; ), 
+ISPICKVAL(FCRM__FCR_Response_Status__c, &quot;Not a Response&quot;)),&quot;Not QL Eligible&quot; , 
+IF( 
+ISPICKVAL(FCRM__FCR_Response_Status__c, &quot;Resolved - Already Engaged&quot; ),&quot;Already Engaged&quot;, 
+
+IF( 
+OR( 
+ISPICKVAL(FCRM__FCR_Response_Status__c, &quot;Resolved - Opportunity Deleted&quot; ), 
+ISPICKVAL(FCRM__FCR_Response_Status__c, &quot;Resolved - Opportunity Lost&quot; ), 
+ISPICKVAL(FCRM__FCR_Response_Status__c, &quot;Resolved - Opportunity Won&quot; )), &quot;6. VO CLOSED&quot;, 
+
+IF( 
+OR( 
+ISPICKVAL(FCRM__FCR_Response_Status__c, &quot;Unqualified Forever&quot; ), 
+ISPICKVAL(FCRM__FCR_Response_Status__c, &quot;Recycled&quot; )),&quot;7. SRL&quot;, 
+
+IF(VO__c = TRUE, &quot;5. VO&quot;, 
+IF(AND( VO__c = FALSE, FCRM__FCR_SQR__c = TRUE), &quot;4. SQO&quot;, 
+IF(AND( VO__c = FALSE, FCRM__FCR_SQR__c = FALSE, FCRM__FCR_SAR__c = TRUE ), &quot;3. SAL&quot;, 
+IF(AND( VO__c = FALSE, FCRM__FCR_SQR__c = FALSE, FCRM__FCR_SAR__c = FALSE,FCRM__FCR_QR__c = TRUE ), &quot;2. QL&quot;, 
+IF(AND( VO__c = FALSE, FCRM__FCR_SQR__c = FALSE, FCRM__FCR_SAR__c = FALSE,FCRM__FCR_QR__c = FALSE, FCRM__FCR_Inquiry_Target__c = TRUE ), &quot;1. Inquiry&quot;, 
+&quot;UNDEFINED&quot;) 
+)))))))))</formula>
+        <inlineHelpText>indicates if a response is active in the funnel or not.</inlineHelpText>
+        <label>Current Stage in Funnel</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CFCR_FCCRM_Threshold_Current__c</fullName>
+        <description>Current FCCRM Threshold score on the related lead/contact record</description>
+        <externalId>false</externalId>
+        <formula>IF(NOT(ISBLANK( ContactId )), Contact.CFCR_FCCRM_Threshold__c ,Lead.CFCR_FCCRM_Threshold__c )</formula>
+        <inlineHelpText>Current FCCRM Threshold score on the related lead/contact record</inlineHelpText>
+        <label>FCCRM Threshold (Current)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CFCR_FCCRM_Threshold_On_Create__c</fullName>
+        <description>Displays FCCRM Score threshold on create - populated by sync.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Displays FCCRM Score threshold on create - populated by sync.</inlineHelpText>
+        <label>FCCRM Threshold (On Create)</label>
+        <precision>8</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CFCR_First_Owner_Assigned_Role__c</fullName>
+        <description>set with trigger - the role for the first owner assigned.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>set with trigger - the role for the first owner assigned.</inlineHelpText>
+        <label>First Owner Assigned Role</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CFCR_First_Owner_Worked_Role__c</fullName>
+        <description>set with trigger - the role for the first owner worked.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>set with trigger - the role for the first owner worked.</inlineHelpText>
+        <label>First Owner Worked Role</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CFCR_Industry_Formula__c</fullName>
+        <description>Displays Industry of related lead or Account.</description>
+        <externalId>false</externalId>
+        <formula>IF( NOT(ISBLANK(ContactId)), text( Contact.Account.Industry),
+text(Lead.Industry))</formula>
+        <inlineHelpText>Displays Industry of related lead or Account.</inlineHelpText>
+        <label>Industry Formula</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CFCR_Infer_Rating_On_Create__c</fullName>
+        <description>Infer field - value on related lead/contact synced to the response on create.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Infer field - value on related lead/contact synced to the response on create.</inlineHelpText>
+        <label>Infer: Rating (On Create)</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CFCR_Infer_Rating_On_Update__c</fullName>
+        <description>Infer field - Synced on Update - Most recent value during the time a response is active.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Infer field - Synced on Update - Most recent value during the time a response is active.</inlineHelpText>
+        <label>Infer: Rating (On Update)</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CFCR_Infer_Score_On_Create__c</fullName>
+        <description>Infer field - value on related lead/contact synced to the response on create.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Infer field - value on related lead/contact synced to the response on create.</inlineHelpText>
+        <label>Infer: Score (On Create)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CFCR_Infer_Score_On_Update__c</fullName>
+        <description>Infer field - Synced on Update - Most recent value during the time a response is active.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Infer field - Synced on Update - Most recent value during the time a response is active.</inlineHelpText>
+        <label>Infer: Score (On Update)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CFCR_Inquiry_to_Close_WD__c</fullName>
+        <description># WEEKDAYS from Inquiry to Closed/Won - Same day = 0, Evaluates to blank if SQL Date if blank. Weekdays is based on Org company settings.</description>
+        <externalId>false</externalId>
+        <formula>IF( FCRM__FCR_Opportunity_Closed__c = &quot;True&quot;, 
+
+ IF( CASE(MOD( FCRM__FCR_Inquiry_Target_Date__c - DATE(1985,6,24),7), 
+  0 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - FCRM__FCR_Inquiry_Target_Date__c ,7),1,2,2,3,3,4,4,5,5,5,6,5,1), 
+  1 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - FCRM__FCR_Inquiry_Target_Date__c ,7),1,2,2,3,3,4,4,4,5,4,6,5,1), 
+  2 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - FCRM__FCR_Inquiry_Target_Date__c ,7),1,2,2,3,3,3,4,3,5,4,6,5,1), 
+  3 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - FCRM__FCR_Inquiry_Target_Date__c ,7),1,2,2,2,3,2,4,3,5,4,6,5,1), 
+  4 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - FCRM__FCR_Inquiry_Target_Date__c ,7),1,1,2,1,3,2,4,3,5,4,6,5,1), 
+  5 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - FCRM__FCR_Inquiry_Target_Date__c ,7),1,0,2,1,3,2,4,3,5,4,6,5,0), 
+  6 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - FCRM__FCR_Inquiry_Target_Date__c ,7),1,1,2,2,3,3,4,4,5,5,6,5,0), 
+  999) 
+  + 
+  (FLOOR(( FCRM__FCR_Opportunity_Closed_Date__c - FCRM__FCR_Inquiry_Target_Date__c )/7)*5) &lt;=0 , 0, 
+
+  CASE(MOD( FCRM__FCR_Inquiry_Target_Date__c - DATE(1985,6,24),7), 
+  0 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - FCRM__FCR_Inquiry_Target_Date__c ,7),1,2,2,3,3,4,4,5,5,5,6,5,1), 
+  1 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - FCRM__FCR_Inquiry_Target_Date__c ,7),1,2,2,3,3,4,4,4,5,4,6,5,1), 
+  2 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - FCRM__FCR_Inquiry_Target_Date__c ,7),1,2,2,3,3,3,4,3,5,4,6,5,1), 
+  3 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - FCRM__FCR_Inquiry_Target_Date__c ,7),1,2,2,2,3,2,4,3,5,4,6,5,1), 
+  4 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - FCRM__FCR_Inquiry_Target_Date__c ,7),1,1,2,1,3,2,4,3,5,4,6,5,1), 
+  5 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - FCRM__FCR_Inquiry_Target_Date__c ,7),1,0,2,1,3,2,4,3,5,4,6,5,0), 
+  6 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - FCRM__FCR_Inquiry_Target_Date__c ,7),1,1,2,2,3,3,4,4,5,5,6,5,0), 
+  999) 
+  + 
+  (FLOOR(( FCRM__FCR_Opportunity_Closed_Date__c - FCRM__FCR_Inquiry_Target_Date__c )/7)*5) -1),  
+null)</formula>
+        <inlineHelpText># WEEKDAYS from Inquiry to Closed/Won - Same day = 0, Evaluates to blank if SQL Date if blank. Weekdays is based on Org company settings.</inlineHelpText>
+        <label>Inquiry to Close WD</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CFCR_Inquiry_to_MQL_WD__c</fullName>
+        <description># WEEKDAYS from Inquiry to MQL - Same day = 0, Evaluates to blank if SQL Date if blank. Weekdays is based on Org company settings.</description>
+        <externalId>false</externalId>
+        <formula>IF(  FCRM__FCR_QR__c  = True, 
+  IF(CASE(MOD( FCRM__FCR_Inquiry_Target_Date__c - DATE(1985,6,24),7), 
+  0 , CASE( MOD( FCRM__FCR_QR_Date__c - FCRM__FCR_Inquiry_Target_Date__c ,7),1,2,2,3,3,4,4,5,5,5,6,5,1), 
+  1 , CASE( MOD( FCRM__FCR_QR_Date__c - FCRM__FCR_Inquiry_Target_Date__c ,7),1,2,2,3,3,4,4,4,5,4,6,5,1), 
+  2 , CASE( MOD( FCRM__FCR_QR_Date__c - FCRM__FCR_Inquiry_Target_Date__c ,7),1,2,2,3,3,3,4,3,5,4,6,5,1), 
+  3 , CASE( MOD( FCRM__FCR_QR_Date__c - FCRM__FCR_Inquiry_Target_Date__c ,7),1,2,2,2,3,2,4,3,5,4,6,5,1), 
+  4 , CASE( MOD( FCRM__FCR_QR_Date__c - FCRM__FCR_Inquiry_Target_Date__c ,7),1,1,2,1,3,2,4,3,5,4,6,5,1), 
+  5 , CASE( MOD( FCRM__FCR_QR_Date__c - FCRM__FCR_Inquiry_Target_Date__c ,7),1,0,2,1,3,2,4,3,5,4,6,5,0), 
+  6 , CASE( MOD( FCRM__FCR_QR_Date__c - FCRM__FCR_Inquiry_Target_Date__c ,7),1,1,2,2,3,3,4,4,5,5,6,5,0), 
+  999) 
+  + 
+  (FLOOR(( FCRM__FCR_QR_Date__c - FCRM__FCR_Inquiry_Target_Date__c )/7)*5) &lt;=0 , 0,
+CASE(MOD( FCRM__FCR_Inquiry_Target_Date__c - DATE(1985,6,24),7), 
+  0 , CASE( MOD( FCRM__FCR_QR_Date__c - FCRM__FCR_Inquiry_Target_Date__c ,7),1,2,2,3,3,4,4,5,5,5,6,5,1), 
+  1 , CASE( MOD( FCRM__FCR_QR_Date__c - FCRM__FCR_Inquiry_Target_Date__c ,7),1,2,2,3,3,4,4,4,5,4,6,5,1), 
+  2 , CASE( MOD( FCRM__FCR_QR_Date__c - FCRM__FCR_Inquiry_Target_Date__c ,7),1,2,2,3,3,3,4,3,5,4,6,5,1), 
+  3 , CASE( MOD( FCRM__FCR_QR_Date__c - FCRM__FCR_Inquiry_Target_Date__c ,7),1,2,2,2,3,2,4,3,5,4,6,5,1), 
+  4 , CASE( MOD( FCRM__FCR_QR_Date__c - FCRM__FCR_Inquiry_Target_Date__c ,7),1,1,2,1,3,2,4,3,5,4,6,5,1), 
+  5 , CASE( MOD( FCRM__FCR_QR_Date__c - FCRM__FCR_Inquiry_Target_Date__c ,7),1,0,2,1,3,2,4,3,5,4,6,5,0), 
+  6 , CASE( MOD( FCRM__FCR_QR_Date__c - FCRM__FCR_Inquiry_Target_Date__c ,7),1,1,2,2,3,3,4,4,5,5,6,5,0), 
+  999) 
+  + 
+  (FLOOR(( FCRM__FCR_QR_Date__c - FCRM__FCR_Inquiry_Target_Date__c )/7)*5) -1),
+null)</formula>
+        <inlineHelpText># WEEKDAYS from Inquiry to MQL - Same day = 0, Evaluates to blank if SQL Date if blank. Weekdays is based on Org company settings.</inlineHelpText>
+        <label>Inquiry to MQL WD</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CFCR_Last_Interesting_Moment_Date__c</fullName>
+        <description>Marketo field synced on create from related lead/contact</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Marketo field synced on create from related lead/contact</inlineHelpText>
+        <label>Last Interesting Moment Date</label>
+        <required>false</required>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>CFCR_Last_Interesting_Moment_Desc__c</fullName>
+        <description>Marketo field synced on create from related lead/contact</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Marketo field synced on create from related lead/contact</inlineHelpText>
+        <label>Last Interesting Moment Desc</label>
+        <required>false</required>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>CFCR_Last_Interesting_Moment_Source__c</fullName>
+        <description>Marketo field synced on create from related lead/contact</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Marketo field synced on create from related lead/contact</inlineHelpText>
+        <label>Last Interesting Moment Source</label>
+        <length>100</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CFCR_Last_Interesting_Moment_Type__c</fullName>
+        <description>Marketo field synced on create from related lead/contact</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Marketo field synced on create from related lead/contact</inlineHelpText>
+        <label>Last Interesting Moment Type</label>
+        <length>100</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CFCR_Last_Interesting_Moment__c</fullName>
+        <description>Marketo field synced on create from related lead/contact</description>
+        <externalId>false</externalId>
+        <formula>CFCR_Last_Interesting_Moment_Type__c &amp; &quot; - &quot; &amp; CFCR_Last_Interesting_Moment_Desc__c</formula>
+        <inlineHelpText>Marketo field synced on create from related lead/contact</inlineHelpText>
+        <label>Last Interesting Moment</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CFCR_Lead_Score_Most_Recent__c</fullName>
+        <description>Synced on Update - Most recent lead score during the time a response is active.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Synced on Update - Most recent lead score during the time a response is active.</inlineHelpText>
+        <label>Lead Score (Most Recent)</label>
+        <precision>9</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CFCR_Lead_Score_On_Create__c</fullName>
+        <description>Synced on create - Lead Score when the response was created.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Synced on create - Lead Score when the response was created.</inlineHelpText>
+        <label>Lead Score (On Create)</label>
+        <precision>8</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CFCR_MQL_to_SAL_WD__c</fullName>
+        <description># WEEKDAYS from MQL to SQL - Same day = 0, Evaluates to blank if SQL Date if blank. Weekdays is based on Org company settings.</description>
+        <externalId>false</externalId>
+        <formula>IF (  FCRM__FCR_SAR__c = True, 
+
+IF(  CASE(MOD( FCRM__FCR_QR_Date__c - DATE(1985,6,24),7), 
+  0 , CASE( MOD( FCRM__FCR_SAR_Date__c - FCRM__FCR_QR_Date__c ,7),1,2,2,3,3,4,4,5,5,5,6,5,1), 
+  1 , CASE( MOD( FCRM__FCR_SAR_Date__c - FCRM__FCR_QR_Date__c ,7),1,2,2,3,3,4,4,4,5,4,6,5,1), 
+  2 , CASE( MOD( FCRM__FCR_SAR_Date__c - FCRM__FCR_QR_Date__c ,7),1,2,2,3,3,3,4,3,5,4,6,5,1), 
+  3 , CASE( MOD( FCRM__FCR_SAR_Date__c - FCRM__FCR_QR_Date__c ,7),1,2,2,2,3,2,4,3,5,4,6,5,1), 
+  4 , CASE( MOD( FCRM__FCR_SAR_Date__c - FCRM__FCR_QR_Date__c ,7),1,1,2,1,3,2,4,3,5,4,6,5,1), 
+  5 , CASE( MOD( FCRM__FCR_SAR_Date__c - FCRM__FCR_QR_Date__c ,7),1,0,2,1,3,2,4,3,5,4,6,5,0), 
+  6 , CASE( MOD( FCRM__FCR_SAR_Date__c - FCRM__FCR_QR_Date__c ,7),1,1,2,2,3,3,4,4,5,5,6,5,0), 
+  999) 
+  + 
+  (FLOOR(( FCRM__FCR_SAR_Date__c - FCRM__FCR_QR_Date__c )/7)*5) &lt;=0 , 0, 
+
+  CASE(MOD( FCRM__FCR_QR_Date__c - DATE(1985,6,24),7), 
+  0 , CASE( MOD( FCRM__FCR_SAR_Date__c - FCRM__FCR_QR_Date__c ,7),1,2,2,3,3,4,4,5,5,5,6,5,1), 
+  1 , CASE( MOD( FCRM__FCR_SAR_Date__c - FCRM__FCR_QR_Date__c ,7),1,2,2,3,3,4,4,4,5,4,6,5,1), 
+  2 , CASE( MOD( FCRM__FCR_SAR_Date__c - FCRM__FCR_QR_Date__c ,7),1,2,2,3,3,3,4,3,5,4,6,5,1), 
+  3 , CASE( MOD( FCRM__FCR_SAR_Date__c - FCRM__FCR_QR_Date__c ,7),1,2,2,2,3,2,4,3,5,4,6,5,1), 
+  4 , CASE( MOD( FCRM__FCR_SAR_Date__c - FCRM__FCR_QR_Date__c ,7),1,1,2,1,3,2,4,3,5,4,6,5,1), 
+  5 , CASE( MOD( FCRM__FCR_SAR_Date__c - FCRM__FCR_QR_Date__c ,7),1,0,2,1,3,2,4,3,5,4,6,5,0), 
+  6 , CASE( MOD( FCRM__FCR_SAR_Date__c - FCRM__FCR_QR_Date__c ,7),1,1,2,2,3,3,4,4,5,5,6,5,0), 
+  999) 
+  + 
+  (FLOOR(( FCRM__FCR_SAR_Date__c - FCRM__FCR_QR_Date__c )/7)*5) -1), 
+null)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText># WEEKDAYS from MQL to SQL - Same day = 0, Evaluates to blank if SQL Date if blank. Weekdays is based on Org company settings.</inlineHelpText>
+        <label>MQL to SAL WD</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CFCR_Manual_Adjustment_Notes__c</fullName>
+        <description>Any administrative notes on the reason for the manual adjustment.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Any administrative notes on the reason for the manual adjustment.</inlineHelpText>
+        <label>Manual Adjustment Notes</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CFCR_Manual_Adjustment__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Administrative field - set to true if you are doing a manual update and want the audit trail</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Administrative field - set to true if you are doing a manual update and want the audit trail</inlineHelpText>
+        <label>Manual Adjustment</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>CFCR_Opportunity_18_Digit_ID__c</fullName>
+        <description>Displays Opportunity 18 Digit ID for the related opportunity if the Opportunity name field is populated.</description>
+        <externalId>false</externalId>
+        <formula>CASESAFEID( FCRM__FCR_Opportunity__c )</formula>
+        <inlineHelpText>Displays Opportunity 18 Digit ID for the related opportunity if the Opportunity name field is populated.</inlineHelpText>
+        <label>Opportunity 18 Digit ID</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CFCR_Opportunity_Stage__c</fullName>
+        <description>Displays stage of related opportunity if opportunity name is populated.</description>
+        <externalId>false</externalId>
+        <formula>TEXT( FCRM__FCR_Opportunity__r.StageName )</formula>
+        <inlineHelpText>Displays stage of related opportunity if opportunity name is populated.</inlineHelpText>
+        <label>Opportunity Stage</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CFCR_Opportunity_Type__c</fullName>
+        <description>Displays type of related opportunity if opportunity name is populated.</description>
+        <externalId>false</externalId>
+        <formula>TEXT( FCRM__FCR_Opportunity__r.Type )</formula>
+        <inlineHelpText>Displays type of related opportunity if opportunity name is populated.</inlineHelpText>
+        <label>Opportunity Type</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CFCR_SAL_Owner_Role__c</fullName>
+        <description>Set with trigger - the role for SAL Owner.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Set with trigger - the role for SAL Owner.</inlineHelpText>
+        <label>SAL Owner Role</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CFCR_SAL_to_SQL_WD__c</fullName>
+        <description># WEEKDAYS from SAL to SQL - Same day = 0, Evaluates to blank if SQL Date if blank. Weekdays is based on Org company settings.</description>
+        <externalId>false</externalId>
+        <formula>IF( FCRM__FCR_SQR__c = True, 
+IF(  CASE(MOD( FCRM__FCR_SAR_Date__c - DATE(1985,6,24),7), 
+  0 , CASE( MOD( FCRM__FCR_SQR_Date__c - FCRM__FCR_SAR_Date__c ,7),1,2,2,3,3,4,4,5,5,5,6,5,1), 
+  1 , CASE( MOD( FCRM__FCR_SQR_Date__c - FCRM__FCR_SAR_Date__c ,7),1,2,2,3,3,4,4,4,5,4,6,5,1), 
+  2 , CASE( MOD( FCRM__FCR_SQR_Date__c - FCRM__FCR_SAR_Date__c ,7),1,2,2,3,3,3,4,3,5,4,6,5,1), 
+  3 , CASE( MOD( FCRM__FCR_SQR_Date__c - FCRM__FCR_SAR_Date__c ,7),1,2,2,2,3,2,4,3,5,4,6,5,1), 
+  4 , CASE( MOD( FCRM__FCR_SQR_Date__c - FCRM__FCR_SAR_Date__c ,7),1,1,2,1,3,2,4,3,5,4,6,5,1), 
+  5 , CASE( MOD( FCRM__FCR_SQR_Date__c - FCRM__FCR_SAR_Date__c ,7),1,0,2,1,3,2,4,3,5,4,6,5,0), 
+  6 , CASE( MOD( FCRM__FCR_SQR_Date__c - FCRM__FCR_SAR_Date__c ,7),1,1,2,2,3,3,4,4,5,5,6,5,0), 
+  999) 
+  + 
+  (FLOOR(( FCRM__FCR_SQR_Date__c - FCRM__FCR_SAR_Date__c )/7)*5) &lt;=0 , 0, 
+
+  CASE(MOD( FCRM__FCR_SAR_Date__c - DATE(1985,6,24),7), 
+  0 , CASE( MOD( FCRM__FCR_SQR_Date__c - FCRM__FCR_SAR_Date__c ,7),1,2,2,3,3,4,4,5,5,5,6,5,1), 
+  1 , CASE( MOD( FCRM__FCR_SQR_Date__c - FCRM__FCR_SAR_Date__c ,7),1,2,2,3,3,4,4,4,5,4,6,5,1), 
+  2 , CASE( MOD( FCRM__FCR_SQR_Date__c - FCRM__FCR_SAR_Date__c ,7),1,2,2,3,3,3,4,3,5,4,6,5,1), 
+  3 , CASE( MOD( FCRM__FCR_SQR_Date__c - FCRM__FCR_SAR_Date__c ,7),1,2,2,2,3,2,4,3,5,4,6,5,1), 
+  4 , CASE( MOD( FCRM__FCR_SQR_Date__c - FCRM__FCR_SAR_Date__c ,7),1,1,2,1,3,2,4,3,5,4,6,5,1), 
+  5 , CASE( MOD( FCRM__FCR_SQR_Date__c - FCRM__FCR_SAR_Date__c ,7),1,0,2,1,3,2,4,3,5,4,6,5,0), 
+  6 , CASE( MOD( FCRM__FCR_SQR_Date__c - FCRM__FCR_SAR_Date__c ,7),1,1,2,2,3,3,4,4,5,5,6,5,0), 
+  999) 
+  + 
+  (FLOOR(( FCRM__FCR_SQR_Date__c - FCRM__FCR_SAR_Date__c )/7)*5) -1), 
+null)</formula>
+        <inlineHelpText># WEEKDAYS from SAL to SQL - Same day = 0, Evaluates to blank if SQL Date if blank. Weekdays is based on Org company settings.</inlineHelpText>
+        <label>SAL to SQL WD</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CFCR_SQL_to_VO_WD__c</fullName>
+        <description># WEEKDAYS from SQL to VO - Same day = 0, Evaluates to blank if VO Date if blank. Weekdays is based on Org company settings.</description>
+        <externalId>false</externalId>
+        <formula>IF( VO__c = True,
+IF( CASE(MOD( FCRM__FCR_SQR_Date__c - DATE(1985,6,24),7),
+0 , CASE( MOD( VO_Date__c - FCRM__FCR_SQR_Date__c ,7),1,2,2,3,3,4,4,5,5,5,6,5,1),
+1 , CASE( MOD( VO_Date__c - FCRM__FCR_SQR_Date__c ,7),1,2,2,3,3,4,4,4,5,4,6,5,1),
+2 , CASE( MOD( VO_Date__c - FCRM__FCR_SQR_Date__c ,7),1,2,2,3,3,3,4,3,5,4,6,5,1),
+3 , CASE( MOD( VO_Date__c - FCRM__FCR_SQR_Date__c ,7),1,2,2,2,3,2,4,3,5,4,6,5,1),
+4 , CASE( MOD( VO_Date__c - FCRM__FCR_SQR_Date__c ,7),1,1,2,1,3,2,4,3,5,4,6,5,1),
+5 , CASE( MOD( VO_Date__c - FCRM__FCR_SQR_Date__c ,7),1,0,2,1,3,2,4,3,5,4,6,5,0),
+6 , CASE( MOD( VO_Date__c - FCRM__FCR_SQR_Date__c ,7),1,1,2,2,3,3,4,4,5,5,6,5,0),
+999)
++
+(FLOOR(( VO_Date__c - FCRM__FCR_SQR_Date__c )/7)*5) &lt;=0 , 0,
+
+CASE(MOD( FCRM__FCR_SQR_Date__c - DATE(1985,6,24),7),
+0 , CASE( MOD( VO_Date__c - FCRM__FCR_SQR_Date__c ,7),1,2,2,3,3,4,4,5,5,5,6,5,1),
+1 , CASE( MOD( VO_Date__c - FCRM__FCR_SQR_Date__c ,7),1,2,2,3,3,4,4,4,5,4,6,5,1),
+2 , CASE( MOD( VO_Date__c - FCRM__FCR_SQR_Date__c ,7),1,2,2,3,3,3,4,3,5,4,6,5,1),
+3 , CASE( MOD( VO_Date__c - FCRM__FCR_SQR_Date__c ,7),1,2,2,2,3,2,4,3,5,4,6,5,1),
+4 , CASE( MOD( VO_Date__c - FCRM__FCR_SQR_Date__c ,7),1,1,2,1,3,2,4,3,5,4,6,5,1),
+5 , CASE( MOD( VO_Date__c - FCRM__FCR_SQR_Date__c ,7),1,0,2,1,3,2,4,3,5,4,6,5,0),
+6 , CASE( MOD( VO_Date__c - FCRM__FCR_SQR_Date__c ,7),1,1,2,2,3,3,4,4,5,5,6,5,0),
+999)
++
+(FLOOR(( VO_Date__c - FCRM__FCR_SQR_Date__c )/7)*5) -1),
+null)</formula>
+        <inlineHelpText># WEEKDAYS from SQL to VO - Same day = 0, Evaluates to blank if VO Date if blank. Weekdays is based on Org company settings.</inlineHelpText>
+        <label>SQL to VO WD</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CFCR_SQL_to_VO_Won_WD__c</fullName>
+        <description># WEEKDAYS from SQL to Closed/Won - Same day = 0, Evaluates to blank if SQL Date if blank. Weekdays is based on Org company settings.</description>
+        <externalId>false</externalId>
+        <formula>IF( FCRM__FCR_Opportunity_Closed_Won__c = &quot;True&quot;, 
+IF(  CASE(MOD( FCRM__FCR_SQR_Date__c  - DATE(1985,6,24),7), 
+  0 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - FCRM__FCR_SQR_Date__c  ,7),1,2,2,3,3,4,4,5,5,5,6,5,1), 
+  1 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - FCRM__FCR_SQR_Date__c  ,7),1,2,2,3,3,4,4,4,5,4,6,5,1), 
+  2 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - FCRM__FCR_SQR_Date__c  ,7),1,2,2,3,3,3,4,3,5,4,6,5,1), 
+  3 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - FCRM__FCR_SQR_Date__c  ,7),1,2,2,2,3,2,4,3,5,4,6,5,1), 
+  4 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - FCRM__FCR_SQR_Date__c  ,7),1,1,2,1,3,2,4,3,5,4,6,5,1), 
+  5 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - FCRM__FCR_SQR_Date__c  ,7),1,0,2,1,3,2,4,3,5,4,6,5,0), 
+  6 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - FCRM__FCR_SQR_Date__c  ,7),1,1,2,2,3,3,4,4,5,5,6,5,0), 
+  999) 
+  + 
+  (FLOOR(( FCRM__FCR_Opportunity_Closed_Date__c - FCRM__FCR_SQR_Date__c  )/7)*5) &lt;=0 , 0, 
+
+  CASE(MOD( FCRM__FCR_SQR_Date__c  - DATE(1985,6,24),7), 
+  0 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - FCRM__FCR_SQR_Date__c  ,7),1,2,2,3,3,4,4,5,5,5,6,5,1), 
+  1 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - FCRM__FCR_SQR_Date__c  ,7),1,2,2,3,3,4,4,4,5,4,6,5,1), 
+  2 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - FCRM__FCR_SQR_Date__c  ,7),1,2,2,3,3,3,4,3,5,4,6,5,1), 
+  3 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - FCRM__FCR_SQR_Date__c  ,7),1,2,2,2,3,2,4,3,5,4,6,5,1), 
+  4 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - FCRM__FCR_SQR_Date__c  ,7),1,1,2,1,3,2,4,3,5,4,6,5,1), 
+  5 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - FCRM__FCR_SQR_Date__c  ,7),1,0,2,1,3,2,4,3,5,4,6,5,0), 
+  6 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - FCRM__FCR_SQR_Date__c  ,7),1,1,2,2,3,3,4,4,5,5,6,5,0), 
+  999) 
+  + 
+  (FLOOR(( FCRM__FCR_Opportunity_Closed_Date__c - FCRM__FCR_SQR_Date__c  )/7)*5) -1), 
+null)</formula>
+        <inlineHelpText># WEEKDAYS from SQL to Closed/Won - Same day = 0, Evaluates to blank if SQL Date if blank. Weekdays is based on Org company settings.</inlineHelpText>
+        <label>SQL to VO Won WD</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CFCR_SRL_Date__c</fullName>
+        <externalId>false</externalId>
+        <label>SRL Date</label>
+        <required>false</required>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>CFCR_SRL__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>SRL</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>CFCR_Still_in_Inquiry__c</fullName>
+        <description>Checked if Current Stage in Funnel is &quot;1. Inquiry&quot;</description>
+        <externalId>false</externalId>
+        <formula>CFCR_Current_Stage_in_Funnel__c = &quot;1. Inquiry&quot;</formula>
+        <inlineHelpText>Checked if Current Stage in Funnel is &quot;1. Inquiry&quot;</inlineHelpText>
+        <label>Still in Inquiry</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>CFCR_Still_in_QL__c</fullName>
+        <description>Checked if Current Stage in Funnel is &quot;2. QL&quot;</description>
+        <externalId>false</externalId>
+        <formula>CFCR_Current_Stage_in_Funnel__c = &quot;2. QL&quot;</formula>
+        <inlineHelpText>Checked if Current Stage in Funnel is &quot;2. QL&quot;</inlineHelpText>
+        <label>Still in QL</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>CFCR_Still_in_SAL__c</fullName>
+        <description>Checked if Current Stage in Funnel is &quot;3. SAL&quot;</description>
+        <externalId>false</externalId>
+        <formula>CFCR_Current_Stage_in_Funnel__c = &quot;3. SAL&quot;</formula>
+        <inlineHelpText>Checked if Current Stage in Funnel is &quot;3. SAL&quot;</inlineHelpText>
+        <label>Still in SAL</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>CFCR_Still_in_SQO__c</fullName>
+        <description>Checked if Current Stage in Funnel is &quot;4. SQO&quot;</description>
+        <externalId>false</externalId>
+        <formula>CFCR_Current_Stage_in_Funnel__c = &quot;4. SQO&quot;</formula>
+        <inlineHelpText>Checked if Current Stage in Funnel is &quot;4. SQO&quot;</inlineHelpText>
+        <label>Still in SQO</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>CFCR_Still_in_VO__c</fullName>
+        <description>CFCR_Current_Stage_in_Funnel__c = &quot;4. SQO&quot;</description>
+        <externalId>false</externalId>
+        <formula>CFCR_Current_Stage_in_Funnel__c = &quot;5. VO&quot;</formula>
+        <inlineHelpText>CFCR_Current_Stage_in_Funnel__c = &quot;4. SQO&quot;</inlineHelpText>
+        <label>Still in VO</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>CFCR_VO_to_VO_Won_WD__c</fullName>
+        <description># WEEKDAYS from VO to Closed/Won - Same day = 0, Evaluates to blank if VO Date if blank. Weekdays is based on Org company settings.</description>
+        <externalId>false</externalId>
+        <formula>IF( FCRM__FCR_Opportunity_Closed_Won__c = &quot;True&quot;,
+IF( CASE(MOD( VO_Date__c - DATE(1985,6,24),7),
+0 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - VO_Date__c ,7),1,2,2,3,3,4,4,5,5,5,6,5,1),
+1 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - VO_Date__c ,7),1,2,2,3,3,4,4,4,5,4,6,5,1),
+2 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - VO_Date__c ,7),1,2,2,3,3,3,4,3,5,4,6,5,1),
+3 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - VO_Date__c ,7),1,2,2,2,3,2,4,3,5,4,6,5,1),
+4 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - VO_Date__c ,7),1,1,2,1,3,2,4,3,5,4,6,5,1),
+5 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - VO_Date__c ,7),1,0,2,1,3,2,4,3,5,4,6,5,0),
+6 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - VO_Date__c ,7),1,1,2,2,3,3,4,4,5,5,6,5,0),
+999)
++
+(FLOOR(( FCRM__FCR_Opportunity_Closed_Date__c - VO_Date__c )/7)*5) &lt;=0 , 0,
+
+CASE(MOD( FCRM__FCR_SQR_Date__c - DATE(1985,6,24),7),
+0 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - VO_Date__c ,7),1,2,2,3,3,4,4,5,5,5,6,5,1),
+1 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - VO_Date__c ,7),1,2,2,3,3,4,4,4,5,4,6,5,1),
+2 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - VO_Date__c ,7),1,2,2,3,3,3,4,3,5,4,6,5,1),
+3 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - VO_Date__c ,7),1,2,2,2,3,2,4,3,5,4,6,5,1),
+4 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - VO_Date__c ,7),1,1,2,1,3,2,4,3,5,4,6,5,1),
+5 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - VO_Date__c ,7),1,0,2,1,3,2,4,3,5,4,6,5,0),
+6 , CASE( MOD( FCRM__FCR_Opportunity_Closed_Date__c - VO_Date__c ,7),1,1,2,2,3,3,4,4,5,5,6,5,0),
+999)
++
+(FLOOR(( FCRM__FCR_Opportunity_Closed_Date__c - VO_Date__c )/7)*5) -1),
+null)</formula>
+        <inlineHelpText># WEEKDAYS from VO to Closed/Won - Same day = 0, Evaluates to blank if VO Date if blank. Weekdays is based on Org company settings.</inlineHelpText>
+        <label>VO to VO Won WD</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CRCR_Rescored_Date__c</fullName>
+        <externalId>false</externalId>
+        <label>Rescored Date</label>
+        <required>false</required>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>CampaignId</fullName>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Campaign_Member_Owner_Role__c</fullName>
+        <description>Displays the role of the campaign member&apos;s record owner based on: Lead_Contact_Owner_Role__c and Contact_Owner_Role__c</description>
+        <externalId>false</externalId>
+        <formula>Lead_Owner_Role__c  +  Contact_Owner_Role__c</formula>
+        <label>Campaign Member Owner Role</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>City</fullName>
+    </fields>
+    <fields>
+        <fullName>CompanyOrAccount</fullName>
+    </fields>
+    <fields>
+        <fullName>ConfirmationNumber__c</fullName>
+        <description>For CVent Integration</description>
+        <externalId>false</externalId>
+        <inlineHelpText>For CVent Integration</inlineHelpText>
+        <label>ConfirmationNumber</label>
+        <required>false</required>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>ContactId</fullName>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Contact_Owner_Role__c</fullName>
+        <externalId>false</externalId>
+        <formula>Contact.Contact_Owner_Role__c</formula>
+        <label>Contact Owner Role</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Country</fullName>
+    </fields>
+    <fields>
+        <fullName>Current_Organization__c</fullName>
+        <externalId>false</externalId>
+        <label>IP-Based Organization</label>
+        <required>false</required>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Current_Postal_Code__c</fullName>
+        <externalId>false</externalId>
+        <label>IP-Based Zip/Postal Code</label>
+        <required>false</required>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Deal_Type__c</fullName>
+        <externalId>false</externalId>
+        <formula>TEXT(FCRM__FCR_Opportunity__r.Deal_Type__c)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Deal Type</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Description</fullName>
+    </fields>
+    <fields>
+        <fullName>DiscountAmount__c</fullName>
+        <description>For CVent Integration</description>
+        <externalId>false</externalId>
+        <inlineHelpText>For CVent Integration</inlineHelpText>
+        <label>DiscountAmount</label>
+        <required>false</required>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>DiscountCode__c</fullName>
+        <description>For CVent Integration</description>
+        <externalId>false</externalId>
+        <inlineHelpText>For CVent Integration</inlineHelpText>
+        <label>DiscountCode</label>
+        <required>false</required>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>DiscountValue__c</fullName>
+        <description>For CVent Integration</description>
+        <externalId>false</externalId>
+        <inlineHelpText>For CVent Integration</inlineHelpText>
+        <label>DiscountValue</label>
+        <required>false</required>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>DoNotCall</fullName>
+    </fields>
+    <fields>
+        <fullName>Do_Not_MQL__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Do Not QL</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Email</fullName>
+    </fields>
+    <fields>
+        <fullName>EventCode__c</fullName>
+        <description>For CVent Integration</description>
+        <externalId>false</externalId>
+        <inlineHelpText>For CVent Integration</inlineHelpText>
+        <label>EventCode</label>
+        <required>false</required>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>FCCRM_Member_Threshold__c</fullName>
+        <description>Score threshold evaluated in addition to the related lead/contact and campaign threshold values.</description>
+        <externalId>false</externalId>
+        <formula>IF( 
+	OR ( 
+		ISPICKVAL( 
+			Campaign.Campaign_Type__c ,&quot;Contact Me&quot;), /* If campaign type is contact me, set to true*/ 
+		AND(ISPICKVAL(Status,&quot;Visited Booth - P1 (Hot)&quot;),
+			Do_Not_MQL__c=FALSE),
+		AND(
+			ISPICKVAL( 
+			Campaign.Campaign_Type__c,&quot;Self-Serve&quot;),
+			Profile_Score_Current__c &lt;&gt; &quot;D&quot;),
+		AND ( 
+				Do_Not_MQL__c=FALSE, /* Do not QL is False */ 
+				NOT(ISPICKVAL(Campaign.Campaign_Type__c,&quot;Email&quot;)),
+				NOT(ISPICKVAL(Status,&quot;Visited Booth - P3 (Cold)&quot;)), /* Status is not P3 */ 
+				Profile_Score_Current__c &lt;&gt; &quot;D&quot;, /* Do not QL if score is &apos;d&apos; */		 
+				NOT( 
+					AND(	/*Campaign = &quot;Content Marketing&quot; and Profile Score = &quot;C&quot; */ 
+						ISPICKVAL(Campaign.Campaign_Type__c,&quot;Content Marketing&quot;), 
+						Profile_Score_Current__c = &quot;C&quot; 
+					)), 
+				NOT( 
+					AND(	/*Campaign = &quot;Webinar&quot; and Profile Score = &quot;C&quot;*/ 
+						ISPICKVAL( 
+							Campaign.Campaign_Type__c,&quot;Webinar&quot;), 
+						ISPICKVAL(Status,&quot;No Show&quot;) 
+					)), 
+				NOT( 
+					AND(	
+						ISPICKVAL( 
+							Campaign.Campaign_Type__c,&quot;Event&quot;), 
+						ISPICKVAL( Campaign.Campaign_Sub_Type__c,&quot;Field Event&quot;), 
+						ISPICKVAL(Status,&quot;Attended&quot;) 
+					)) 
+		) 
+	),2000, -2000)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Score threshold evaluated in addition to the related lead/contact and campaign threshold values.</inlineHelpText>
+        <label>FCCRM Member Threshold</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_18_Character_ID__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Displays 18 Character Campaign Member ID</description>
+        <externalId>false</externalId>
+        <formula>CASESAFEID(Id)</formula>
+        <inlineHelpText>Displays 18 Character Campaign Member ID</inlineHelpText>
+        <label>Campaign Member 18 Character ID</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Admin_Opportunity_Status__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Administrative field to determine if a response is tied to an opportunity, and if so, the status of that opportunity</description>
+        <externalId>false</externalId>
+        <formula>IF(OR(ISBLANK(ContactId), ISBLANK( FCRM__FCR_Opportunity__c ),  ISPICKVAL(FCRM__FCR_Response_Status__c, &apos;Resolved - Non-Response RT&apos;)  ),
+    0,
+    IF(FCRM__FCR_Opportunity__r.IsClosed ,
+         IF( FCRM__FCR_Opportunity__r.IsWon , 2, 3),
+        1)
+)
+/*
+0 - Lead or no opportunity
+1 - Open opportunity
+2 - Opportunity closed won
+3 - Opportunity closed lost
+*/</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Admin Opportunity Status</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Admin_Response_Control__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Numeric field to override standard processing of responses during evaluation</description>
+        <externalId>false</externalId>
+        <label>Admin Response Control</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Admin_Response_Day__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Converts the response date field (date time) to a response date for report processing</description>
+        <externalId>false</externalId>
+        <formula>if(ISBLANK(FCRM__FCR_Response_Date__c),DATE(1970,1,1),DATEVALUE(FCRM__FCR_Response_Date__c ))</formula>
+        <label>Response Day</label>
+        <required>false</required>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Admin_SyncPending__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Set when a field sync to this response is pending (async)
+1 - Sync the fields if SyncOnUpdate
+2 - Sync the fields if SyncOnCreate
+3 - Clear the fields.</description>
+        <externalId>false</externalId>
+        <label>Admin SyncPending</label>
+        <precision>1</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Admin_SyncTest__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Used internally by the response management system for testing purposes</description>
+        <externalId>false</externalId>
+        <label>Admin Sync Test</label>
+        <length>40</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Admin_Update_Counter__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <description>This counter is changed any time this object is updated by the response management system. Look for changes in this value during validation rules to disable the rule and allow the update.</description>
+        <externalId>false</externalId>
+        <label>Admin Update Counter</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Campaign_Repeat_Parent__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Lookup to the cascade parent campaign, or the campaign (if this is not a repeat)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>This field is used in reporting to group all responses by Repeat Parent Campaign.</inlineHelpText>
+        <label>Campaign Name (Repeat Parent)</label>
+        <referenceTo>Campaign</referenceTo>
+        <relationshipLabel>Campaign Members (Campaign Name (Repeat Parent))</relationshipLabel>
+        <relationshipName>Campaign_Members_With_Repeats</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_CascadeID__c</fullName>
+        <deprecated>false</deprecated>
+        <description>This formula field is used to simplify queries for cascaded campaignmembers.
+First part is the campaignID if there is no parent, or the parent campaignID if there is. Second part is the contactID if present, otherwise the lead ID</description>
+        <externalId>false</externalId>
+        <formula>IF(ISBLANK(Campaign.FCRM__FCR_CascadeParent__c), CampaignId , Campaign.FCRM__FCR_CascadeParent__c )  + BLANKVALUE( ContactId , LeadId )</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Admin_CascadeID</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_ClosedOpRevenueModel1__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Closed won opportunity revenue for primary campaign influence model</description>
+        <externalId>false</externalId>
+        <label>Closed Op Revenue Model1</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_ClosedOpRevenueModel2__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Closed opportunity revenue for secondary campaign influence model</description>
+        <externalId>false</externalId>
+        <label>Closed Op Revenue Model2</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_ClosedOpRevenueModel3__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Closed opportunity revenue for tertiary campaign influence model</description>
+        <externalId>false</externalId>
+        <label>Closed Op Revenue Model3</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Converted_Lead__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Indicates that the response was active when the lead was converted</description>
+        <externalId>false</externalId>
+        <label>Converted Lead</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Current_Lead_Contact_Status__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Displays the current status of the related lead or contact. Looks at the standard lead status field or the Full Circle CRM Contact Status field.</description>
+        <externalId>false</externalId>
+        <formula>IF(NOT(ISBLANK( ContactId )), TEXT(Contact.FCRM__FCR_Status__c) ,  TEXT(Lead.Status) )</formula>
+        <inlineHelpText>Displays the current status of the related lead or contact.</inlineHelpText>
+        <label>Current Lead/Contact Status</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Dated_Opportunity_Amount__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Opportunity amount based on dated conversion - set during campaign influence</description>
+        <externalId>false</externalId>
+        <label>Dated Opportunity Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_FCCRM_Logo__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IMAGE(&quot;/resource/Full_Circle_CRM_Sm_Logo&quot;, &quot;Full Circle CRM&quot;,25, 80)</formula>
+        <label>||</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_First_Owner_Assigned__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>First Owner (non-queue) assigned a response.</inlineHelpText>
+        <label>First Owner Assigned</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Response_First_Owned</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_First_Owner_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <description>First Owner Assigned Type - User or Queue</description>
+        <externalId>false</externalId>
+        <inlineHelpText>First Owner Assigned Type - User or Queue</inlineHelpText>
+        <label>First Owner Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>User</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Queue</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_First_Owner_Worked__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>First Owner to set a lead/contact status to a working status when the response is active</inlineHelpText>
+        <label>First Owner Worked</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Response_First_Worked</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_First_Queue_Assigned__c</fullName>
+        <deprecated>false</deprecated>
+        <description>If first owner assigned is a lead queue - queue name will be set here.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If first owner assigned is a lead queue - queue name will be set here.</inlineHelpText>
+        <label>First Queue Assigned</label>
+        <length>50</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Inquiry_Target_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date Inquiry or Target was set</description>
+        <externalId>false</externalId>
+        <label>Inquiry/Target Date</label>
+        <required>false</required>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Inquiry_Target__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Has responded to a Marketing Campaign, or is a Sales Target</description>
+        <externalId>false</externalId>
+        <label>Inquiry/Target</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Inquiry_to_MQR__c</fullName>
+        <deprecated>false</deprecated>
+        <description># Days from Inquiry/Target to MQR/QR - Evaluates to blank if MQR/QR Date if blank.</description>
+        <externalId>false</externalId>
+        <formula>FCRM__FCR_QR_Date__c - FCRM__FCR_Inquiry_Target_Date__c</formula>
+        <inlineHelpText># Days from Inquiry/Target to MQR/QR</inlineHelpText>
+        <label>Inquiry to MQR</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Last_Modified_By_Date_Formula__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>LastModifiedDate</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Last Modified By Date Formula</label>
+        <required>false</required>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Last_Modified_By_Formula__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>LastModifiedBy.FirstName &amp; &quot; &quot; &amp; LastModifiedBy.LastName</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Last Modified By Formula</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Lead_Contact_18_Digit_ID__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>CASESAFEID(BLANKVALUE( ContactId , LeadId ))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Lead/Contact 18 Digit ID</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_LostOpRevenueModel1__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Lost opportunity revenue for primary campaign influence model</description>
+        <externalId>false</externalId>
+        <label>Lost Op Revenue Model1</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_LostOpRevenueModel2__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Lost opportunity revenue for secondary campaign influence model</description>
+        <externalId>false</externalId>
+        <label>Lost Op Revenue Model2</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_LostOpRevenueModel3__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Lost opportunity revenue for tertiary campaign influence model</description>
+        <externalId>false</externalId>
+        <label>Lost Op Revenue Model3</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_MQR_to_SAR__c</fullName>
+        <deprecated>false</deprecated>
+        <description># Days from MQR/QR to SAR - Evaluates to blank if MQR/QR Date if blank.</description>
+        <externalId>false</externalId>
+        <formula>FCRM__FCR_SAR_Date__c -  FCRM__FCR_QR_Date__c</formula>
+        <inlineHelpText># Days from MQR/QR to SAR.</inlineHelpText>
+        <label>MQR to SAR</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Member_Type_On_Create__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Admin field specifying whether the CampaignMember was originally created by a lead or a contact</description>
+        <externalId>false</externalId>
+        <label>Member Type On Create</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Lead</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Contact</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Name_Created_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Displays the lead or contact Name Created Date.</description>
+        <externalId>false</externalId>
+        <formula>IF(IsBlank(ContactId ), Lead.FCRM__FCR_Name_Created_Date__c, Contact.FCRM__FCR_Name_Created_Date__c )</formula>
+        <inlineHelpText>Displays the lead or contact Name Created Date.</inlineHelpText>
+        <label>Name Created Date</label>
+        <required>false</required>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Net_New_Lead__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Checked if associated lead or contact was created within 5 minutes of this response.</description>
+        <externalId>false</externalId>
+        <label>Net New Name</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Nurture_Timeout__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Set to true when the lead/contact was set to nurture time out and therefore this response was not processed by the system.</description>
+        <externalId>false</externalId>
+        <label>Nurture Timeout</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_OpenOpRevenueModel1__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Open opportunity revenue for primary campaign influence model</description>
+        <externalId>false</externalId>
+        <label>Open Op Revenue Model1</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_OpenOpRevenueModel2__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Open opportunity revenue for secondary campaign influence model</description>
+        <externalId>false</externalId>
+        <label>Open Op Revenue Model2</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_OpenOpRevenueModel3__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Open opportunity revenue for tertiary campaign influence model</description>
+        <externalId>false</externalId>
+        <label>Open Op Revenue Model3</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Opportunity_Amount__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>if( FCRM__FCR_Dated_Opportunity_Amount__c &gt;0,  FCRM__FCR_Dated_Opportunity_Amount__c, FCRM__FCR_Opportunity__r.Amount)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Opportunity Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Opportunity_Cleared__c</fullName>
+        <deprecated>false</deprecated>
+        <description>If an opportunity was associated to a Campaign and then deleted - the date of deletion is set here.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If an opportunity was associated to a Campaign and then deleted - the date of deletion is set here.</inlineHelpText>
+        <label>Opportunity Cleared</label>
+        <required>false</required>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Opportunity_Closed_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>FCRM__FCR_Opportunity__r.CloseDate</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Opportunity Closed Date</label>
+        <required>false</required>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Opportunity_Closed_Won__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Evaluates to &quot;True&quot; if Opportunity is Won - else is blank.  Requires that the opportunity name is populated.</description>
+        <externalId>false</externalId>
+        <formula>IF(
+AND(
+NOT(ISBLANK( FCRM__FCR_Opportunity__c )),
+FCRM__FCR_Opportunity__r.IsWon = True), &quot;True&quot;, null)</formula>
+        <inlineHelpText>Evaluates to &quot;True&quot; if Opportunity is Won - else is blank. Requires that the opportunity name is populated.</inlineHelpText>
+        <label>Opportunity Closed Won</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Opportunity_Closed__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF(
+AND(
+NOT(ISBLANK( FCRM__FCR_Opportunity__c )),
+ FCRM__FCR_Opportunity__r.IsClosed  = True), &quot;True&quot;, null)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Opportunity Closed</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Opportunity_Count__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Evaluates to 1 if there is a related opportunity - used for funnel reports.</description>
+        <externalId>false</externalId>
+        <formula>IF ( NOT(ISBLANK( FCRM__FCR_Opportunity__c )),1,0)</formula>
+        <inlineHelpText>Evaluates to 1 if there is a related opportunity - used for funnel reports.</inlineHelpText>
+        <label>Opportunity Count</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Opportunity_Create_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>DATEVALUE(FCRM__FCR_Opportunity__r.CreatedDate)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Opportunity Create Date</label>
+        <required>false</required>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Opportunity_Created_by__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>User that created the opportunity</description>
+        <externalId>false</externalId>
+        <label>Opportunity Created by</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Campaign_Members</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Opportunity_Value_Lost__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Amount of related lost opportunity. Based on standard opportunity Amount field.</description>
+        <externalId>false</externalId>
+        <formula>IF( 
+AND( 
+NOT(ISBLANK( FCRM__FCR_Opportunity__c )), 
+ FCRM__FCR_Opportunity__r.IsClosed = True,
+  FCRM__FCR_Opportunity__r.IsWon = False 
+) , FCRM__FCR_Opportunity_Amount__c , 0)</formula>
+        <inlineHelpText>Amount of related lost opportunity. Based on standard opportunity Amount field.</inlineHelpText>
+        <label>Opportunity Value Lost</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Opportunity_Value_Won__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Amount of related Won opportunity. Based on standard opportunity Amount field.</description>
+        <externalId>false</externalId>
+        <formula>IF( NOT(ISBLANK(FCRM__FCR_Opportunity_Closed_Won__c)) ,  FCRM__FCR_Opportunity_Amount__c , 0)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Amount of related Won opportunity. Based on standard opportunity Amount field.</inlineHelpText>
+        <label>Opportunity Value Won</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Opportunity__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>If an opportunity was created as a result of this MQR follow up the Opportunity Name field will be populated.</description>
+        <externalId>false</externalId>
+        <label>Opportunity Name</label>
+        <referenceTo>Opportunity</referenceTo>
+        <relationshipLabel>Campaign Members</relationshipLabel>
+        <relationshipName>Campaign_Members</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Precedence_Campaign__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Set to the campaign of the response specified in FCR_Precedence_Response__c</description>
+        <externalId>false</externalId>
+        <label>Precedence Campaign</label>
+        <referenceTo>Campaign</referenceTo>
+        <relationshipLabel>Precedence Campaign Members</relationshipLabel>
+        <relationshipName>Precedence_Campaign_Members</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Precedence_Replaced_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Specifies the date at which this response was replaced by a response to a precedence campaign</description>
+        <externalId>false</externalId>
+        <label>Precedence Replaced Date</label>
+        <required>false</required>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Precedence_Response_Link__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF(
+NOT(ISBLANK(FCRM__FCR_Precedence_Response__c)),HYPERLINK(&quot;/&quot; &amp;  FCRM__FCR_Precedence_Response__c,&quot;View Precedence Response&quot;),&quot;&quot;)</formula>
+        <inlineHelpText>If populated, Click here to view the precedence response</inlineHelpText>
+        <label>Precedence Response Link</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Precedence_Response__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Set to the ID of a precedence response that replace this one when it was active.</description>
+        <externalId>false</externalId>
+        <label>Precedence Response ID</label>
+        <length>20</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_QR_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date MQR Achieved</description>
+        <externalId>false</externalId>
+        <label>MQR/QT Date</label>
+        <required>false</required>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_QR__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>System checks this field if the record has met the score qualification threshold.</description>
+        <externalId>false</externalId>
+        <label>MQR/QT</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Repeat_Count__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <description># of this repeat 1 = first repeat response.</description>
+        <externalId>false</externalId>
+        <label>Repeat Count</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Replaced_Campaign__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Specifies the ID of the campaign of that was replaced by this response.</description>
+        <externalId>false</externalId>
+        <label>Replaced Campaign</label>
+        <referenceTo>Campaign</referenceTo>
+        <relationshipLabel>Replaced Campaign Members</relationshipLabel>
+        <relationshipName>Replaced_Campaign_Members</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Replaced_Response_Link__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF( 
+NOT(ISBLANK( FCRM__FCR_Replaced_Response__c )),HYPERLINK(&quot;/&quot; &amp; FCRM__FCR_Replaced_Response__c,&quot;View Replaced Response&quot;),&quot;&quot;)</formula>
+        <inlineHelpText>If populated, click here to view the replaced response.</inlineHelpText>
+        <label>Replaced Response Link</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Replaced_Response__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Specifies the ID of the response that was replaced by this response (this is a precedence response)</description>
+        <externalId>false</externalId>
+        <label>Replaced Response ID</label>
+        <length>20</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Response_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Response date</description>
+        <externalId>false</externalId>
+        <label>Response Date</label>
+        <required>false</required>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Response_Engagement_Level__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Displays engagement level for responses.</description>
+        <externalId>false</externalId>
+        <formula>IF ( ISPICKVAL( FCRM__FCR_Response_Status__c , &quot;Resolved - No Action Required&quot;), &quot;1. No Action Required&quot;,
+IF ( ISPICKVAL( FCRM__FCR_Response_Status__c , &quot;Legacy&quot;), &quot;1. No Action Required&quot;,  
+IF ( ISPICKVAL( FCRM__FCR_Response_Status__c , &quot;Resolved - Already Engaged&quot;), &quot;3. Already Engaged&quot;, 
+IF ( ISPICKVAL (FCRM__FCR_Response_Status__c , &quot;Not A Response&quot;), &quot;Not A Response&quot;, 
+IF (ISBLANK( FCRM__FCR_Response_Date__c ), &quot;Not A Response&quot;, 
+&quot;2. Engagement&quot;)))))</formula>
+        <inlineHelpText>Displays engagement level for responses.</inlineHelpText>
+        <label>Response Engagement Level</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Response_Score__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Score assigned to this response</description>
+        <externalId>false</externalId>
+        <label>Response Score</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Response_Status__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Current response status</description>
+        <externalId>false</externalId>
+        <label>Response Status</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Open</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Attempting Contact</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Working</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Recycled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Unqualified Forever</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Qualified - New Opportunity</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Resolved - Already Engaged</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Resolved - No Action Required</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Resolved - Opportunity Won</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Resolved - Opportunity Lost</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Not a Response</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Unmapped</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Pending</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Revenue_Timestamp__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Timestamp of batch request that set campaign influence revenue data</description>
+        <externalId>false</externalId>
+        <label>Revenue Timestamp</label>
+        <required>false</required>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_SAR_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Sales accepted response date</description>
+        <externalId>false</externalId>
+        <label>SAR Date</label>
+        <required>false</required>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_SAR_Owner__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Owner at the time when the record status mapping to SAR is set on the lead, contact or opportunity.</description>
+        <externalId>false</externalId>
+        <label>SAR Owner</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>SAR_Campaign_Members</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_SAR__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Set if this is a sales accepted response (sync from lead/contact status)</description>
+        <externalId>false</externalId>
+        <label>SAR</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_SAR_to_SQR__c</fullName>
+        <deprecated>false</deprecated>
+        <description># Days from SAR to SQR - Evaluates to blank if SQR Date if blank.</description>
+        <externalId>false</externalId>
+        <formula>FCRM__FCR_SQR_Date__c -  FCRM__FCR_SAR_Date__c</formula>
+        <inlineHelpText># Days from SAR to SQR</inlineHelpText>
+        <label>SAR to SQR</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_SQR_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date SQR Set (Converted to Opportunity)</description>
+        <externalId>false</externalId>
+        <label>SQR Date</label>
+        <required>false</required>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_SQR_Won__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>SQR Won</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_SQR__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Response was Qualified (converted)</description>
+        <externalId>false</externalId>
+        <label>SQR</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_SQR_to_Closed_Won__c</fullName>
+        <deprecated>false</deprecated>
+        <description># Days from SQR to Closed/Won - Evaluates to blank if Closed/Won Date if blank.</description>
+        <externalId>false</externalId>
+        <formula>IF(  FCRM__FCR_Opportunity_Closed_Won__c = &quot;True&quot;, FCRM__FCR_Opportunity_Closed_Date__c -  FCRM__FCR_SQR_Date__c , null)</formula>
+        <inlineHelpText># Days from SQR to Closed/Won</inlineHelpText>
+        <label>SQR to Closed/Won</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Status_Age__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF( 
+NOT(ISBLANK(FCRM__FCR_Status_Last_Set__c)), 
+ROUND(NOW()-FCRM__FCR_Status_Last_Set__c, 0), null)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Status Age</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Status_Last_Set__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date/time when status was last updated</description>
+        <externalId>false</externalId>
+        <label>Status Last Set</label>
+        <required>false</required>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_TQR__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Indicates that this Response passed threshold and proceeded to be evaluated. On Lead/Contact passing organizations, FCR_QR will also be set.</description>
+        <externalId>false</externalId>
+        <label>Threshold QR</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_TotalOpRevenueModel1__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Total Influence Model 1</description>
+        <externalId>false</externalId>
+        <formula>FCRM__FCR_ClosedOpRevenueModel1__c + FCRM__FCR_OpenOpRevenueModel1__c + FCRM__FCR_LostOpRevenueModel1__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Total Influence Model 1</inlineHelpText>
+        <label>Total Op Revenue Model1</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_TotalOpRevenueModel2__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Total Influence Model 2</description>
+        <externalId>false</externalId>
+        <formula>FCRM__FCR_ClosedOpRevenueModel2__c + FCRM__FCR_OpenOpRevenueModel2__c + FCRM__FCR_LostOpRevenueModel2__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Total Influence Model 2</inlineHelpText>
+        <label>Total Op Revenue Model2</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_TotalOpRevenueModel3__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Total Influence Model 3</description>
+        <externalId>false</externalId>
+        <formula>FCRM__FCR_ClosedOpRevenueModel3__c + FCRM__FCR_OpenOpRevenueModel3__c + FCRM__FCR_LostOpRevenueModel3__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Total Influence Model 3</inlineHelpText>
+        <label>Total Op Revenue Model3</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_View_Response__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Used for related list views on Lead and Contact page layouts</description>
+        <externalId>false</externalId>
+        <formula>HYPERLINK(&quot;/&quot; &amp; Id,&quot;View Response&quot;)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>View Response</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__Opportunity_Value_Open__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Amount of related open opportunity. Based on standard opportunity Amount field.</description>
+        <externalId>false</externalId>
+        <formula>IF( 
+AND(
+NOT(ISBLANK( FCRM__FCR_Opportunity__c )), 
+ FCRM__FCR_Opportunity__r.IsClosed = False
+) , FCRM__FCR_Opportunity_Amount__c , 0)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Amount of related open opportunity. Based on standard opportunity Amount field.</inlineHelpText>
+        <label>Opportunity Value Open</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FC_Reanimation_Date__c</fullName>
+        <externalId>false</externalId>
+        <label>Reanimation Date</label>
+        <required>false</required>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Fax</fullName>
+    </fields>
+    <fields>
+        <fullName>FirstName</fullName>
+    </fields>
+    <fields>
+        <fullName>FirstRespondedDate</fullName>
+    </fields>
+    <fields>
+        <fullName>First_Owner_Assigned_Funtion__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(CONTAINS(CFCR_First_Owner_Assigned_Role__c,&apos;Inside Sales&apos;),&apos;ISR&apos;,
+IF(CONTAINS(CFCR_First_Owner_Assigned_Role__c,&apos;Partner&apos;), &apos;Partner&apos;,
+IF(AND(CONTAINS(CFCR_First_Owner_Assigned_Role__c,&apos;Sales&apos;),CONTAINS(CFCR_First_Owner_Assigned_Role__c,&apos;Leader&apos;),OR(CONTAINS(CFCR_First_Owner_Assigned_Role__c,&apos;Rep&apos;),CONTAINS(CFCR_First_Owner_Assigned_Role__c,&apos;FSR&apos;))),&apos;FSR&apos;,&apos; &apos;
+)))</formula>
+        <label>First Owner Assigned Function</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>First_Owner_Assigned_Geo__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(CONTAINS(CFCR_First_Owner_Assigned_Role__c, &apos;EMEA&apos;),&apos;EMEA&apos;,
+IF(CONTAINS(CFCR_First_Owner_Assigned_Role__c, &apos;ROW&apos;), &apos;ROW&apos;,
+IF(CONTAINS(CFCR_First_Owner_Assigned_Role__c, &apos;Partner&apos;),&apos;Partner&apos;,
+&apos;North America&apos;
+)))</formula>
+        <label>First Owner Assigned Geo</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>First_Owner_Worked_Function__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(CONTAINS(FCRM__FCR_First_Owner_Worked__c,&apos;Inside Sales&apos;),&apos;ISR&apos;, 
+IF(CONTAINS(FCRM__FCR_First_Owner_Worked__c,&apos;Partner&apos;), &apos;Partner&apos;, 
+IF(AND(CONTAINS(FCRM__FCR_First_Owner_Worked__c,&apos;Sales&apos;),CONTAINS(FCRM__FCR_First_Owner_Worked__c,&apos;Leader&apos;),OR(CONTAINS(FCRM__FCR_First_Owner_Worked__c,&apos;Rep&apos;),CONTAINS(FCRM__FCR_First_Owner_Worked__c,&apos;FSR&apos;))),&apos;FSR&apos;,&apos; &apos; 
+)))</formula>
+        <label>First Owner Worked Function</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>First_Owner_Worked_Geo__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(CONTAINS(FCRM__FCR_First_Owner_Worked__c, &apos;EMEA&apos;),&apos;EMEA&apos;, 
+IF(CONTAINS(FCRM__FCR_First_Owner_Worked__c, &apos;ROW&apos;), &apos;ROW&apos;, 
+IF(CONTAINS(FCRM__FCR_First_Owner_Worked__c, &apos;Partner&apos;),&apos;Partner&apos;, 
+&apos;North America&apos; 
+)))</formula>
+        <label>First Owner Worked Geo</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>HasOptedOutOfEmail</fullName>
+    </fields>
+    <fields>
+        <fullName>HasOptedOutOfFax</fullName>
+    </fields>
+    <fields>
+        <fullName>HasResponded</fullName>
+    </fields>
+    <fields>
+        <fullName>IP_Based_City_New__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(NOT(ISBLANK( ContactId )),(Contact.Current_City__c) ,(Lead.Current_City__c) )</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>IP-Based City (Current)</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>IP_Based_City__c</fullName>
+        <externalId>false</externalId>
+        <label>IP-Based City (On Create)</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>IP_Based_Country_New__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(NOT(ISBLANK( ContactId )),(Contact.Current_Country__c) ,(Lead.Current_Country__c) )</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>IP-Based Country (Current)</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>IP_Based_Country__c</fullName>
+        <externalId>false</externalId>
+        <label>IP-Based Country (On Create)</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>IP_Based_State_Province_New__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(NOT(ISBLANK( ContactId )),(Contact.Current_State_Province__c) ,(Lead.Current_State_Province__c) )</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>IP-Based State/Province (Current)</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>IP_Based_State_Province__c</fullName>
+        <externalId>false</externalId>
+        <label>IP-Based State/Province (On Create)</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>LastName</fullName>
+    </fields>
+    <fields>
+        <fullName>LeadId</fullName>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>LeadSource</fullName>
+        <picklist>
+            <picklistValues>
+                <fullName>Banner Ad Download</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>BMC Referral</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Customer Referrals</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Direct Download</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Email Marketing</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Employee Generated</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Existing Customer</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Free Download</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Partner Lite Referral</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Partner Referral</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Partner Marketing</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>PPC</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>SEO</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Trade Show</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>User Group</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>VAR Prospecting</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Web Marketing</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Website</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>BD Generated</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>MICROSOFT WINDOWS AZURE STORE</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Lead_Contact_Owner_Email__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(ISBLANK(Lead.Owner:User.Email),  Contact.Owner.Email, Lead.Owner:User.Email )</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Lead/Contact Owner Email</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lead_Contact_Owner_Role__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(ISBLANK(Lead.Contact_Owner_Role__c), Contact.Contact_Owner_Role__c, Lead.Contact_Owner_Role__c)</formula>
+        <label>Lead/Contact Owner Role</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lead_Owner_Role__c</fullName>
+        <externalId>false</externalId>
+        <formula>Lead.Contact_Owner_Role__c</formula>
+        <label>Lead Owner Role</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lead_Source_Detail__c</fullName>
+        <externalId>false</externalId>
+        <label>Lead Source Details (On Create)</label>
+        <length>125</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lead_Source_Details_On_Update__c</fullName>
+        <externalId>false</externalId>
+        <label>Lead Source Details (On Update)</label>
+        <length>125</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lead_Source_On_Update__c</fullName>
+        <description>Most recent Lead source value on the related lead/contact during an engagement. full circle sync on create and on update.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Most recent Lead source value on the related lead/contact during an engagement.</inlineHelpText>
+        <label>Lead Source (On Update)</label>
+        <length>125</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lead_Source__c</fullName>
+        <description>Lead source on the related lead/contact at the time of the response. full circle sync on create.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Lead source on the related lead/contact at the time of the response.</inlineHelpText>
+        <label>Lead Source</label>
+        <length>125</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lead_Status__c</fullName>
+        <externalId>false</externalId>
+        <label>Lead Status</label>
+        <length>50</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lite_User__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Lite User</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>MobilePhone</fullName>
+    </fields>
+    <fields>
+        <fullName>My_Responses__c</fullName>
+        <description>Use for report filters - checked if lead or contact owner is the running user.</description>
+        <externalId>false</externalId>
+        <formula>IF( Lead.OwnerId = $User.Id , TRUE,
+IF( Contact.OwnerId = $User.Id , TRUE,
+FALSE))</formula>
+        <inlineHelpText>Use for report filters - checked if lead or contact owner is the running user.</inlineHelpText>
+        <label>My Responses</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Note_to_Sales__c</fullName>
+        <externalId>false</externalId>
+        <label>Note to Sales</label>
+        <length>131072</length>
+        <type>LongTextArea</type>
+        <visibleLines>10</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Origin_LP__c</fullName>
+        <externalId>false</externalId>
+        <label>Origin LP</label>
+        <required>false</required>
+        <type>Url</type>
+    </fields>
+    <fields>
+        <fullName>Origin_Source_Detail__c</fullName>
+        <externalId>false</externalId>
+        <formula>TEXT(Lead.Lead_Origin_Detail__c)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Origin Source Detail</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Origin_Source_Type__c</fullName>
+        <externalId>false</externalId>
+        <formula>TEXT(Lead.Origin_Source_Type__c)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Origin Source Type</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Original_Referrer__c</fullName>
+        <externalId>false</externalId>
+        <label>Original Referrer</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Original_Response_Keyword__c</fullName>
+        <externalId>false</externalId>
+        <label>Original Response Keyword</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Original_Response_Vendor__c</fullName>
+        <externalId>false</externalId>
+        <label>Original Response Vendor</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Owner_Function__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(CONTAINS(Lead_Contact_Owner_Role__c,&apos;Inside Sales&apos;),&apos;ISR&apos;, 
+IF(CONTAINS(Lead_Contact_Owner_Role__c,&apos;Partner&apos;), &apos;Partner&apos;, 
+IF(AND(OR(CONTAINS(Lead_Contact_Owner_Role__c,&apos;Sales&apos;),CONTAINS(Lead_Contact_Owner_Role__c,&apos;Territory&apos;),CONTAINS(Lead_Contact_Owner_Role__c,&apos;Accounts&apos;)),OR(CONTAINS(Lead_Contact_Owner_Role__c,&apos;Rep&apos;),CONTAINS(Lead_Contact_Owner_Role__c,&apos;Leader&apos;),CONTAINS(Lead_Contact_Owner_Role__c,&apos;FSR&apos;))),&apos;FSR&apos;,&apos; &apos; 
+)))</formula>
+        <label>Lead/Contact Owner Function</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Owner_Geo__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(ISBLANK(TEXT(Lead.Owner:User.Geo__c)),TEXT(Contact.Owner.Geo__c), TEXT(Lead.Owner:User.Geo__c))</formula>
+        <label>Lead/Contact Owner Geo</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Partner_ID__c</fullName>
+        <externalId>false</externalId>
+        <label>Partner ID</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Partner_Name__c</fullName>
+        <externalId>false</externalId>
+        <label>Partner Name</label>
+        <length>100</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Phone</fullName>
+    </fields>
+    <fields>
+        <fullName>PostalCode</fullName>
+    </fields>
+    <fields>
+        <fullName>Profile_Score_Current__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(ISBLANK(Lead.Id),Contact.Profile_Score_Tier__c ,Lead.Profile_Score_Tier__c )</formula>
+        <label>Profile Score (Current)</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Profile_Score_Tier_On_Create__c</fullName>
+        <description>Synced from Lead or Contact Profile Score Tier On Create</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Synced from Lead or Contact Profile Score Tier On Create</inlineHelpText>
+        <label>Profile Score Tier (On Create)</label>
+        <length>25</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>QL_to_SRL_WD__c</fullName>
+        <description># WEEKDAYS from QL to SRL - Same day = 0, Evaluates to blank if SRL Date is blank. Weekdays is based on Org company settings.</description>
+        <externalId>false</externalId>
+        <formula>IF( NOT(ISBLANK(CFCR_SRL_Date__c)),
+
+IF( CASE(MOD( FCRM__FCR_QR_Date__c - DATE(1985,6,24),7),
+0 , CASE( MOD( CFCR_SRL_Date__c - FCRM__FCR_QR_Date__c ,7),1,2,2,3,3,4,4,5,5,5,6,5,1),
+1 , CASE( MOD( CFCR_SRL_Date__c - FCRM__FCR_QR_Date__c ,7),1,2,2,3,3,4,4,4,5,4,6,5,1),
+2 , CASE( MOD( CFCR_SRL_Date__c - FCRM__FCR_QR_Date__c ,7),1,2,2,3,3,3,4,3,5,4,6,5,1),
+3 , CASE( MOD( CFCR_SRL_Date__c - FCRM__FCR_QR_Date__c ,7),1,2,2,2,3,2,4,3,5,4,6,5,1),
+4 , CASE( MOD( CFCR_SRL_Date__c - FCRM__FCR_QR_Date__c ,7),1,1,2,1,3,2,4,3,5,4,6,5,1),
+5 , CASE( MOD( CFCR_SRL_Date__c - FCRM__FCR_QR_Date__c ,7),1,0,2,1,3,2,4,3,5,4,6,5,0),
+6 , CASE( MOD( CFCR_SRL_Date__c - FCRM__FCR_QR_Date__c ,7),1,1,2,2,3,3,4,4,5,5,6,5,0),
+999)
++
+(FLOOR(( CFCR_SRL_Date__c - FCRM__FCR_QR_Date__c )/7)*5) &lt;=0 , 0,
+
+CASE(MOD( FCRM__FCR_QR_Date__c - DATE(1985,6,24),7),
+0 , CASE( MOD( CFCR_SRL_Date__c - FCRM__FCR_QR_Date__c ,7),1,2,2,3,3,4,4,5,5,5,6,5,1),
+1 , CASE( MOD( CFCR_SRL_Date__c - FCRM__FCR_QR_Date__c ,7),1,2,2,3,3,4,4,4,5,4,6,5,1),
+2 , CASE( MOD( CFCR_SRL_Date__c - FCRM__FCR_QR_Date__c ,7),1,2,2,3,3,3,4,3,5,4,6,5,1),
+3 , CASE( MOD( CFCR_SRL_Date__c - FCRM__FCR_QR_Date__c ,7),1,2,2,2,3,2,4,3,5,4,6,5,1),
+4 , CASE( MOD( CFCR_SRL_Date__c - FCRM__FCR_QR_Date__c ,7),1,1,2,1,3,2,4,3,5,4,6,5,1),
+5 , CASE( MOD( CFCR_SRL_Date__c - FCRM__FCR_QR_Date__c ,7),1,0,2,1,3,2,4,3,5,4,6,5,0),
+6 , CASE( MOD( CFCR_SRL_Date__c - FCRM__FCR_QR_Date__c ,7),1,1,2,2,3,3,4,4,5,5,6,5,0),
+999)
++
+(FLOOR(( CFCR_SRL_Date__c - FCRM__FCR_QR_Date__c )/7)*5) -1),
+null)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText># WEEKDAYS from QL to SRL - Same day = 0, Evaluates to blank if SRL Date is blank. Weekdays is based on Org company settings.</inlineHelpText>
+        <label>QL to SRL WD</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>QL_to_SRL__c</fullName>
+        <externalId>false</externalId>
+        <formula>CFCR_SRL_Date__c - FCRM__FCR_QR_Date__c</formula>
+        <label>QL to SRL</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>RegisteredForHotel__c</fullName>
+        <description>For CVent Integration</description>
+        <externalId>false</externalId>
+        <inlineHelpText>For CVent Integration</inlineHelpText>
+        <label>RegisteredForHotel</label>
+        <required>false</required>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>RegistrationTypeCode__c</fullName>
+        <description>For CVent integration</description>
+        <externalId>false</externalId>
+        <label>RegistrationTypeCode</label>
+        <required>false</required>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>RegistrationType__c</fullName>
+        <description>For CVent Integration</description>
+        <externalId>false</externalId>
+        <inlineHelpText>For CVent Integration</inlineHelpText>
+        <label>RegistrationType</label>
+        <required>false</required>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Response_Detail__c</fullName>
+        <description>Synced from lead/contact on response create</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Synced from lead/contact on response create</inlineHelpText>
+        <label>Response Detail</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Response_Keyword__c</fullName>
+        <externalId>false</externalId>
+        <label>Response Keyword</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Response_LP__c</fullName>
+        <externalId>false</externalId>
+        <label>Response LP</label>
+        <required>false</required>
+        <type>Url</type>
+    </fields>
+    <fields>
+        <fullName>Response_Type__c</fullName>
+        <description>Synced on create from related lead &amp; contact</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Synced on create from related lead &amp; contact</inlineHelpText>
+        <label>Response Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Email Marketing</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Web</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Event</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Webinar</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>PPC</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Response_Vendor__c</fullName>
+        <externalId>false</externalId>
+        <label>Response Vendor</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>SAL_to_SRL_WD__c</fullName>
+        <description># WEEKDAYS from SAL to SRL - Same day = 0, Evaluates to blank if SRL Date is blank. Weekdays is based on Org company settings.</description>
+        <externalId>false</externalId>
+        <formula>IF( NOT(ISBLANK(CFCR_SRL_Date__c)),
+
+IF( CASE(MOD( FCRM__FCR_SAR_Date__c - DATE(1985,6,24),7),
+0 , CASE( MOD( CFCR_SRL_Date__c - FCRM__FCR_SAR_Date__c ,7),1,2,2,3,3,4,4,5,5,5,6,5,1),
+1 , CASE( MOD( CFCR_SRL_Date__c - FCRM__FCR_SAR_Date__c ,7),1,2,2,3,3,4,4,4,5,4,6,5,1),
+2 , CASE( MOD( CFCR_SRL_Date__c - FCRM__FCR_SAR_Date__c ,7),1,2,2,3,3,3,4,3,5,4,6,5,1),
+3 , CASE( MOD( CFCR_SRL_Date__c - FCRM__FCR_SAR_Date__c ,7),1,2,2,2,3,2,4,3,5,4,6,5,1),
+4 , CASE( MOD( CFCR_SRL_Date__c - FCRM__FCR_SAR_Date__c ,7),1,1,2,1,3,2,4,3,5,4,6,5,1),
+5 , CASE( MOD( CFCR_SRL_Date__c - FCRM__FCR_SAR_Date__c ,7),1,0,2,1,3,2,4,3,5,4,6,5,0),
+6 , CASE( MOD( CFCR_SRL_Date__c - FCRM__FCR_SAR_Date__c ,7),1,1,2,2,3,3,4,4,5,5,6,5,0),
+999)
++
+(FLOOR(( CFCR_SRL_Date__c - FCRM__FCR_SAR_Date__c )/7)*5) &lt;=0 , 0,
+
+CASE(MOD( FCRM__FCR_SAR_Date__c - DATE(1985,6,24),7),
+0 , CASE( MOD( CFCR_SRL_Date__c - FCRM__FCR_SAR_Date__c ,7),1,2,2,3,3,4,4,5,5,5,6,5,1),
+1 , CASE( MOD( CFCR_SRL_Date__c - FCRM__FCR_SAR_Date__c ,7),1,2,2,3,3,4,4,4,5,4,6,5,1),
+2 , CASE( MOD( CFCR_SRL_Date__c - FCRM__FCR_SAR_Date__c ,7),1,2,2,3,3,3,4,3,5,4,6,5,1),
+3 , CASE( MOD( CFCR_SRL_Date__c - FCRM__FCR_SAR_Date__c ,7),1,2,2,2,3,2,4,3,5,4,6,5,1),
+4 , CASE( MOD( CFCR_SRL_Date__c - FCRM__FCR_SAR_Date__c ,7),1,1,2,1,3,2,4,3,5,4,6,5,1),
+5 , CASE( MOD( CFCR_SRL_Date__c - FCRM__FCR_SAR_Date__c ,7),1,0,2,1,3,2,4,3,5,4,6,5,0),
+6 , CASE( MOD( CFCR_SRL_Date__c - FCRM__FCR_SAR_Date__c ,7),1,1,2,2,3,3,4,4,5,5,6,5,0),
+999)
++
+(FLOOR(( CFCR_SRL_Date__c - FCRM__FCR_SAR_Date__c )/7)*5) -1),
+null)</formula>
+        <inlineHelpText># WEEKDAYS from SAL to SRL - Same day = 0, Evaluates to blank if SRL Date is blank. Weekdays is based on Org company settings.</inlineHelpText>
+        <label>SAL to SRL WD</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>SAL_to_SRL__c</fullName>
+        <externalId>false</externalId>
+        <formula>CFCR_SRL_Date__c -  FCRM__FCR_SAR_Date__c</formula>
+        <label>SAL to SRL</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>SQO_to_VO__c</fullName>
+        <description># Days from SQO to VO - Evaluates to blank if VO Date if blank.</description>
+        <externalId>false</externalId>
+        <formula>VO_Date__c - FCRM__FCR_SQR_Date__c</formula>
+        <inlineHelpText># Days from SQO to VO - Evaluates to blank if VO Date if blank.</inlineHelpText>
+        <label>SQO to VO</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Sales_Segment__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(ISBLANK(Lead.Id),Contact.Account.Sales_Segment__c, Lead.Sales_Segment__c)</formula>
+        <label>Sales Segment</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Salutation</fullName>
+        <picklist>
+            <picklistValues>
+                <fullName>Mr.</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Ms.</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Mrs.</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Dr.</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Prof.</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Herr</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Frau</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Self_Service_Product__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(ISBLANK(TEXT(Lead.Self_Service_Product__c)), TEXT(Contact.Self_Service_Product__c), TEXT(Lead.Self_Service_Product__c))</formula>
+        <label>Self-Service Product</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>State</fullName>
+    </fields>
+    <fields>
+        <fullName>Status</fullName>
+        <picklist>
+            <picklistValues>
+                <fullName>01 Bad Data</fullName>
+                <color>#8F6429</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>01 Member</fullName>
+                <color>#0B6FCE</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>02 Requested Trial</fullName>
+                <color>#AFCADF</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>03 Verified Email</fullName>
+                <color>#F3D904</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>04 Reserved Saas Controller</fullName>
+                <color>#E27001</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>05 Downloaded Controller On-Premise</fullName>
+                <color>#E27001</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>06 Launched Controller</fullName>
+                <color>#A53711</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>07 Downloaded Java Agents</fullName>
+                <color>#641CCF</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>07 Started Download Wizard</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>085 Downloaded PHP Agents</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>08 Downloaded Agents</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>08 Downloaded NET Agent</fullName>
+                <color>#641CCF</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>09 Installed Agents</fullName>
+                <color>#0B6FCE</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>10 Opened Snapshot</fullName>
+                <color>#B6E32E</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>10 Visits</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>11 Launched Diagnostic Session</fullName>
+                <color>#78C953</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>12 Ready to Buy</fullName>
+                <color>#419249</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>13 Lead Converted</fullName>
+                <color>#F96FB7</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>14 Buys Agents</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1 Visit</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>2 Visits</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3 Visits</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>4 Visits</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>5 Visits</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>6 Visits</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7 Visits</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>8 Visits</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>9 Visits</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Added to Campaign</fullName>
+                <color>#641CCF</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Add to email send</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>AppDynamics Recommended by Gartner</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Appointment set</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Attended</fullName>
+                <color>#78C953</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Attended Dinner</fullName>
+                <color>#57F17C</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Attended Exec Briefing</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Attended On-demand</fullName>
+                <color>#641CCF</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Attended Presentation</fullName>
+                <color>#66E9BD</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Attended Show</fullName>
+                <color>#8F6429</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Attended User Group</fullName>
+                <color>#F3D904</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Booked Hotel</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Booth Survey</fullName>
+                <color>#0B24BE</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Cancelled Appointment</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Clicked</fullName>
+                <color>#F3D904</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Clicked Link</fullName>
+                <color>#78C953</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Clicked Link in Email</fullName>
+                <color>#8F6429</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Completed</fullName>
+                <color>#78C953</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Contact? No</fullName>
+                <color>#AFCADF</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Contact? Possibly</fullName>
+                <color>#2F5D85</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Contact? Yes</fullName>
+                <color>#F96FB7</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Contacted</fullName>
+                <color>#57F17C</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Content Checked and Ready to Send</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Converted</fullName>
+                <color>#A53711</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Deleting this from this camp</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Did Not Attend</fullName>
+                <color>#B6E32E</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>DO NOT SEND</fullName>
+                <color>#0B6FCE</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>DO NOT USE</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Downloaded</fullName>
+                <color>#B6E32E</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Downloaded Asset</fullName>
+                <color>#0B24BE</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Downloaded from Banner Ad</fullName>
+                <color>#8F6429</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Downloaded from Email</fullName>
+                <color>#AFCADF</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Downloaded from ON24</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Downloaded from Website</fullName>
+                <color>#2F5D85</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Downloaded WP</fullName>
+                <color>#A845DC</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Engagaed</fullName>
+                <color>#F96FB7</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Engaged</fullName>
+                <color>#419249</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Filled Out Booth Survey</fullName>
+                <color>#641CCF</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Filled out Form</fullName>
+                <color>#E27001</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Filled Out Form (Test A)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Filled Out Form (Test B)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Filled Out Form (Test C)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>From Old Opportunity</fullName>
+                <color>#F96FB7</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>FSR Sent VITO</fullName>
+                <color>#EFAE73</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>FSR to Send Bespoke VITO</fullName>
+                <color>#2F5D85</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Have sent PR</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>High Priority</fullName>
+                <color>#A845DC</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>In Progress</fullName>
+                <color>#0B6FCE</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Internal Attendee</fullName>
+                <color>#F96FB7</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Invited</fullName>
+                <color>#F3D904</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Invited to Exec Briefing - no box</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>ISR Sent VITO</fullName>
+                <color>#57F17C</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>ISR Sourced</fullName>
+                <color>#E27001</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>ISR to Send Bespoke VITO</fullName>
+                <color>#AFCADF</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>JobSite</fullName>
+                <color>#8F6429</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>LinkedIn</fullName>
+                <color>#78C953</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Low Priority</fullName>
+                <color>#A53711</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Marketing Sent VITO</fullName>
+                <color>#8F6429</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Marketing to Send FRENCH VITO</fullName>
+                <color>#78C953</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Marketing to Send VITO</fullName>
+                <color>#F96FB7</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Medium Priority</fullName>
+                <color>#F3D904</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Member</fullName>
+                <color>#0B6FCE</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>No</fullName>
+                <color>#E27001</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>No Follow Up</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Nominated</fullName>
+                <color>#641CCF</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>No Response</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>No Show</fullName>
+                <color>#A845DC</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>No show to exec briefing</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Not Started</fullName>
+                <color>#57F17C</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Not Used</fullName>
+                <color>#A53711</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>On List</fullName>
+                <color>#0B24BE</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Opened</fullName>
+                <color>#57F17C</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Opened Email</fullName>
+                <color>#AFCADF</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Pending Approval</fullName>
+                <color>#A53711</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Rainking</fullName>
+                <color>#AFCADF</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Registered</fullName>
+                <color>#0B6FCE</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Registered To Attend</fullName>
+                <color>#EFAE73</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Registration Error</fullName>
+                <color>#419249</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Rejected</fullName>
+                <color>#0B24BE</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Remove from Track 0</fullName>
+                <color>#8F6429</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Remove from Track 1a</fullName>
+                <color>#F3D904</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Remove from Track 1b</fullName>
+                <color>#F96FB7</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Remove from Track 2</fullName>
+                <color>#78C953</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Remove from Track 3</fullName>
+                <color>#419249</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Removing this from camp</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Responded</fullName>
+                <color>#A845DC</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Responded-FCCRM</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sent</fullName>
+                <color>#E27001</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sent Direct Mailer</fullName>
+                <color>#EFAE73</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sent Email</fullName>
+                <color>#66E9BD</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sent Mail</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Stream 1 - Email 1</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Stream 1 - Email 2</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Stream 1 - Email 3</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Stream 1 - Email 4</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Stream 1 - Email 5</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Stream 1 - Email 6</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Stream 1 - Email 7</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Stream 1 - Email 8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Stream 1 - Email 9</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Taxi List</fullName>
+                <color>#2F5D85</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>To Invite</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>To Send</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Track 0 Email 2 Day 2</fullName>
+                <color>#2F5D85</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Track 0 Email 3 Day 3</fullName>
+                <color>#AFCADF</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Track 1a Email 2 Day 2</fullName>
+                <color>#EFAE73</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Track 1a Email 3 Day 5</fullName>
+                <color>#57F17C</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Track 1a Email 4 Day 8</fullName>
+                <color>#0B6FCE</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Track 1a Email 5 Day 11</fullName>
+                <color>#78C953</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Track 1a Email 6 Day 14</fullName>
+                <color>#E27001</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Track 1a Email 7 Day 15</fullName>
+                <color>#A845DC</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Track 1a Email 8 Day 17</fullName>
+                <color>#B6E32E</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Track 1b Email 2 Day 2</fullName>
+                <color>#A53711</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Track 1b Email 3 Day 5</fullName>
+                <color>#66E9BD</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Track 1b Email 4 Day 8</fullName>
+                <color>#0B24BE</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Track 1b Email 5 Day 11</fullName>
+                <color>#419249</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Track 1b Email 6 Day 14</fullName>
+                <color>#B6E32E</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Track 1b Email 7 Day 15</fullName>
+                <color>#641CCF</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Track 1b Email 8 Day 17</fullName>
+                <color>#641CCF</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Track 2 Email 2 Day 2</fullName>
+                <color>#2F5D85</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Track 2 Email 3 Day 5</fullName>
+                <color>#AFCADF</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Track 2 Email 4 Day 8</fullName>
+                <color>#8F6429</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Track 2 Email 5 Day 11</fullName>
+                <color>#EFAE73</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Track 2 Email 6 Day 14</fullName>
+                <color>#57F17C</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Track 2 Email 7 Day 15</fullName>
+                <color>#0B6FCE</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Track 2 Email 8 Day 17</fullName>
+                <color>#B6E32E</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Track 3 Email 2 Day 2</fullName>
+                <color>#E27001</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Track 3 Email 3 Day 5</fullName>
+                <color>#A845DC</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Track 3 Email 4 Day 8</fullName>
+                <color>#F3D904</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Track 3 Email 5 Day 11</fullName>
+                <color>#A53711</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Track 3 Email 6 Day 14</fullName>
+                <color>#66E9BD</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Track 3 Email 7 Day 15</fullName>
+                <color>#0B24BE</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Track 3 Email 8 Day 17</fullName>
+                <color>#419249</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Unsubscribed</fullName>
+                <color>#66E9BD</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>VAR Partner Attendee</fullName>
+                <color>#2F5D85</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Visisted Page (Test C)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Visited</fullName>
+                <color>#B6E32E</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Visited Booth</fullName>
+                <color>#EFAE73</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Visited Booth - P1 (Hot)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Visited Booth - P2 (Warm)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Visited Booth - P3 (Cold)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Visited Page (Test A)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Visited Page (Test B)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Wait Listed</fullName>
+                <color>#66E9BD</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Websphere List</fullName>
+                <color>#EFAE73</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Winner</fullName>
+                <color>#419249</color>
+                <default>false</default>
+            </picklistValues>
+            <sorted>true</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Status_Reason__c</fullName>
+        <externalId>false</externalId>
+        <label>Status Reason</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Competitor</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>AppDynamics Employee</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Partner Employee</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>No Longer with Company</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>SPAMmy data</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Not suitable for AppDynamics sale</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Ops Cleaning</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Existing Competitive Solution Installed</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>No Immediate Need</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Couldn&apos;t Connect</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Inaccurate Contact Info</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Existing AppD Customer</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Not a Technology Fit</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Street</fullName>
+    </fields>
+    <fields>
+        <fullName>Title</fullName>
+    </fields>
+    <fields>
+        <fullName>VO_Date__c</fullName>
+        <description>VO Achieved Date - formula of VO checkbox from the opportunity set for stage progression beyond B2</description>
+        <externalId>false</externalId>
+        <formula>DATEVALUE( FCRM__FCR_Opportunity__r.VO_Date__c )</formula>
+        <inlineHelpText>VO Achieved Date - formula of VO checkbox from the opportunity set for stage progression beyond B2</inlineHelpText>
+        <label>VO Date</label>
+        <required>false</required>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>VO__c</fullName>
+        <description>VO Achieved - formula of VO checkbox from the opportunity set for stage progression beyond B2</description>
+        <externalId>false</externalId>
+        <formula>FCRM__FCR_Opportunity__r.VO__c</formula>
+        <inlineHelpText>VO Achieved - formula of VO checkbox from the opportunity set for stage progression beyond B2</inlineHelpText>
+        <label>VO</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>VO_to_VO_Won__c</fullName>
+        <description># Days from VO to VO Won - Evaluates to blank if VO Won Date if blank.</description>
+        <externalId>false</externalId>
+        <formula>IF( FCRM__FCR_Opportunity_Closed_Won__c = &quot;True&quot;, FCRM__FCR_Opportunity_Closed_Date__c - VO_Date__c, null)</formula>
+        <inlineHelpText># Days from VO to VO Won - Evaluates to blank if VO Won Date if blank.</inlineHelpText>
+        <label>VO to VO Won</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>poll1answer__c</fullName>
+        <description>On24 Poll Answer</description>
+        <externalId>false</externalId>
+        <label>Answer 1</label>
+        <length>1000</length>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>poll1question__c</fullName>
+        <description>On24 Questions</description>
+        <externalId>false</externalId>
+        <label>Question 1</label>
+        <length>32768</length>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>poll2answer__c</fullName>
+        <externalId>false</externalId>
+        <label>Answer 2</label>
+        <length>32768</length>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>poll2question__c</fullName>
+        <description>On24 Poll Question</description>
+        <externalId>false</externalId>
+        <label>Question 2</label>
+        <length>32768</length>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>poll3answer__c</fullName>
+        <description>On24 Poll Answer</description>
+        <externalId>false</externalId>
+        <label>Answer 3</label>
+        <length>32768</length>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>poll3question__c</fullName>
+        <description>On24 Poll Question</description>
+        <externalId>false</externalId>
+        <label>Question 3</label>
+        <length>32768</length>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>poll4answer__c</fullName>
+        <externalId>false</externalId>
+        <label>Answer 4</label>
+        <length>32768</length>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>poll4question__c</fullName>
+        <description>On24 Poll Question</description>
+        <externalId>false</externalId>
+        <label>Question 4</label>
+        <length>32768</length>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+</CustomObject>

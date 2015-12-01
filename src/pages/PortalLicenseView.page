@@ -1,0 +1,189 @@
+<apex:page standardController="LicenseDetail__c"
+	extensions="PortalControllerLicenseView" action="{!initAction}">
+	<style>
+		div.operation{
+			border: 2px 
+			width: 98%;
+		    height: 120px;
+		}
+		div.task{
+			float:left;
+			width: 14%;
+		    height: 60%;
+		    border: 1px
+		}
+		div.open{
+			border: 2px solid grey;
+		}
+		div.inprogress{
+			border: solid yellow;
+		    -webkit-animation: mymove 5s infinite; /* Chrome, Safari, Opera */
+		    animation: mymove 5s infinite;
+		}
+		
+		div.success{
+			border: 2px solid green;
+		}
+		
+		div.failed{
+			border: 2px solid red;
+		}
+		
+		/* Chrome, Safari, Opera */
+		@-webkit-keyframes mymove {
+		    50% {border-color: lightblue;}
+		}
+		
+		/* Standard syntax */
+		@keyframes mymove {
+		    50% {border-color: lightblue;}
+		}
+	</style>
+	<apex:PageMessages escape="false"></apex:PageMessages>
+	<apex:form >
+		<apex:actionPoller action="{!checkLicenseState}" reRender="pageBlock" enabled="{!!operationStatus.finished}"  interval="15"/>
+		<apex:pageBlock id="pageBlock">
+			<apex:pageBlockButtons >
+				<apex:commandButton value="Update" action="{!updateLicense}" />
+				<apex:commandButton value="Upgrade" action="{!upgradeLicense}"/>
+				<apex:commandButton value="Convert to Lite" />
+				<apex:commandButton value="Disable" />				
+			</apex:pageBlockButtons>
+			<!-- License Details -->
+			<apex:pageBlockSection id="operationStatus" title="License Last Operation Status {!operationStatus.status}" columns="1">
+				<apex:outputPanel >
+					<div class="operation {!operationStatus.statusClass}">
+						License Operation: {!operationStatus.id}  Status: {!operationStatus.status}
+						<br/>Started: {!operationStatus.started}  Completed: {!operationStatus.completed}
+						<br/>
+						<br/>
+						<apex:repeat value="{!operationStatus.tasks}" var="task">
+							<div class="task {!task.statusClass}">
+								Name: {!task.name}<br/>
+								Id: {!task.id} <br/>
+								Started: {!task.started}<br/>
+								Completed: {!task.completed}
+							</div>		
+						</apex:repeat>
+					</div>
+				</apex:outputPanel>
+			</apex:pageBlockSection>
+			
+			
+			<apex:pageBlockSection id="licenseDetails" title="License Details" columns="2">
+				<apex:pageBlockSectionItem id="productTypeSection">
+					<apex:outputLabel value="Edition"></apex:outputLabel>
+					<apex:outputLabel value="{!licenseObj.edition}"/>
+				</apex:pageBlockSectionItem>
+				<apex:pageBlockSectionItem id="deploymentSection">
+					<apex:outputLabel value="Deployment Option"></apex:outputLabel>
+					<apex:outputLabel value="{!licenseObj.deployment.type}"/>
+				</apex:pageBlockSectionItem>
+
+				<apex:PageBlockSectionItem id="expiryDateSection">
+					<apex:outputLabel value="License Expiration Date"></apex:outputLabel>
+					<apex:outputLabel value="{!licenseObj.expiration_date}" />
+				</apex:PageBlockSectionItem>
+
+				<apex:PageBlockSectionItem id="theSectionItem2"
+					rendered="{!licenseObj.deployment.type == 'saas'}">
+					<apex:outputLabel value="Customer SaaS URL" id="customURLLbl" />
+					<apex:outputLabel value="{!licenseObj.deployment.attributes.hostname}.saas.appdynamics.com"
+							style="width:450" />
+				</apex:PageBlockSectionItem>
+
+				<apex:PageBlockSectionItem rendered="{!licenseObj.deployment.type == 'saas'}">
+					<apex:outputLabel value="SAAS Account" />
+					<apex:outputLabel value="{!licenseObj.deployment.attributes.account_name}"
+						style="width:450" />
+				</apex:PageBlockSectionItem>
+
+				<apex:PageBlockSectionItem rendered="{!licenseObj.deployment.type == 'saas'}">
+					<apex:outputLabel value="SAAS User" />
+					<apex:outputLabel value="{!licenseObj.deployment.attributes.user_name}"
+						style="width:450" />
+				</apex:PageBlockSectionItem>
+
+				<apex:PageBlockSectionItem rendered="{!licenseObj.deployment.type == 'saas'}">
+					<apex:outputLabel value="SAAS Password" />
+					<apex:outputLabel value="{!licenseObj.deployment.attributes.password}"
+						style="width:450" />
+				</apex:PageBlockSectionItem>
+
+				<apex:PageBlockSectionItem rendered="{!licenseObj.deployment.type == 'saas'}">
+					<apex:outputLabel value="SAAS Password" />
+					<apex:outputLabel value="{!licenseObj.deployment.attributes.access_key}"
+						style="width:450" />
+				</apex:PageBlockSectionItem>
+
+				<apex:PageBlockSectionItem id="macSection"
+					rendered="{!licenseObj.deployment.type == 'onprem'}">
+					<apex:outputLabel value="MAC Address" id="macLblId"></apex:outputLabel>
+					<apex:outputLabel value="{!licenseObj.deployment.attributes.mac_address}"
+						id="macValId" />
+				</apex:PageBlockSectionItem>
+			</apex:pageBlockSection>
+			<apex:pageBlockSection id="licenseProducts" title="License Products"
+				collapsible="false" columns="1">
+				<apex:repeat id="agentsRepeat" value="{!productCategories}"
+					var="agentCategory">
+					<div class="hideCurrDate">
+						<apex:pageBlockSection id="agentsSection"
+							title="{!agentCategory} Products" columns="1" collapsible="true">
+							<apex:pageBlockTable value="{!categoryBasedProducts[agentCategory]}" var="licUnit"
+								border="0">
+								<apex:column headerValue="Agent Type" width="150">
+									<apex:outputLabel value="{!licUnit.name}" />
+								</apex:column>
+								<apex:column headerValue="Product Edition" width="200">
+									<apex:outputLabel value="{!licUnit.edition}" />
+								</apex:column>
+								<apex:column headerValue="Expiration Date" width="200">
+									<apex:outputLabel value="{!licUnit.expiration_date}"/>
+								</apex:column>
+								<apex:column headerValue="Licensing Model" width="120">
+									<apex:outputLabel value="{!licUnit.model}"/>
+								</apex:column>
+								<apex:column headerValue="Units" width="80">
+									<apex:outputLabel value="{!licUnit.units}"/>
+								</apex:column>
+								<apex:column headerValue="Max Units" width="80">
+									<apex:outputLabel value="{!licUnit.max_units}" />
+								</apex:column>
+								<apex:column headerValue="Data Retention (in Days)" width="80"
+									headerClass="data-retention-{!agentCategory}"
+									styleClass="data-retention-{!agentCategory}">
+									<apex:outputLabel value="{!licUnit.retention}" />
+								</apex:column>
+								<apex:column ></apex:column>
+							</apex:pageBlockTable>
+						</apex:pageBlockSection>
+					</div>
+				</apex:repeat>
+			</apex:pageBlockSection>
+			<apex:pageBlockSection title="License Users" collapsible="false"
+				columns="1">
+				<apex:pageBlockTable value="{!licenseUsers}" var="lu" border="0">
+					<apex:column headerValue="Need License Email?" width="200">
+						<apex:inputCheckbox value="{!lu.needLicenseEmail}" />
+					</apex:column>
+					<apex:column headerValue="Need Service Email?" width="120">
+						<apex:inputCheckbox value="{!lu.needServiceEmail}" />
+					</apex:column>
+					<apex:column headerValue="Email" width="150">
+						<apex:outputLabel value="{!lu.email}" />
+					</apex:column>
+					<apex:column headerValue="First Name" width="200">
+						<apex:outputLabel value="{!lu.firstName}" />
+					</apex:column>
+					<apex:column headerValue="Last Name" width="200">
+						<apex:outputLabel value="{!lu.lastName}" />
+					</apex:column>
+					<apex:column headerValue="Type" width="80">
+						<apex:outputLabel value="{!lu.user_type}" />
+					</apex:column>
+				</apex:pageBlockTable>
+			</apex:pageBlockSection>
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>

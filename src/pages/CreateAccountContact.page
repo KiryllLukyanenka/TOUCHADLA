@@ -1,0 +1,72 @@
+<apex:page standardController="Opportunity" extensions="CreateAccountContactExtension" showHeader="false" sidebar="false">    
+    <style type="text/css">
+        .input-long {
+            width: 300px;
+            padding: 3px;
+        }
+        .bPageBlock .detailList .labelCol {
+            width: 30%;
+        }
+        #sectionHeader {
+            font-size: 18px;
+            margin: 10px 20px;
+        }
+    </style>
+    <apex:includeScript value="{!URLFOR($Resource.AppDynamicsPack, 'js/jquery-1.11.1.min.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.AppDynamicsPack, 'js/jquery.blockUI.js')}" />    
+    <script type="text/javascript">    
+        (function( $ ) {
+            $(function() {
+                $("[id$=submit]").click(function() {
+                    $.blockUI();
+                });
+            });
+        })( jQuery );
+    </script>
+    <script type="text/javascript">
+        if({!isSuccess}){
+            alert("The Account & Contact were created and associated with the Opportunity");
+            // Refreshes the parent window.
+            window.opener.location.href = '/{!oppId}';
+            window.close();
+        }       
+    </script>
+    <apex:form id="theForm">      
+        <apex:pageMessages ></apex:pageMessages>
+        <div id="sectionHeader">Create Account &#38; Contact</div>        
+        <apex:pageBlock mode="edit">
+            
+            <apex:pageBlockSection columns="1" title="Opportunity & Account Ownership">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Opp & Account Owner"></apex:outputLabel>
+                    <apex:inputField value="{!RelatedAccount.OwnerId}" styleClass="input-long" required="true"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection columns="1" title="Account">                                
+                <apex:inputField value="{!RelatedAccount.Name}" styleClass="input-long" required="true" />
+                <apex:inputField value="{!RelatedAccount.BillingStreet}" styleClass="input-long" required="true" />
+                <apex:inputField value="{!RelatedAccount.BillingCity}" styleClass="input-long" required="true" />
+                <apex:inputField value="{!RelatedAccount.BillingState}" styleClass="input-long" required="true" />
+                <apex:inputField value="{!RelatedAccount.BillingPostalCode}" styleClass="input-long" required="true" />
+                <apex:inputField value="{!RelatedAccount.BillingCountry}" styleClass="input-long" required="true" />
+            </apex:pageBlockSection>
+
+            <apex:pageBlockSection columns="1" title="Contact">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Contact Owner"></apex:outputLabel>
+                    <apex:outputField value="{!PrimaryContact.OwnerId}"/>
+                </apex:pageBlockSectionItem>
+                <apex:inputField value="{!PrimaryContact.FirstName}" styleClass="input-long" required="true" />
+                <apex:inputField value="{!PrimaryContact.LastName}" styleClass="input-long" required="true" />
+                <apex:inputField value="{!PrimaryContact.Title}" styleClass="input-long" required="true" />
+                <apex:inputField value="{!PrimaryContact.Phone}" styleClass="input-long" required="true" />
+                <apex:inputField value="{!PrimaryContact.Email}" styleClass="input-long" required="true" />
+            </apex:pageBlockSection>         
+
+            <apex:pageBlockButtons location="bottom">
+                <apex:commandButton value="Create & Relate To Opp" action="{!save}" id="submit" />
+                <apex:commandButton value="Close" onclick="window.close(); return false;" />                
+            </apex:pageBlockButtons>      
+        </apex:pageBlock>   
+    </apex:form>        
+</apex:page>

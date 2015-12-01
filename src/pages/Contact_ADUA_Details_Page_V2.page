@@ -1,0 +1,26 @@
+<apex:page standardController="Contact" extensions="ADUADetailsController_V2" action="{!initAction}">
+<apex:pageMessages ></apex:pageMessages>
+	<apex:form >
+		<apex:pageBlock id="pageBlock">
+			<apex:pageBlockButtons >
+                <apex:commandButton value="Save" action="{!saveObject}" disabled="{!disableUIComponent}">
+                </apex:commandButton>
+            </apex:pageBlockButtons>
+			<apex:pageBlockSection title="Accessable systems" columns="1" collapsible="false" >
+            	<apex:outputPanel >
+            		<apex:repeat value="{!accCtADUAHelper.contactWrapperList}" var="ctWrapper">
+            			<apex:repeat value="{!ctWrapper.aduaUIObj.systemEntries}" var="system">
+							<apex:inputCheckBox styleClass="systemsClass" rendered="{!system.isVisible}" value="{!system.selected}" disabled="{!system.isLMS}">
+								<!-- <apex:actionSupport event="onchange" action="{!accessibleSystemsChange}" rerender="pageBlock"/> -->
+							</apex:inputCheckBox>           		
+							<apex:outputLabel value="{!system.systemName}" rendered="{!system.isVisible}" />
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            			</apex:repeat>
+            		</apex:repeat>
+				</apex:outputPanel>
+			</apex:pageBlockSection>
+		</apex:pageBlock>
+	</apex:form>
+
+</apex:page>

@@ -1,0 +1,108 @@
+<apex:page >
+	<apex:pageBlock >
+			<apex:tabPanel switchType="client" selectedTab="opportunities2"
+				id="theTabPanel">
+				<apex:tab label="Premium Accounts" name="adoptionSummary" id="tabSummaryOne">
+					<apex:pageBlockSection columns="2">
+						<c:PremiumAdoptionSummary currentYearAttr="false" durationAttr="all" reload="true"/>
+						<c:PremiumAdoptionSummary currentYearAttr="false" durationAttr="last3" reload="true"/>
+						<c:PremiumAdoptionSummary currentYearAttr="false" durationAttr="last6" reload="true"/>
+						<c:PremiumAdoptionSummary currentYearAttr="false" durationAttr="6plus" reload="true"/>
+					</apex:pageBlockSection>
+				</apex:tab>
+				<apex:tab label="Premium Accounts FY 14" name="adoptionSummaryFY" id="tabSummaryTwo">
+					<c:PremiumAdoptionSummary currentYearAttr="true" durationAttr="all" reload="true"/>
+					<c:PremiumAdoptionSummary currentYearAttr="true" durationAttr="last3" reload="true"/>
+					<c:PremiumAdoptionSummary currentYearAttr="true" durationAttr="last6" reload="true"/>
+					<c:PremiumAdoptionSummary currentYearAttr="true" durationAttr="6plus" reload="true"/>
+				</apex:tab>
+				<apex:tab label="DataSheet" name="dataSheet" id="tabOne">
+					<apex:pageBlockSection columns="1">
+						<c:DataView reportTitle="Data Sheet"
+							query="SELECT Date_TAM_Assigned_to_Account__c,
+								Support_Level__c,
+								Adoption_Score__c,
+								Name,
+								Technical_Account_Manager__c 
+								from Account  WHERE Adoption_Score__c!=null and Adoption_Score__c!=0 and Support_Level__c!=null" timeFilterField=""
+							timeFilterRange="" startTime="" endTime="" reload="true" />
+					</apex:pageBlockSection>
+				</apex:tab>
+				<apex:tab label="DataSheet Current FY" name="dataSheetCurrentFY" id="tabTwo">
+					<apex:pageBlockSection columns="1">
+						<c:DataView reportTitle="Data Sheet FY 14"
+							query="SELECT Date_TAM_Assigned_to_Account__c,
+												Support_Level__c,
+												Adoption_Score__c,
+												Name,
+												Technical_Account_Manager__c 
+												from Account 
+												WHERE  Adoption_Score__c!=null and Adoption_Score__c!=0 and Support_Level__c!=null and Date_TAM_Assigned_to_Account__c=THIS_FISCAL_YEAR" timeFilterField=""
+							timeFilterRange="" startTime="" endTime="" reload="true" />
+					</apex:pageBlockSection>
+				</apex:tab>
+				<apex:tab label="Adoption Package Report Current FY" name="adoptionPackageReport" id="tabThree">
+					<apex:pageBlockSection columns="1">
+						<c:DataView reportTitle="Data Sheet FY 14"
+							query="Select Opportunity.Owner.Name, 
+							Opportunity.Account.Name,Opportunity.Name, 
+							Opportunity.ForecastCategoryName,
+							PriceBookEntry.Product2.Name, 
+							Opportunity.CloseDate, 
+							Opportunity.StageName,  
+							Opportunity.Amount_USD__c,
+							Opportunity.Probability,
+ 							Opportunity.CreatedDate, 
+ 							Quantity, 
+ 							TotalPrice,
+ 							List_Price2__c
+ 							Opportunity.Owner.Name,
+ 							Oppotunity.Account.Billing.City,
+ 							Oppotunity.Account.Billing.City,
+ 							Oppotunity.Account.Billing.City,
+ 							from OpportunityLineItem 
+ 							WHERE Opportunity.CloseDate=THIS_FISCAL_YEAR" timeFilterField=""
+							timeFilterRange="" startTime="" endTime="" reload="true" />
+					</apex:pageBlockSection>
+				</apex:tab>
+				<apex:tab label="New Deals Onboarding" name="newDealsOnBoarding" id="tabFour">
+					<apex:pageBlockSection columns="1">
+						<c:DataView reportTitle="Bookings FY14 YTD"
+							query="SELECT Date_TAM_Assigned_to_Account__c,
+										Support_Level__c,
+										Adoption_Score__c,
+										Name,
+										Technical_Account_Manager__c 
+										from Account" timeFilterField=""
+							timeFilterRange="" startTime="" endTime="" reload="true" />
+					</apex:pageBlockSection>
+				</apex:tab>
+				
+				<apex:tab label="Bookings Current FY YTD" name="bookingsCurrentFYReport" id="tabFive">
+					<apex:pageBlockSection columns="1">
+						<c:DataView reportTitle="Bookings Current FY YTD"
+							query="Select Opportunity.Account.Name, 
+							Opportunity.Name,
+							Opportunity.Account.Technical_Account_Manager__c,
+							PriceBookEntry.Product2.ProductCode,
+							Opportunity.CloseDate,
+							TotalPrice,
+							Currency,
+							Quantity,
+							UnitPrice,
+							ListPrice,
+							List_Price2__c,
+							Opportunity.Ammount_USD__c,
+							Opportunity.Owner.Name
+ 							Oppotunity.Account.BillingCity,
+ 							Oppotunity.Account.BillingState,
+ 							Oppotunity.Account.BillingCountry,
+ 							from OpportunityLineItem 
+ 							WHERE Opportunity.CloseDate=THIS_FISCAL_YEAR" timeFilterField=""
+							timeFilterRange="" startTime="" endTime="" reload="true" />
+					</apex:pageBlockSection>
+				</apex:tab>
+				
+			</apex:tabPanel>
+	</apex:pageBlock>
+</apex:page>

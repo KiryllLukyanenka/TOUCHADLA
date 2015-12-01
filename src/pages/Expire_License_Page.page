@@ -1,0 +1,27 @@
+<apex:page standardController="LicenseDetail__c" extensions="LicenseExpiryController">
+    
+    <apex:pageMessages />
+    
+    <apex:form >
+        
+        <apex:pageblock >
+            
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Expire" action="{!expireLicense}"/>
+                <apex:commandButton value="Cancel" action="{!cancel}"/>
+            </apex:pageBlockButtons>
+            
+            <apex:pageBlockSection >
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Select License"/>
+                    <apex:selectList value="{!inputLicenseId}" multiselect="false" >
+                        <apex:selectOptions value="{!licensesToExpire}"/>
+                    </apex:selectList>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+        </apex:pageblock>
+        
+    </apex:form>
+    
+
+</apex:page>

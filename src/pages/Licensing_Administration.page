@@ -1,0 +1,13 @@
+<apex:page >
+  <!-- Begin Default Content REMOVE THIS -->
+  <h1>Congratulations</h1>
+  This is your new Page
+  <!-- End Default Content REMOVE THIS -->
+  <apex:pageBlock >
+      <apex:outputLink value="/apex/Maintenance">Email Maintenance Notifications</apex:outputLink>
+  </apex:pageBlock>
+  <apex:pageBlock >
+      <apex:outputLink value="/apex/Expire_License_Page">Manage Expired Licences</apex:outputLink>
+  </apex:pageBlock>
+
+</apex:page>

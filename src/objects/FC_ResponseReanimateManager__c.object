@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>List</customSettingsType>
+    <customSettingsVisibility>Protected</customSettingsVisibility>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>Last_X_Days_Responded_For_Reopen__c</fullName>
+        <description>Number of days to evaluate from today when looking for a response to re-animate.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Number of days to evaluate from today when looking for a response to re-animate.</inlineHelpText>
+        <label>Last X Days Responded For Reopen</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Response_Active_Status_Value__c</fullName>
+        <externalId>false</externalId>
+        <label>Response Active Status Value</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Response_Status_Values_to_Consider__c</fullName>
+        <description>Response Status values that are eligible for re-animation</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Response Status values that are eligible for re-animation</inlineHelpText>
+        <label>Response Status Values to Consider</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Unopened_Response_Status_Values__c</fullName>
+        <description>not in use</description>
+        <externalId>false</externalId>
+        <inlineHelpText>not in use</inlineHelpText>
+        <label>Unopened Response Status Values</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <label>Response Reanimate Manager</label>
+</CustomObject>

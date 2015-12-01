@@ -1,0 +1,41 @@
+<apex:page id="thePage" standardController="Opportunity" extensions="ClaimLicenseControllerNew" action="{!init}">
+<apex:pageMessages />
+    <apex:form >
+        <apex:pageBlock title="Claim License" rendered="{!IF(currentView==0,true,false)}">
+            <apex:pageBlockSection columns="1" title="Select Contact(s) from which self-service licenses to be claimed">
+                    <apex:repeat value="{!contactsList}" var="ct">
+                        <apex:pageBlockSectionItem >
+                            <apex:inputCheckBox value="{!ct.selected}"/>
+                            <apex:outputText ><apex:outputLink value="/{!ct.contactObj.Id}">{!ct.contactObj.Name} ({!ct.contactObj.Email})</apex:outputLink></apex:outputText>
+                        </apex:pageBlockSectionItem>
+                    </apex:repeat>
+            </apex:pageBlockSection>
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Get Licenses" action="{!getLicenses}">
+                </apex:commandButton>
+                <apex:commandButton value="Cancel" action="{!doCancel}"/>
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+        <apex:pageBlock id="claimLicSection" rendered="{!IF(currentView==1,true,false)}">
+            
+            <apex:pageBlockSection title="Claim License - Choose the licenses to be claimed">
+                <apex:pageBlockTable value="{!licenseWrappers}" var="lic" width="100%">
+                    <apex:column headerValue="Selected?">
+                        <apex:inputCheckBox value="{!lic.selected}"/>
+                    </apex:column>
+                    <apex:column headerValue="Email" value="{!lic.contactEmail}"/>
+                    <apex:column headerValue="Expiry Date" value="{!lic.licenseObj.expiryDate}"/>
+                    <apex:column headerValue="Product Type" value="{!lic.licenseObj.ProductType}"/>
+                    <apex:column headerValue="Stage" value="{!lic.licenseObj.stage}"/>
+                    <apex:column headerValue="SAAS URL" value="{!lic.licenseObj.customerSaasUrl}"/>
+                </apex:pageBlockTable>
+            </apex:pageBlockSection> 
+            
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Claim Licenses" action="{!claimLicense}">
+                </apex:commandButton>
+                <apex:commandButton value="Cancel" action="{!doCancel}"/>
+            </apex:pageBlockButtons>
+            </apex:pageBlock>
+    </apex:form>
+</apex:page>

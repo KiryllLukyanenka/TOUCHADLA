@@ -1,0 +1,316 @@
+<apex:page standardController="LicenseDetail__c" id="thePage"
+    extensions="ViewLicenseController" action="{!initAction}">
+    <apex:includeScript value="{!$Resource.License_Page_JavaScript}" />
+    <apex:includeScript value="{!$Resource.Jquery_script}" />
+<style type="text/css"> 
+    	.data-retention-APM {
+    		display: none;
+    	}
+    	.data-retention-EUM {
+    		display: none;
+    	}
+    	
+    	div.hideCurrDate span.dateInput span.dateFormat{
+			display:none;
+		}
+    </style>
+    <script>
+    $(document).ready(function(){
+    	licenseModulesPageLoad('view');
+            $(".selectcheckbox").click(function(){
+                var $table = $(this).closest("table");
+                var index = $(this).closest("tr").children().index($(this).closest("th")) + 1;
+                $table.find("td:nth-child("+index+") input:checkbox:not(:disabled)").prop("checked",$(this).is(":checked"));
+            });
+        });
+    </script>
+
+    <apex:pageMessages />
+    <apex:form >
+        <apex:pageblock id="theBlock" title="{!pageTitle}">
+            <apex:pageBlockButtons >
+                <apex:commandButton id="saveButton" value="Save" action="{!save}"
+                    style="display:none" />
+                <apex:commandButton id="cancelButton" value="Cancel"
+                    action="{!cancel}" style="display:none" />
+                <apex:commandButton id="associateButton"
+                    value="Associate License to Opportunity"
+                    action="{!associateLicenseToOpportunity}"
+                    rendered="{!showAssociateOpportunity}" />
+                <!-- SAAS-8372: Srinidhi 28-Mar-2014 - Temporary Fix to allow both System Administraor and the IDs mentioned in Settings object to be able to do License flows-->
+                <apex:commandButton id="extendButton" value="Update License"
+                    action="{!extendTrial}" disabled="{!disableExtendTrial}"
+                    rendered="{! IF ( OR ($Profile.Name == 'System Administrator', render.extend), True, False ) }" />
+                <apex:commandButton id="paidTempButton" value="Upgrade to Paid Temp"
+                    action="{!transitionToPaidTemp}"
+                    disabled="{!disableTransitionToPaidTemp}"
+                    rendered="{! IF(OR ($Profile.Name == 'System Administrator', render.paidTemp),True,False)}" />
+                <apex:commandButton id="paidButton"
+                    value="Upgrade to Paid Permanent" action="{!transitionToPaid}"
+                    disabled="{!disableTransitionToPaid}"
+                    rendered="{! IF(OR ($Profile.Name == 'System Administrator', render.paid),True,False)}" />
+                <apex:commandButton id="resendBtn" value="Resend"
+                    action="{!resendLicense}" disabled="{!disableResendBtn}"
+                    rendered="{! IF( OR (render.resend, $Profile.Name == 'System Administrator'), True, False ) }" />
+                <apex:commandButton id="haButton" value="HA License"
+                    action="{!haLicense}" disabled="{!disableHA}"
+                    rendered="{! IF( OR ( render.ha, $Profile.Name == 'System Administrator'), True, False)}" />
+                <apex:commandButton id="disableButton" value="Disable"
+                    onclick="disableAfterTimeout(this);return confirmDisable('{!licenseDetailObj.Product_Type__c}');"
+                    action="{!disableAction}" disabled="{!disableUnProvision}"
+                    rendered="{! IF ( OR ($Profile.Name == 'System Administrator', render.disable), True, False ) }" />
+                <apex:commandButton id="convertToLiteButton" value="Convert To Lite"
+                	onclick="return confirmConvertToLite();"
+                    action="{!convertToLite}" disabled="{!disableConvertToLite}"
+                    rendered="{! IF ( OR ($Profile.Name == 'System Administrator', render.convertToLite), True, False ) }" />
+            </apex:pageBlockButtons>
+
+            <apex:pageblockSection id="theSection" columns="1">
+                <apex:pageblockSection columns="2">
+                    <apex:outputField value="{!pageContextObj['License_Expiry_Date__c']}" styleClass="accountExpiryDate" />
+                    <apex:pageblockSectionItem >
+                        <apex:outputlabel value="Stage:" />
+                        <apex:outputLabel value="{!pageContextObj['Stage__c']}" />
+                    </apex:pageblockSectionItem>
+                    <apex:outputField value="{!pageContextObj['Product_Type__c']}"
+                        id="productType">
+                    </apex:outputField>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Transaction Status:" />
+                        <apex:outputLabel id="State"
+                            value="{!pageContextObj['ProcessState__c']}" />
+                    </apex:pageBlockSectionItem>
+                    <apex:outputField value="{!pageContextObj['Transaction_ID__c']}" />
+                    
+                    <apex:outputField value="{!pageContextObj['MAC_Address__c']}"
+                        rendered="{!showMacAddress}" />
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Is HA License?" />
+                        <apex:outputLabel value="{!pageContextObj['IS_HA__c']}" />
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem rendered="{!originalHALicenseShown}">
+                        <apex:outputLabel value="Primary License" />
+                        <apex:outputLink value="/{!pageContextObj['HA_Source_License__c']}">{!licenseDetailObj.HA_Source_License__c}</apex:outputLink>
+                    </apex:pageBlockSectionItem>
+                    <apex:outputField value="{!LicenseDetail__c.Reason__c}">
+                        <apex:inlineEditSupport showOnEdit="saveButton, cancelButton"
+                            hideOnEdit="extendButton,paidTempButton,disableButton,paidButton,resendBtn"
+                            event="ondblclick" changedStyleClass="myBoldClass" />
+                    </apex:outputField>
+                </apex:pageBlockSection>
+                    
+                <apex:pageBlockSection title="SAAS Account Information" rendered="{!customSaaSURLShown}">
+                    <apex:pageBlockSectionItem id="customURLSection">
+                        <apex:outputLabel value="Customer SaaS URL"
+                                rendered="{!customSaaSURLShown}" id="saasURLLbl" />
+                        <apex:outputLabel value="{!saasURL}"
+                                rendered="{!customSaaSURLShown}" id="saasURL" />
+                    </apex:pageBlockSectionItem>
+
+                    <apex:pageBlockSectionItem id="saasAccountSection">
+                        <apex:outputLabel value="SAAS Account"
+                                rendered="{!customSaaSURLShown}" id="saasAccLbl" />
+                        <apex:outputLabel value="{!licenseDetailObj.SaaS_Account__c}"
+                                rendered="{!customSaaSURLShown}" id="saasAcc" />
+                    </apex:pageBlockSectionItem>
+
+                    <apex:pageBlockSectionItem id="saasUserNameSection">
+                        <apex:outputLabel value="SAAS Username"
+                                rendered="{!customSaaSURLShown}" id="saasUSerLbl" />
+                        <apex:outputLabel value="{!licenseDetailObj.SAAS_UserName__c}"
+                                rendered="{!customSaaSURLShown}" id="saasUsr" />
+                    </apex:pageBlockSectionItem>
+
+                    <apex:pageBlockSectionItem id="saasPasswordSection">
+                        <apex:outputLabel value="Password"
+                                rendered="{!customSaaSURLShown}" id="saasURLLbl" />
+                        <apex:outputLabel value="{!licenseDetailObj.SaaS_Password__c}"
+                                rendered="{!customSaaSURLShown}" id="saasPasswd" />
+                    </apex:pageBlockSectionItem>
+
+                    <apex:pageBlockSectionItem id="saasAccessKeySection">
+                        <apex:outputLabel value="Access Key"
+                                rendered="{!customSaaSURLShown}" id="saasAccKeyLbl" />
+                        <apex:outputLabel value="{!licenseDetailObj.SaaS_Access_Key__c}"
+                                rendered="{!customSaaSURLShown}" id="saasAccKey" />
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+                    
+                <c:PortalLicenseAgentVC licenseControllerParam="{!thisController}"/>
+                
+                <apex:pageBlockSection title="EUM Information" >
+
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="EUM Web" />
+                        <apex:outputLabel value="{!eumWebDisplayString}" />
+                    </apex:pageBlockSectionItem>
+
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="EUM Account Name" />
+                        <apex:outputLabel value="{!eumInput.eumDetails.AccountName__c}" />
+                    </apex:pageBlockSectionItem>
+
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="EUM Mobile" />
+                        <apex:outputLabel value="{!eumMobileDisplayString}" />
+                    </apex:pageBlockSectionItem>
+
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="EUM Access Key" />
+                        <apex:outputLabel value="{!eumInput.eumDetails.Access_Key__c}" />
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+
+                <apex:pageBlockSection >
+
+                    <apex:actionPoller action="{!pollForStateCompletion}"
+                            status="counterStatus" interval="15" rerender="pageBlockId"
+                            enabled="{!enablePoll}" />
+                </apex:pageblockSection>
+
+                <apex:pageBlockSection title="HA License"
+                    rendered="{!haLicenseShown}">
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="HA License ID" />
+                        <apex:outputLink id="haLicenseID" value="/{!haLicenseData.ID}">{!haLicenseData.ID}</apex:outputLink>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Failover Node Mac Address" />
+                        <apex:outputField value="{!haLicenseData.MAC_Address__c}" />
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+
+                <apex:pageblockSection columns="1" title="Additional Information">
+                    <apex:pageblockSectionItem >
+                        <apex:outputLabel value="Last License Operation" />
+                        <apex:outputText >
+                            <B>{!lastOperation} </B> by&nbsp; <apex:outputLink value="/{!pageContextObj['Last_License_User__c']}">{!lastOperationUser}
+                            </apex:outputLink> on {!pageContextObj['License_Time__c']}
+                        </apex:outputText>
+                    </apex:pageblockSectionItem>
+                    <apex:pageblockSection columns="2">
+                        <apex:outputField value="{!pageContextObj['Account_Manager__c']}" />
+                        <apex:outputField value="{!pageContextObj['Sales_Rep__c']}" />
+                        <apex:pageBlockSectionItem >
+                        	<apex:outputLabel value="Technical Owner"/>
+                        	<apex:outputLabel value=""/><!-- {!pageContextObj['Technical_Owner__c']}" /> -->	
+                        </apex:pageBlockSectionItem>
+                        
+                        <apex:outputField value="{!LicenseDetail__c.Ad_hoc_Email_Ids__c}">
+                            <apex:inlineEditSupport showOnEdit="saveButton, cancelButton"
+                                    hideOnEdit="extendButton,paidTempButton,paidButton,resendBtn,disableButton"
+                                    event="ondblclick" changedStyleClass="myBoldClass" />
+                        </apex:outputField>
+                    </apex:pageblockSection>
+                </apex:pageblockSection>
+            
+                <apex:pageBlockSection columns="1" title="License-Contacts">
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel id="licContactsPanel">
+                            <apex:commandButton action="{!showAllContacts}"
+                                        value="{!IF((togglebutton), 'Show Opportunity Contacts', 'Show All Contacts')}"
+                                        rendered="{!!showAssociateOpportunity }">
+                            </apex:commandButton>
+                            <apex:commandButton value="Save Notification Changes"
+                                        action="{!saveLicenseContacts}" />
+                            <apex:commandButton value="Reset" action="{!cancel}" />
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockTable width="100%" value="{!licenseContacts}"
+                                var="ct">
+                        <apex:column headerValue="Contact">
+                            <apex:outputLink value="/{!ct.contactObj.Id}">{!ct.contactObj.Name}</apex:outputLink>
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">
+                                <span class="helpButtonOn" id="operationsemail-_Help"
+                                    style="margin-right: 30px"> <input type="checkbox"
+                                    style="vertical-align: top;" class="selectcheckbox" />
+                                    License Notifications? <img class="helpOrb" alt=""
+                                    src="/s.gif"></img> <script type="text/javascript">sfdcPage.setHelp('operationsemail', 'The users enabled with this option will be copied on license emails during Provision/Extend/Upgrade.');</script>
+                                </span>
+                            </apex:facet>
+                            <apex:outputField value="{!ct.licContact.Need_Operations_Email__c}"
+                                rendered="{!ct.isPrimary}" />
+                            <apex:inputField value="{!ct.licContact.Need_Operations_Email__c}"
+                                        rendered="{!!ct.isPrimary}" />
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">
+                                <span class="helpButtonOn" id="serviceNotif-_Help"
+                                    style="margin-right: 30px"> <input type="checkbox"
+                                    style="vertical-align: top;" class="selectcheckbox" />
+                                    Service Notifications? <img class="helpOrb" alt=""
+                                    src="/s.gif"></img> <script type="text/javascript">sfdcPage.setHelp('serviceNotif', 'The users enabled with this option will be copied on Maintenance Downtime Notifications.');</script>
+                                </span>
+                            </apex:facet>
+                            <apex:outputField value="{!ct.licContact.Need_Service_Email__c}"
+                                rendered="{!ct.isPrimary}" />
+                            <apex:inputField value="{!ct.licContact.Need_Service_Email__c}"
+                                rendered="{!!ct.isPrimary}" />
+                        </apex:column>
+    
+                        <apex:column headerValue="Primary Contact?">
+                            <apex:inputCheckBox value="{!ct.isPrimary}" disabled="true" />
+                        </apex:column>
+
+                        <apex:column headerValue="Email">
+                            <apex:outputField value="{!ct.contactObj.Email}" />
+                        </apex:column>
+
+                        <apex:column headerValue="Download Center">
+                            <apex:outputField value="{!ct.contactObj.Contact_Portal_User__r[0].Download__c}"
+                            rendered="{! IF(ct.contactObj.Contact_Portal_User__r.size != 0,True,False)}" />
+                            <apex:outputField value="{!ct.contactObj.Download__c}"
+                            rendered="{! IF(ct.contactObj.Contact_Portal_User__r.size == 0,True,False)}" />
+                        </apex:column>
+                        <apex:column headerValue="Help Center">
+                            <apex:outputField value="{!ct.contactObj.Contact_Portal_User__r[0].ZenDesk__c}"
+                            rendered="{! IF(ct.contactObj.Contact_Portal_User__r.size != 0,True,False)}" />
+                            <apex:outputField value="{!ct.contactObj.ZenDesk__c}"
+                            rendered="{! IF(ct.contactObj.Contact_Portal_User__r.size == 0,True,False)}" />
+                        </apex:column>
+                        <apex:column headerValue="Online Docs">
+                            <apex:outputField value="{!ct.contactObj.Contact_Portal_User__r[0].Docs__c}"
+                            rendered="{! IF(ct.contactObj.Contact_Portal_User__r.size != 0,True,False)}" />
+                            <apex:outputField value="{!ct.contactObj.Docs__c}"
+                            rendered="{! IF(ct.contactObj.Contact_Portal_User__r.size == 0,True,False)}" />
+                        </apex:column>
+                        <apex:column headerValue="AppDynamics University">
+                            <apex:outputField value="{!ct.contactObj.Contact_Portal_User__r[0].LMS__c}"
+                            rendered="{! IF(ct.contactObj.Contact_Portal_User__r.size != 0,True,False)}" />
+                            <apex:outputField value="{!ct.contactObj.LMS__c}"
+                            rendered="{! IF(ct.contactObj.Contact_Portal_User__r.size == 0,True,False)}" />
+                        </apex:column>
+                    </apex:pageBlockTable>
+                </apex:pageBlockSection>
+
+                <apex:pageBlockSection columns="1"
+                    title="Self Service License Status" rendered="{!showSelfService}">
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Claimed License From:" />
+                        <apex:outputField value="{!selfServiceContact.Name}" />
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+            </apex:pageblockSection>
+        </apex:pageblock>
+    </apex:form>
+
+    <apex:relatedList list="Opportunities__r"
+        rendered="{!!showAssociateOpportunity}" />
+
+    <apex:form >
+        <apex:pageblock rendered="{!IF(myOpportunity==null,true,false)}">
+            <apex:pageblockbuttons >
+                <apex:commandButton value="Associate to an Opportunity"
+                    action="{!associateLicenseToOpportunity}" />
+            </apex:pageblockbuttons>
+            <apex:pageblocksection >
+                <apex:outputlabel value="This license is not associated with any opportunity. Please click on Associate to Opportunity to move this license under an opportunity" />
+            </apex:pageblocksection>
+        </apex:pageblock>
+    </apex:form>
+
+    <c:LicenseHistoryComponent_V2 licenseId="{!licenseDetailObj.Id}">
+    </c:LicenseHistoryComponent_V2>
+</apex:page>

@@ -1,0 +1,1427 @@
+<apex:page sidebar="false" title="Edit Lead Territory" controller="EditLeadTerritoryController" tabStyle="Lead_TM__tab" id="page">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="icon" href="{!URLFOR($Resource.LeadAssigment, '../../favicon.ico')}"/>
+
+    <!-- Bootstrap -->
+    <link href="{!URLFOR($Resource.LeadAssigment, './assets/bs/css/bootstrap.min.css')}" rel="stylesheet"/>
+    <!-- Bootstrap theme -->
+    <link href="{!URLFOR($Resource.LeadAssigment, './assets/bs/css/bootstrap-theme.min.css')}" rel="stylesheet"/>
+
+    <!-- Custom -->
+    <link href="{!URLFOR($Resource.LeadAssigment, './assets/css/custom.css')}" rel="stylesheet"/>
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="{!URLFOR($Resource.LeadAssigment, './assets/js/ie10-viewport-bug-workaround.js')}"></script>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="{!URLFOR($Resource.LeadAssigment, './assets/js/html5shiv.min.js')}"></script>
+      <script src="{!URLFOR($Resource.LeadAssigment, './assets/js/respond.min.js')}"></script>
+    <![endif]-->  
+      
+    <style type="text/css">
+        body{
+            font-size: 12px;
+            font-family: Arial,Helvetica,sans-serif;
+        }
+        .content-wrapper{
+            font-size:14px;
+        }
+        input, button, select, textarea{
+            line-height: normal;
+        }
+        .content-wrapper a:hover{
+            text-decoration: none;
+        }
+        
+        .btnNoOverride{
+            -moz-user-select: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-block;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.42857;
+            margin-bottom: 0;
+            padding: 6px 12px;
+            text-align: center;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+        input.btn{
+            -moz-user-select: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-block;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.42857;
+            margin-bottom: 0;
+            padding: 6px 12px;
+            text-align: center;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+        h1, .h1{
+            font-size: 24px;
+        }
+        select[multiple], select[size] {
+            height: 34px;
+        }
+        .dateInput .dateFormat{
+            display:none;
+        }
+    </style> 
+
+    <script>
+        var dateFields = 'mkto_si__HideDate__c; ConvertedDate; Registration_Expiration_Date__c; LastActivityDate; Registration_Date__c; Handraiser_Date__c; '
+            + 'Estimated_Close_Date__c; Referral_Registration_Date__c; Last_Marketing_Campaign_Date__c; Deal_Approved_Date__c; Meeting_Schedule_Date__c;';
+
+        var datetimeFields = 'mkto_si__Last_Interesting_Moment_Date__c; Download_Time_Stamp__c; SystemModstamp; Version_Check_Last_Visit__c; ' 
+            + 'App_Map_First_Visit__c; Version_Check_First_Visit__c; infer2__Infer_Lead_Created_Date__c; LastModifiedDate; LastReferencedDate; ' 
+            + 'FreeForm_Download_Time__c; CreatedDate; LastViewedDate; EmailBouncedDate; Page_Visit_Time_Stamp__c; Lite_Download_Time_Stamp__c; ' 
+            + 'App_Map_Last_Visit__c;';
+
+        var checkboxFields = 'Cannot_be_cleaned_by_DQS__c; HasOptedOutOfEmail; infer2__Infer_Converted_to_Opp__c; Competitive_Deal__c; ' 
+            + 'infer2__Infer_Good_Lead__c; jsImpacts__Data_com_do_not_auto_update__c; IsConverted; Has_Task__c; Customer_Referral__c; ' 
+            + 'Marketing_Priority__c; Meeting_Held__c; Cleaned_by__c; infer2__Infer_Is_Open__c; IsUnreadByOwner; Lite_User__c; ' 
+            + 'Self_Service_Pro_Trial__c; Other_Lead_Source_Lite_Downloader__c; AppJam_Presenter__c; NET_Lite_User__c; ' 
+            + 'Trade_Show_Lead_del__c; Project_Budgeted__c; No_GAP_Lookup__c; Java_Lite_User__c; No_Marketing__c;';
+
+        function displayField(currentSelect, value){
+            var targetRow = $(currentSelect).parent().next().next();
+            var fieldName = $(currentSelect).val();
+            var source = $('#leadFieldValue');
+            var textField = source.children('.textField').clone();
+
+            targetRow.children().remove();
+
+            if(!fieldName){
+                targetRow.append(textField);
+                return;
+            }
+
+            if(source.find('.' + fieldName).length != 0){
+                var selectField = source.find('.' + fieldName).clone();
+                if(value) selectField.val(value);
+                targetRow.append(selectField);
+                return;
+            }
+
+            if(dateFields.indexOf(fieldName) != -1){
+                var dateField = source.children('.date').clone();
+                if(value) dateField.val(value);
+                targetRow.append(dateField);
+                return;
+            }
+
+            if(datetimeFields.indexOf(fieldName) != -1){
+                var datetimeField = source.children('.datetime').clone();
+                if(value) datetimeField.val(value);
+                targetRow.append(datetimeField);
+                return;
+            }
+
+            if(checkboxFields.indexOf(fieldName) != -1){
+                var checkboxField = source.children('.checkboxField').clone();
+                if(value) checkboxField.val(value);
+                targetRow.append(checkboxField);
+                return;
+            }
+            
+            if(value) textField.val(value);
+            targetRow.append(textField);
+        }
+    </script>
+
+    <script>
+        function editRow(editButton, theLeadValue){
+            var currentRow = $(editButton).parent().parent();
+            currentRow.css('display', 'none');
+            currentRow.next().css('display', 'table-row');
+            if(theLeadValue)
+            {
+                displayField($(editButton).parent().parent().next().children().first().children().first(), theLeadValue);
+            }
+        }
+        
+        function cancelRow(cancelButton){
+            var currentRow = $(cancelButton).parent().parent();
+            currentRow.css('display', 'none');
+            currentRow.prev().css('display', 'table-row');
+        }
+        
+        function deleteRow(deletedId, deletedType){
+            document.getElementById('page:form:deleteId').value = deletedId;
+            document.getElementById('page:form:deleteType').value = deletedType;
+            if(deletedType == 'territory'){
+                $('#deleteText').text('Lead Territory');
+            }
+            if(deletedType == 'geography'){
+                $('#deleteText').text('Geographic Criteria');
+            }
+            if(deletedType == 'leadField'){
+                $('#deleteText').text('Lead Field Criteria');
+            }
+        }
+        
+        function saveGeography(button, parentId, criteriaId){
+            var allInputs = $(button).parent().prevAll();
+            var jsonValue = '{"Territory__c":"' + parentId 
+                          + '","Country__c":"' + allInputs[3].firstChild.value
+                          + '","State__c":"' + allInputs[2].firstChild.value
+                          + '","Zip_Start__c":"' + allInputs[1].firstChild.value 
+                          + '","Zip_End__c":"' + allInputs[0].firstChild.value;
+            if(criteriaId){
+                jsonValue += '","Id":"' + criteriaId + '"}';
+            }
+            else{
+                jsonValue += '"}';
+            }
+            document.getElementById('page:form:json').value = jsonValue;
+            createGeographicCriteria();
+        }
+        
+        function saveLeadField(button, parentId, criteriaId){
+            var allInputs = $(button).parent().prevAll();
+            var fieldnameTD = $(allInputs[2]);
+            var fieldname = fieldnameTD.find("select").val();
+            var fieldOperatorTD = $(allInputs[1]);
+            var fieldOperator = fieldOperatorTD.find("select").val();
+            var jsonValue = '{"Territory__c":"' + parentId 
+                          + '","Field__c":"' + fieldname
+                          + '","Operator__c":"' + fieldOperator 
+                          + '","Value__c":"' + allInputs[0].firstChild.value;
+            if(criteriaId){
+                jsonValue += '","Id":"' + criteriaId + '"}';
+            }
+            else{
+                jsonValue += '"}';
+            }
+            document.getElementById('page:form:json').value = jsonValue;
+            createLeadFieldCriteria();
+        }
+        
+        function insertLeadTerritoryByCSV()
+        {
+            if(checkAssignmentCSV())
+            {
+                insertNewLeadTerritoryGeosByCSV();
+            }
+        }
+        
+        function checkAssignmentCSV()
+        {
+            var isValid = true;
+            var assignmentCsvValue = $(".assignmentCsv").val();
+            if(assignmentCsvValue != null && assignmentCsvValue != '')
+            {
+                var assignmentCSV = '';
+                var assignments = new Array();
+                assignments = assignmentCsvValue.split('\n');
+                if(assignments.length > 400)
+                {
+                    alert('Assignments can\'t be greater than 400.')
+                    isValid = false;
+                }
+                else
+                {
+                    var reg = new RegExp('("[^"]*("{2})*[^"]*")*[^,]*,', 'g');                
+                    for(var i = 0; i < assignments.length; i++)
+                    {
+                        var count = 0;
+                        if(assignments[i].trim().length > 0)
+                        {
+                            var assignment = assignments[i] + ',';
+                            var arr;
+                            while((arr=reg.exec(assignment)) != null)
+                            {
+                                count++;
+                            }
+                            if(count == 1) 
+                            {
+                                assignmentCSV += assignments[i] + ',,,\n';
+                            }
+                            else if(count == 2)
+                            {
+                                assignmentCSV += assignments[i] + ',,\n';
+                            }
+                            else if(count == 3)
+                            {
+                                assignmentCSV += assignments[i] + ',\n';
+                            }
+                            else if(count == 4)
+                            {
+                                assignmentCSV += assignments[i] + '\n';
+                            }
+                            else 
+                            {
+                                alert('Not Valid');
+                                isValid = false;
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            alert('The assignments you entered have invalid data.');
+                            $('.assignmentCsv').focus();
+                            isValid = false;
+                            break;
+                        }    
+                    }
+                    if(isValid)
+                    {
+                        assignmentCSV = assignmentCSV.substring(0, assignmentCSV.length - 1);
+                        $('.assignmentCsv').val(assignmentCSV);
+                    }   
+                }                    
+            }
+            else
+            {
+                alert('You need to paste some assignments.');
+                isValid = false;
+            }
+            return isValid;            
+        }
+        
+         function setTarget(targetId){
+            $('#userTarget').val(targetId);
+            $('#searchResponse').hide();
+        }
+        
+        function getUser(userId, userName){
+            var targetId = $('#userTarget').val();
+            if(targetId){
+                getUserWithTarget(targetId, userId, userName)
+            }
+            else{
+                document.getElementById('page:form:userId').value = userName;
+                $('#userName').val(userName);
+            }
+            target = null;
+        }
+        
+        function getUserWithTarget(targetId, userId, userName){
+            var inputs = $('#' + targetId).children('input');
+            inputs[0].value = userName;
+            inputs[1].value = userName;
+            inputs[2].value = userId;
+        }
+        
+        function setSearchType(assignedType)
+        {
+            var thisSelect = $(assignedType);
+            var thisSelectType = thisSelect.val();
+            var currentSearchType = document.getElementById('page:lookupForm:searchType');
+            currentSearchType.value = thisSelectType;
+            //alert(currentSearchType.value);
+        }
+    </script>
+  </head>
+
+  <body>
+    <apex:form id="form">
+        <apex:actionFunction name="first" action="{!first}"/>
+        <apex:actionFunction name="previous" action="{!previous}"/>
+        <apex:actionFunction name="next" action="{!next}"/>
+        <apex:actionFunction name="last" action="{!last}"/>
+        <apex:actionFunction action="{!saveLeadTerritory}" name="saveLeadTerritory"/>
+        <apex:actionFunction action="{!createGeographicCriteria}" name="createGeographicCriteria"/>
+        <apex:actionFunction action="{!createLeadFieldCriteria}" name="createLeadFieldCriteria"/>
+        <apex:actionFunction action="{!insertNewLeadTerritoryGeos}" name="insertNewLeadTerritoryGeos"/>
+        <apex:actionFunction action="{!addMoreLeadTerritoryGeos}" name="addMoreLeadTerritoryGeos" rerender="singleAssignmentPanel" status="statusAssignment" />
+        <apex:actionFunction action="{!insertNewLeadTerritoryGeosByCSV}" name="insertNewLeadTerritoryGeosByCSV" />
+        <apex:inputHidden id="json" value="{!jsonCriteria}"/>
+        <apex:inputHidden id="deleteId" value="{!removedId}"/>
+        <apex:inputHidden id="deleteType" value="{!removedType}"/>
+        <apex:inputField value="{!leadObject.DatetimeField__c}" style="display:none;"/>
+        <input type="hidden" id="userTarget"/>
+
+        <!-- Begin page content -->
+        <div class="container">
+          <div class="page-header">
+            <h1>Edit Lead Territory <small>{!leadTerritory.Name}</small></h1>
+          </div>
+        </div>
+        
+        
+        <div class="content-wrapper">
+          <div class="container">
+            <apex:outputPanel rendered="{!errorMessages.size != 0}">
+                <div class="message errorM3" role="alert" style="margin:5px 0; color:#c00;">
+                    <img alt="FATAL" src="/s.gif" class="msgIcon" title="FATAL"/> Error:
+                    <ul style="font-size:12px;">
+                    <apex:repeat value="{!errorMessages}" var="message">
+                        <li>{!message}</li>
+                    </apex:repeat>
+                    </ul>
+                </div>
+            </apex:outputPanel>
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-4" style="width:25%;">
+                    <apex:inputField value="{!leadTerritory.Name}" styleclass="form-control"/>
+                </div>
+                <div class="col-xs-12 col-sm-3 col-md-4" style="width:25%;">
+                    <apex:inputField value="{!leadTerritory.Type__c}" styleclass="form-control"/>
+                </div>
+                <div class="col-xs-3 col-sm-2 col-md-3" style="width:25%;"><apex:inputField value="{!leadTerritory.Assigned_To_Type__c}" styleClass="form-control" onchange="setSearchType(this)"/></div>
+                <div class="col-xs-12 col-sm-3 col-md-4" style="width:25%;">
+                    <div id="{!leadTerritory.Id}" class="input-group">
+                      <input type="text" class="form-control" value="{!leadTerritory.Assigned_To__c}" readonly="true"/>
+                      <apex:inputHidden value="{!leadTerritory.Assigned_To__c}"/>
+                      <apex:inputHidden value="{!leadTerritory.Assigned_To_ID__c}"/>
+                      <span class="input-group-btn">
+                      <a href="#allAssignmentsModal2" data-toggle="modal" onclick="setTarget('{!leadTerritory.Id}')">
+                          <button type="button" style="font-size:14px; margin-left:-1px;">
+                              <span class="glyphicon glyphicon-search" style="padding:6px; margin-top-1px;"></span>
+                          </button>
+                      </a>
+                      </span>
+                    </div>
+                </div>
+                
+                <div class="col-xs-12">
+                    <div class="checkbox" style="margin-top:0px;margin-bottom:0px;min-height:5px;">
+                      &nbsp;
+                    </div>
+                    <button class="btnNoOverride btn-primary" type="button" onclick="saveLeadTerritory();">Save</button>
+                    <!--<apex:commandButton action="{!saveLeadTerritory}" value="Save" styleClass="btnNoOverride btn-primary"/>-->
+                    <a href="/apex/ManageLeadTerritory?sfdc.tabName=01rV00000000MGN" class="btnNoOverride btn-info" style="padding:7px 12px;">Return to Lead Terr</a>
+                </div>
+                
+                <div class="col-xs-12">
+                
+                    <hr/>    
+                
+                    <div class="row">
+                        <div class="col-xs-12">
+                            
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                
+                                  <p class="clearfix">
+                                    <strong>Lead Field Criteria</strong>
+                                    <a href=".leadfield-addrow" data-toggle="collapse" class="pull-right">Add Row</a>
+                                  </p>  
+                                  <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                      <thead>
+                                        <tr>
+                                          <th>Field</th>
+                                          <th>Operator</th>
+                                          <th>Value</th>
+                                          <th>Action</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <apex:repeat value="{!leadTerritory.Territory_Field_Criteria__r}" var="leadField">
+                                            <tr>
+                                              <td>
+                                                  {!leadField.Field__c}
+                                              </td>
+                                              <td>{!leadField.Operator__c}</td>
+                                              <td>{!leadField.Value__c}</td>
+                                              <td>
+                                                <a href="javascript:void(0)" title="Edit" onclick="editRow(this, '{!leadField.Value__c}')">
+                                                    <span class="glyphicon glyphicon-edit"></span>
+                                                </a> 
+                                                <a href="javascript:void(0)" title="Delete" data-toggle="modal" data-target="#deleteModal" 
+                                                    onclick="deleteRow('{!leadField.Id}', 'leadField')">
+                                                    <span class="glyphicon glyphicon-trash"></span>
+                                                </a>
+                                              </td>
+                                            </tr>
+                                            <tr class="leadfield-addrow collapse" style="display:none;">
+                                              <td>
+                                                  <apex:selectList value="{!leadField.Field__c}" styleClass="form-control" size="1" onchange="displayField(this);">
+                                                      <apex:selectOptions value="{!leadFields}"/>
+                                                  </apex:selectList>
+                                              </td>
+                                              <td>
+                                                  <apex:selectList value="{!leadField.Operator__c}" styleClass="form-control" size="1" multiselect="false">
+                                                      <apex:selectOption itemLabel="--None--" itemValue=""/>
+                                                      <apex:selectOption itemLabel="equals" itemValue="equals"/>
+                                                      <apex:selectOption itemLabel="not equal to" itemValue="not equal to"/>
+                                                  </apex:selectList>
+                                              </td>
+                                              <td><input type="text" class="form-control" value="{!leadField.Value__c}"/></td>
+                                              <td>
+                                                <a href="javascript:void(0)" title="Save" 
+                                                    onclick="saveLeadField(this, '{!leadTerritory.Id}', '{!leadField.Id}');">
+                                                    <span class="glyphicon glyphicon-saved"></span>
+                                                </a>
+                                                <a href="javascript:void(0)" title="Cancel" onclick="cancelRow(this)">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </a>
+                                              </td>
+                                            </tr>
+                                        </apex:repeat>
+                                        <tr class="leadfield-addrow collapse">
+                                          <td>
+                                              <apex:selectList styleClass="form-control" size="1" onchange="displayField(this);">
+                                                  <apex:selectOptions value="{!leadFields}"/>
+                                              </apex:selectList>
+                                          </td>
+                                          <td>
+                                              <apex:selectList styleClass="form-control" size="1" multiselect="false">
+                                                  <apex:selectOption itemLabel="--None--" itemValue=""/>
+                                                  <apex:selectOption itemLabel="equals" itemValue="equals"/>
+                                                  <apex:selectOption itemLabel="not equal to" itemValue="not equal to"/>
+                                              </apex:selectList>
+                                          </td>
+                                          <td><input type="text" class="form-control"/></td>
+                                          <td>
+                                            <a href="javascript:void(0)" title="Save" onclick="saveLeadField(this, '{!leadTerritory.Id}');">
+                                                <span class="glyphicon glyphicon-saved"></span>
+                                            </a>
+                                            <a href=".leadfield-addrow" data-toggle="collapse" title="Cancel">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </a>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div><!-- /table-responsive -->
+                                  
+                                </div>   
+                            </div><!--/panel-->
+                        </div>
+                        <div class="col-xs-12">
+                            
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                
+                                  <p class="clearfix">
+                                    <strong>Geographic Criteria</strong>
+                                    <a href="#pasteAssignmentsModal" class="pull-right" data-toggle="modal">Paste geographic assignments</a>
+                                  </p>
+                                
+                                  <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                      <thead>                                          
+                                          <tr>
+                                              <th>Country</th>
+                                              <th>State/Province</th>
+                                              <th>Postal Start</th>
+                                              <th>Postal End</th>
+                                              <th>Action</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                        <apex:repeat value="{!currentGeos}" var="geography">
+                                          <tr>
+                                              <td>{!geography.Country__c}</td>
+                                              <td>{!geography.State__c}</td>
+                                              <td>{!geography.Zip_Start__c}</td>
+                                              <td>{!geography.Zip_End__c}</td>
+                                              <td>
+                                                <a href="javascript:void(0)" title="Edit" onclick="editRow(this);">
+                                                    <span class="glyphicon glyphicon-edit"></span>
+                                                </a> 
+                                                <a href="javascript:void(0)" title="Delete" data-toggle="modal" data-target="#deleteModal" 
+                                                    onclick="deleteRow('{!geography.Id}', 'geography');">
+                                                    <span class="glyphicon glyphicon-trash"></span>
+                                                </a>
+                                              </td>
+                                          </tr>
+                                          <tr class="geographic-addrow" style="display:none;">
+                                              <td><input type="text" class="form-control" value="{!geography.Country__c}"/></td>
+                                              <td><input type="text" class="form-control" value="{!geography.State__c}"/></td>
+                                              <td><input type="text" class="form-control" value="{!geography.Zip_Start__c}"/></td>
+                                              <td><input type="text" class="form-control" value="{!geography.Zip_End__c}"/></td>
+                                              <td>
+                                                <a href="javascript:void(0)" title="Save" 
+                                                    onclick="saveGeography(this, '{!leadTerritory.Id}', '{!geography.Id}');">
+                                                    <span class="glyphicon glyphicon-saved"></span>
+                                                </a> 
+                                                <a href="javascript:void(0)" title="Cancel" onclick="cancelRow(this)">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </a>
+                                              </td>
+                                          </tr>
+                                        </apex:repeat>
+                                        <tr class="geographic-addrow collapse">
+                                          <td><input type="text" class="form-control"/></td>
+                                          <td><input type="text" class="form-control"/></td>
+                                          <td><input type="text" class="form-control"/></td>
+                                          <td><input type="text" class="form-control"/></td>
+                                          <td>
+                                            <a href="javascript:void(0)" title="Save" onclick="saveGeography(this, '{!leadTerritory.Id}');">
+                                                <span class="glyphicon glyphicon-saved"></span>
+                                            </a> 
+                                            <a href=".geographic-addrow" data-toggle="collapse" title="Cancel">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </a>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                    <div class="col-xs-12" style="text-align:right;font-weight:bold;">
+                                        Total Records: {!TotalRecordNumber} &nbsp;&nbsp; Total Pages: {!TotalPageNumber} &nbsp;&nbsp;Current Page:{!CurrentPageNumber}
+                                        <button class="btnNoOverride btn-primary" type="button" onclick="first();" style="display:{!IF(hasFirst, '', 'none')}">First</button>
+                                        <button class="btnNoOverride btn-primary" type="button" onclick="previous();" style="display:{!IF(hasPrevious, '', 'none')}">Previous</button>
+                                        <button class="btnNoOverride btn-primary" type="button" onclick="next();" style="display:{!IF(hasNext, '', 'none')}">Next</button>
+                                        <button class="btnNoOverride btn-primary" type="button" onclick="last();" style="display:{!IF(hasLast, '', 'none')}">Last</button>
+                                    </div>
+                                  </div><!-- /table-responsive -->
+                                  
+                                  
+                                </div>  
+                            </div><!--/panel-->
+                        </div>
+                    </div><!--/row-->
+                
+                </div>
+                
+            </div><!--/row-->
+          
+          </div>
+        </div><!--/content-wrapper-->
+    
+        <!-- Modal -->
+        <div class="modal fade" id="allAssignmentsModal" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">View All Assignments</h4>
+              </div>
+              <div class="modal-body">
+                ...
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btnNoOverride btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btnNoOverride btn-primary">Save changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--/allAssignmentsModal-->
+        
+        <div class="modal fade" id="pasteAssignmentsModal" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Create Assignments</h4>
+              </div>
+              <div class="modal-body">
+              
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                  <li class="active"><a href="#Type" role="tab" data-toggle="tab">Type Assignments</a></li>
+                  <li><a href="#Paste" role="tab" data-toggle="tab">Paste Assignments</a></li>
+                </ul>
+                
+                <!-- Tab panes -->
+                <div class="tab-content">
+                  <div class="tab-pane active" id="Type">
+                  
+                    <div class="table-responsive top15">
+                        <apex:outputPanel id="singleAssignmentPanel">
+                        <table class="table table-bordered">
+                          <thead>
+                            <tr>
+                              <th>Country</th>
+                              <th>State/Provice</th>
+                              <th>Postal Start</th>
+                              <th>Postal End</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <apex:repeat value="{!newLeadTerritoryGeos}" var="assignment">
+                                <tr>
+                                  <td><apex:inputText value="{!assignment.Country__c}" styleClass="form-control"/></td>
+                                  <td><apex:inputText value="{!assignment.State__c}" styleClass="form-control"/></td>
+                                  <td><apex:inputText value="{!assignment.Zip_Start__c}" styleClass="form-control"/></td>
+                                  <td><apex:inputText value="{!assignment.Zip_End__c}" styleClass="form-control"/></td>
+                                </tr>
+                            </apex:repeat>
+                          </tbody>
+                        </table>
+                         </apex:outputPanel>
+                    </div><!-- /table-responsive -->
+                    
+                    <a href="javascript:addMoreLeadTerritoryGeos();" class="btnNoOverride btn-default">Add More Row</a>
+                    <apex:actionStatus id="statusAssignment">
+                        <apex:facet name="start">
+                            <img style="margin-top:15px;" src="/img/loading.gif" alt="loading..." />
+                        </apex:facet>
+                    </apex:actionStatus>
+                    
+                    <hr/>
+                    <button type="button" class="btnNoOverride btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btnNoOverride btn-primary" onclick="insertNewLeadTerritoryGeos();">Save changes</button>
+                    
+                  </div>
+                  <div class="tab-pane" id="Paste">
+                  
+                    <p class="top15">Paste up to 400 assignments with the following format: Country, State, Postal Start, Postal End</p>
+                    <apex:inputTextarea value="{!assignmentsCSV}" styleClass="form-control assignmentCsv"/>
+                    
+                    <hr/>
+                    <button type="button" class="btnNoOverride btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btnNoOverride btn-primary" onclick="insertLeadTerritoryByCSV();">Save changes</button>
+                  
+                  </div>
+                </div>
+              
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        <!--/pasteAssignmentsModal-->
+       
+        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Are you sure?</h4>
+              </div>
+              <div class="modal-body">
+                The <span id="deleteText"></span> will be deleted, correct?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btnNoOverride btn-default" data-dismiss="modal">No</button>
+                <apex:commandButton value="Yes" styleClass="btnNoOverride btn-danger" action="{!remove}" style="background-image: linear-gradient(to bottom, #d9534f 0px, #c12e2a 100%); background-repeat: repeat-x;border-color: #b92c28;"/>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--/deleteModal-->
+    
+        <!-- Bootstrap core JavaScript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="{!URLFOR($Resource.LeadAssigment, './assets/js/jquery.min.js')}"></script>
+        <script src="{!URLFOR($Resource.LeadAssigment, './assets/js/jquery-ui.min.js')}"></script>
+        <script src="{!URLFOR($Resource.LeadAssigment, './assets/bs/js/bootstrap.min.js')}"></script>
+        <script src="{!URLFOR($Resource.LeadAssigment, './assets/js/custom.js')}"></script>
+    </apex:form>
+    <!-- Modal -->
+    <div class="modal fade" id="allAssignmentsModal2" tabindex="-1" role="dialog" aria-hidden="true"><apex:form id="lookupForm">
+    <apex:inputHidden value="{!searchType}" id="searchType"/>
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Lookup</h4>
+            <div style="width:480px; float:right">&nbsp;</div>
+            <apex:commandButton action="{!searchUser}" value="Search" style="float:right; margin-left:10px;" reRender="lookupForm"/>
+            <apex:inputText value="{!userinfo}" styleClass="form-control" style="float:right; width:200px; height:30px;" 
+                onkeypress="if(event.keyCode==13) return false;"/>
+          </div>
+          <div class="modal-body">
+            <div style="font-size:12px;"><b>Search Results</b>: max 15 records.</div>
+            <div class="table-responsive top15" style="margin-top:2px;" id="searchResponse">
+                <apex:pageBlock rendered="{!searchtype = 'User'}">
+                    <apex:pageBlockTable value="{!users}" var="user">
+                        <apex:column headerValue="Full Name">
+                            <a href="javascript:void(0)" data-dismiss="modal" onclick="getUser('{!user.Id}', '{!user.Name}');">{!user.Name}</a>
+                        </apex:column>
+                        <apex:column headerValue="Phone" value="{!user.Phone}"/>
+                        <apex:column headerValue="Email" value="{!user.Email}"/>
+                        <apex:column headerValue="Role" value="{!user.UserRole.Name}"/>
+                    </apex:pageBlockTable>
+                </apex:pageBlock>
+                <apex:pageBlock rendered="{!searchtype = 'Lead Queue'}">
+                    <apex:pageBlockTable value="{!LeadQueues}" var="queue">
+                        <apex:column headerValue="Queue Name">
+                            <a href="javascript:void(0)" data-dismiss="modal" onclick="getUser('{!queue.Id}', '{!queue.Name}');">{!queue.Name}</a>
+                        </apex:column>                        
+                    </apex:pageBlockTable>
+                </apex:pageBlock>
+            </div><!-- /table-responsive -->
+          </div>
+        </div>
+      </div>
+      
+      <!-- Lead Field Value Node -->
+        <div id="leadFieldValue" style="display:none;">
+            <input type="text" class="textField form-control"/>
+    
+            <!-- picklist --> 
+            <select class="CleanStatus form-control">
+                <option value="">--None--</option>
+                <option value="In Sync">In Sync</option>
+                <option value="Different">Different</option>
+                <option value="Reviewed">Reviewed</option>
+                <option value="Not Found">Not Found</option>
+                <option value="Inactive">Inactive</option>
+                <option value="Not Compared">Not Compared</option>
+                <option value="Select Match">Select Match</option>
+                <option value="Skipped">Skipped</option>
+            </select>
+            <select class="Industry form-control">
+                <option value="">--None--</option>
+                <option value="Education">Education</option>
+                <option value="Energy">Energy</option>
+                <option value="Federal">Federal</option>
+                <option value="Finance">Finance</option>
+                <option value="Gaming">Gaming</option>
+                <option value="Healthcare">Healthcare</option>
+                <option value="Insurance">Insurance</option>
+                <option value="ISV">ISV</option>
+                <option value="Manufacturing">Manufacturing</option>
+                <option value="Media">Media</option>
+                <option value="Retail">Retail</option>
+                <option value="Telco">Telco</option>
+                <option value="Service Provider/SI">Service Provider/SI</option>
+                <option value="Travel">Travel</option>
+                <option value="Transport">Transport</option>
+                <option value="State/Local Government">State/Local Government</option>
+            </select>
+            <select class="LeadSource form-control">
+                <option value="">--None--</option>
+                <option value="Banner Ad Download">Banner Ad Download</option>
+                <option value="BMC Referral">BMC Referral</option>
+                <option value="Customer Referrals">Customer Referrals</option>
+                <option value="Direct Download">Direct Download</option>
+                <option value="Email Marketing">Email Marketing</option>
+                <option value="Employee Generated">Employee Generated</option>
+                <option value="Existing Customer">Existing Customer</option>
+                <option value="Free Download">Free Download</option>
+                <option value="Partner Lite Referral">Partner Lite Referral</option>
+                <option value="Partner Referral">Partner Referral</option>
+                <option value="Partner Marketing">Partner Marketing</option>
+                <option value="PPC">PPC</option>
+                <option value="SEO">SEO</option>
+                <option value="Trade Show">Trade Show</option>
+                <option value="User Group">User Group</option>
+                <option value="VAR Prospecting">VAR Prospecting</option>
+                <option value="Web Marketing">Web Marketing</option>
+                <option value="Website">Website</option>
+                <option value="BD Generated">BD Generated</option>
+                <option value="MICROSOFT WINDOWS AZURE STORE">MICROSOFT WINDOWS AZURE STORE</option>
+            </select>
+            <select class="Status form-control">
+                <option value="">--None--</option>
+                <option value="Open">Open</option>
+                <option value="Attempted Contact">Attempted Contact</option>
+                <option value="Contacted">Contacted</option>
+                <option value="Qualified">Qualified</option>
+                <option value="Unqualified">Unqualified</option>
+                <option value="Customer">Customer</option>
+                <option value="Bad Data">Bad Data</option>
+                <option value="Recycled">Recycled</option>
+            </select>
+            <select class="Rating form-control">
+                <option value="">--None--</option>
+                <option value="Hot">Hot</option>
+                <option value="Warm">Warm</option>
+                <option value="Cold">Cold</option>
+            </select>
+            <select class="AppJam_Skill_Level__c form-control">
+                <option value="">--None--</option>
+                <option value="Beginner">Beginner</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Advanced">Advanced</option>
+            </select>
+            <select class="Application_Stack__c form-control">
+                <option value="">--None--</option>
+                <option value="Java">Java</option>
+                <option value=".NET">.NET</option>
+                <option value="Java/.NET">Java/.NET</option>
+                <option value="PHP">PHP</option>
+                <option value="Other">Other</option>
+            </select>
+            <select class="Are_you_a__c form-control">
+                <option value="">--None--</option>
+                <option value="App Ops Ecosystem Partner">App Ops Ecosystem Partner</option>
+                <option value="Reseller Partner">Reseller Partner</option>
+                <option value="Cloud Platform Partner">Cloud Platform Partner</option>
+                <option value="Managed Service Provider Partner">Managed Service Provider Partner</option>
+                <option value="End User Looking for a Partner">End User Looking for a Partner</option>
+                <option value="VAR">VAR</option>
+                <option value="Ecosystem Ally">Ecosystem Ally</option>
+            </select>
+            <select class="Deal_Source__c form-control">
+                <option value="">--None--</option><option value="Deal Registration">Deal Registration</option>
+                <option value="Existing Customer">Existing Customer</option>
+                <option value="New Business">New Business</option>
+                <option value="RFP">RFP</option>
+            </select>
+            <select class="Deal_Stage__c form-control">
+                <option value="">--None--</option><option value="Suspect">Suspect</option>
+                <option value="Identified">Identified</option>
+                <option value="Qualified">Qualified</option>
+                <option value="Proposed">Proposed</option>
+                <option value="Agreed">Agreed</option>
+                <option value="In Contract">In Contract</option>
+                <option value="Closed-Won">Closed-Won</option>
+                <option value="Closed-Lost">Closed-Lost</option>
+            </select>
+            <select class="Deployment_Option__c form-control">
+                <option value="">--None--</option>
+                <option value="SaaS">SaaS</option>
+                <option value="On-Premise">On-Premise</option>
+            </select>
+            <select class="End_User_Type__c form-control">
+                <option value="">--None--</option><option value="VAR Partner">VAR Partner</option>
+                <option value="AppDynamics Administrator">AppDynamics Administrator</option>
+                <option value="System Administrator/Operator">System Administrator/Operator</option>
+                <option value="Developer/Architect">Developer/Architect</option>
+                <option value="Performance Architect">Performance Architect</option>
+            </select>
+            <select class="First_meeting_set_by__c form-control">
+                <option value="">--None--</option><option value="Robert Jweinat">Robert Jweinat</option>
+                <option value="Lee Weinberg">Lee Weinberg</option>
+                <option value="Tom Reksten">Tom Reksten</option>
+                <option value="Joel Fortune">Joel Fortune</option>
+                <option value="David Lam">David Lam</option>
+                <option value="Randy Boysen">Randy Boysen</option>
+                <option value="Frank Swain">Frank Swain</option>
+                <option value="Marc Ownbey">Marc Ownbey</option>
+                <option value="Mark Majeski">Mark Majeski</option>
+                <option value="Joel Brown">Joel Brown</option>
+                <option value="Michael Nelson">Michael Nelson</option>
+                <option value="Scott Wilson">Scott Wilson</option>
+                <option value="Alec Short">Alec Short</option>
+                <option value="Phil Evans">Phil Evans</option>
+            </select>
+            <select class="How_did_they_find_us__c form-control">
+                <option value="">--None--</option><option value="Email">Email</option>
+                <option value="LinkedIn">LinkedIn</option>
+                <option value="Search Engine">Search Engine</option>
+                <option value="Advertisement">Advertisement</option>
+                <option value="Sourceforge">Sourceforge</option>
+                <option value="Java Performance Tuning">Java Performance Tuning</option>
+                <option value="DZone">DZone</option>
+                <option value="Stack Overflow">Stack Overflow</option>
+                <option value="High Scalability">High Scalability</option>
+                <option value="infoq.com">infoq.com</option>
+                <option value="Google Search (SEO)">Google Search (SEO)</option>
+                <option value="Google (DoubleClick)">Google (DoubleClick)</option>
+                <option value="AppDynamics Website">AppDynamics Website</option>
+                <option value="Google AdWords">Google AdWords</option>
+                <option value="Other Web Source">Other Web Source</option>
+                <option value="Non-Web Source">Non-Web Source</option>
+                <option value="AD Google Search">AD Google Search</option>
+                <option value="AD Direct Download">AD Direct Download</option>
+            </select>
+            <select class="How_did_you_hear_about_AppDynamics__c form-control">
+                <option value="">--None--</option><option value="Online advertisement">Online advertisement</option>
+                <option value="Online article">Online article</option>
+                <option value="Online community/forum mention">Online community/forum mention</option>
+                <option value="Trade show">Trade show</option>
+                <option value="Colleague/friend referral">Colleague/friend referral</option>
+                <option value="Searched online">Searched online</option>
+                <option value="Analyst recommendation">Analyst recommendation</option>
+                <option value="Other">Other</option>
+            </select>
+            <select class="International_or_Domestic__c form-control">
+                <option value="">--None--</option>
+                <option value="US/ Canada">US/ Canada</option>
+                <option value="International">International</option>
+            </select>
+            <select class="Level_of_Interest_in_APM__c form-control">
+                <option value="">--None--</option>
+                <option value="Low: Gathering info only">Low: Gathering info only</option>
+                <option value="Moderate: May consider APM">Moderate: May consider APM</option>
+                <option value="High: Starting APM project">High: Starting APM project</option>
+                <option value="Urgent: Want to buy APM">Urgent: Want to buy APM</option>
+            </select>
+            <select class="Meeting_to_be_held_by__c form-control">
+                <option value="">--None--</option><option value="Randy Boysen">Randy Boysen</option>
+                <option value="David Lam">David Lam</option>
+                <option value="Joel Fortune">Joel Fortune</option>
+                <option value="Tom Reksten">Tom Reksten</option>
+                <option value="Lee Weinberg">Lee Weinberg</option>
+                <option value="Jerry Nelson">Jerry Nelson</option>
+                <option value="Pete Abrams">Pete Abrams</option>
+                <option value="Reseller">Reseller</option>
+            </select>
+            <select class="New_Sales_Territory__c form-control">
+                <option value="">--None--</option><option value="Central West">Central West</option>
+                <option value="Mid Atlantic">Mid Atlantic</option>
+                <option value="Northeast">Northeast</option>
+                <option value="Southeast">Southeast</option>
+                <option value="West North">West North</option>
+                <option value="West South">West South</option>
+            </select>
+            <select class="Lead_Origin_Detail__c form-control">
+                <option value="">--None--</option>
+                <option value="05-20-13 PEM Philadelphia CIO Summit 2013">05-20-13 PEM Philadelphia CIO Summit 2013</option>
+                <option value="08-23-13 HMG Atlanta 2013">08-23-13 HMG Atlanta 2013</option>
+                <option value="12-05-13 CIO Summit SF 2013">12-05-13 CIO Summit SF 2013</option>
+                <option value="12-12-13 SplunkLive Baltimore">12-12-13 SplunkLive Baltimore</option>
+                <option value="30-Day Trial Form">30-Day Trial Form</option>
+                <option value="30-Day Trial - Partner">30-Day Trial - Partner</option>
+                <option value="AD Direct Download">AD Direct Download</option>
+                <option value="AD Google Search">AD Google Search</option>
+                <option value="ApacheCon 2011">ApacheCon 2011</option>
+                <option value="ApacheCon 2013">ApacheCon 2013</option>
+                <option value="AppDynamics Website">AppDynamics Website</option>
+                <option value="AppJam NYC 2013">AppJam NYC 2013</option>
+                <option value="AppJam Paris 2013">AppJam Paris 2013</option>
+                <option value="AppJam Road Show Chicago 2013">AppJam Road Show Chicago 2013</option>
+                <option value="AppJam Road Show Dallas 2013">AppJam Road Show Dallas 2013</option>
+                <option value="AppJam Road Show DC 2013">AppJam Road Show DC 2013</option>
+                <option value="AppJam Road Show Frankfurt 2013">AppJam Road Show Frankfurt 2013</option>
+                <option value="AppJam Road Show London 2013">AppJam Road Show London 2013</option>
+                <option value="AppJam Road Show Newport Beach 2013">AppJam Road Show Newport Beach 2013</option>
+                <option value="AppJam Road Show SF 2013">AppJam Road Show SF 2013</option>
+                <option value="Apps World London 13">Apps World London 13</option>
+                <option value="AWS re:Invent 2013">AWS re:Invent 2013</option>
+                <option value="AWS Summit London Sept 13">AWS Summit London Sept 13</option>
+                <option value="AWS Summit NYC 2013">AWS Summit NYC 2013</option>
+                <option value="Basta! .NET 2012">Basta! .NET 2012</option>
+                <option value="BASTA Fall Mainz 13">BASTA Fall Mainz 13</option>
+                <option value="BbWorld 2011">BbWorld 2011</option>
+                <option value="BbWorld 2013">BbWorld 2013</option>
+                <option value="Beta .Net User Group 2012">Beta .Net User Group 2012</option>
+                <option value="Blue Chew">Blue Chew</option>
+                <option value="BMC Referral">BMC Referral</option>
+                <option value="BMC Trial Form">BMC Trial Form</option>
+                <option value="Camp IT 2012">Camp IT 2012</option>
+                <option value="Catalysts Developer Contest 2012">Catalysts Developer Contest 2012</option>
+                <option value="ceCMG Conference 2013">ceCMG Conference 2013</option>
+                <option value="Central Iowa Software Symposium (NFJS) 2012">Central Iowa Software Symposium (NFJS) 2012</option>
+                <option value="CIO Executive Summit Boston 2013">CIO Executive Summit Boston 2013</option>
+                <option value="CIO Synergy DC 2013">CIO Synergy DC 2013</option>
+                <option value="CIOSYNERGY Los Angeles 2013">CIOSYNERGY Los Angeles 2013</option>
+                <option value="CIO Synergy Minneapolios 2013">CIO Synergy Minneapolios 2013</option>
+                <option value="CIO Synergy NYC 2013">CIO Synergy NYC 2013</option>
+                <option value="CIO Synergy SF 2013">CIO Synergy SF 2013</option>
+                <option value="Cleveland CIO Conference 2013">Cleveland CIO Conference 2013</option>
+                <option value="Cloud Connect 2010">Cloud Connect 2010</option>
+                <option value="Cloud Connect 2011">Cloud Connect 2011</option>
+                <option value="Cloud Connect 2012">Cloud Connect 2012</option>
+                <option value="Cloud World Forum June 2013">Cloud World Forum June 2013</option>
+                <option value="Codecentric">Codecentric</option>
+                <option value="CodePalousa 2013">CodePalousa 2013</option>
+                <option value="Confoo CA 2013">Confoo CA 2013</option>
+                <option value="Contact Us Form">Contact Us Form</option>
+                <option value="Crestingwave 2013">Crestingwave 2013</option>
+                <option value="Cresting Wave 2013">Cresting Wave 2013</option>
+                <option value="CRiP Annual Conference 2013">CRiP Annual Conference 2013</option>
+                <option value="CRiP Innovation Day 2013">CRiP Innovation Day 2013</option>
+                <option value="Customer Referral">Customer Referral</option>
+                <option value="CWO Dinner - June 2013">CWO Dinner - June 2013</option>
+                <option value="Days of .NET St. Louis 2012">Days of .NET St. Louis 2012</option>
+                <option value="DevConnections (.NET) 2011">DevConnections (.NET) 2011</option>
+                <option value="DevConnections 2011">DevConnections 2011</option>
+                <option value="DevNexus, Atlanta 2013">DevNexus, Atlanta 2013</option>
+                <option value="DevOpsDays Amsterdam 2013">DevOpsDays Amsterdam 2013</option>
+                <option value="DevOpsDays Austin 2013">DevOpsDays Austin 2013</option>
+                <option value="DevOpsDays Berlin 2013">DevOpsDays Berlin 2013</option>
+                <option value="Devops Days London 2013">Devops Days London 2013</option>
+                <option value="Devoxx 2012">Devoxx 2012</option>
+                <option value="DevOxx France 2013">DevOxx France 2013</option>
+                <option value="DiscoverOrg">DiscoverOrg</option>
+                <option value="Domestic Pricing Form">Domestic Pricing Form</option>
+                <option value="DZone">DZone</option>
+                <option value="EclipseCon 2013">EclipseCon 2013</option>
+                <option value="eCommerce Paris 13">eCommerce Paris 13</option>
+                <option value="Educause 2001">Educause 2001</option>
+                <option value="Educause 2012">Educause 2012</option>
+                <option value="Educause 2013">Educause 2013</option>
+                <option value="Employee Generated">Employee Generated</option>
+                <option value="eTail Europe, London 2013">eTail Europe, London 2013</option>
+                <option value="Existing Customer">Existing Customer</option>
+                <option value="FOSE 2011">FOSE 2011</option>
+                <option value="Gartner Data Conf 2010">Gartner Data Conf 2010</option>
+                <option value="Gluecon 2013">Gluecon 2013</option>
+                <option value="Google AdWords">Google AdWords</option>
+                <option value="GoToCon Aarhus 2013">GoToCon Aarhus 2013</option>
+                <option value="GoToCon Amsterdam 2013">GoToCon Amsterdam 2013</option>
+                <option value="GotoCon Chicago 2013">GotoCon Chicago 2013</option>
+                <option value="GoToCon Zurich 2013">GoToCon Zurich 2013</option>
+                <option value="HighScalability">HighScalability</option>
+                <option value="House List Send">House List Send</option>
+                <option value="Houston .Net User Group 2012">Houston .Net User Group 2012</option>
+                <option value="IIS.net">IIS.net</option>
+                <option value="IKS Partner Day 2013">IKS Partner Day 2013</option>
+                <option value="InfoQ">InfoQ</option>
+                <option value="InsideView">InsideView</option>
+                <option value="Internal Citrix Event 2013">Internal Citrix Event 2013</option>
+                <option value="International Pricing Form">International Pricing Form</option>
+                <option value="Internet World London 2013">Internet World London 2013</option>
+                <option value="Iowa .NET User Group 2012">Iowa .NET User Group 2012</option>
+                <option value="IPC Spring 2013">IPC Spring 2013</option>
+                <option value="IRCE 2013">IRCE 2013</option>
+                <option value="JavaOne 2011">JavaOne 2011</option>
+                <option value="JavaOne 2012">JavaOne 2012</option>
+                <option value="JavaOne 2013">JavaOne 2013</option>
+                <option value="Java Performance Tuning">Java Performance Tuning</option>
+                <option value="JavaRanch">JavaRanch</option>
+                <option value="Jax Germany 2013">Jax Germany 2013</option>
+                <option value="JAX London 2011">JAX London 2011</option>
+                <option value="Jax London 2013">Jax London 2013</option>
+                <option value="JAX SJ 2011">JAX SJ 2011</option>
+                <option value="Jazoon Zurich, Switzerland 2011">Jazoon Zurich, Switzerland 2011</option>
+                <option value="JBoss 2010">JBoss 2010</option>
+                <option value="JBoss 2011">JBoss 2011</option>
+                <option value="JBoss RedHat Summit 2013">JBoss RedHat Summit 2013</option>
+                <option value="JFall JUG NL  2012">JFall JUG NL  2012</option>
+                <option value="Lone Star PHP 2013">Lone Star PHP 2013</option>
+                <option value="Microsoft MVP Mixer 2013">Microsoft MVP Mixer 2013</option>
+                <option value="Microsoft Tech ed (.NET) 2011">Microsoft Tech ed (.NET) 2011</option>
+                <option value="MMS 2013">MMS 2013</option>
+                <option value="MS Cloud 2012">MS Cloud 2012</option>
+                <option value="MSP World 2012">MSP World 2012</option>
+                <option value="MSP World 2013">MSP World 2013</option>
+                <option value="MSP World  2013">MSP World  2013</option>
+                <option value="NetProspex">NetProspex</option>
+                <option value="OSCON 2012">OSCON 2012</option>
+                <option value="Oscon 2013">Oscon 2013</option>
+                <option value="Other Web Source">Other Web Source</option>
+                <option value="Partner Prospecting">Partner Prospecting</option>
+                <option value="PEM CIO Summit Boston 2013">PEM CIO Summit Boston 2013</option>
+                <option value="Personal Contacts">Personal Contacts</option>
+                <option value="Phoenix Java User Group">Phoenix Java User Group</option>
+                <option value="Puppet Camp Verona 2013">Puppet Camp Verona 2013</option>
+                <option value="QCon 2010">QCon 2010</option>
+                <option value="QCon 2011">QCon 2011</option>
+                <option value="QCon Berlin 2013">QCon Berlin 2013</option>
+                <option value="QCon London 2013">QCon London 2013</option>
+                <option value="QCon NY 2013">QCon NY 2013</option>
+                <option value="QCon SF 2012">QCon SF 2012</option>
+                <option value="QconSF 2013">QconSF 2013</option>
+                <option value="Rain King">Rain King</option>
+                <option value="Referral">Referral</option>
+                <option value="RTECC Chicago 2012">RTECC Chicago 2012</option>
+                <option value="RTECC Detroit 2012">RTECC Detroit 2012</option>
+                <option value="SalesView">SalesView</option>
+                <option value="SD JUG 2012">SD JUG 2012</option>
+                <option value="Seattle CIO Executive Summit 2013">Seattle CIO Executive Summit 2013</option>
+                <option value="SEO">SEO</option>
+                <option value="SEO - Competitor Bakeoff">SEO - Competitor Bakeoff</option>
+                <option value="SEO - Deal In Motion">SEO - Deal In Motion</option>
+                <option value="SEO - Problem Solving">SEO - Problem Solving</option>
+                <option value="Server Side Symposium 2011">Server Side Symposium 2011</option>
+                <option value="SF .NET User Group">SF .NET User Group</option>
+                <option value="SF Bay Area Azure Developers">SF Bay Area Azure Developers</option>
+                <option value="SF Java User Group">SF Java User Group</option>
+                <option value="Sharefest 2013">Sharefest 2013</option>
+                <option value="Sourceforge">Sourceforge</option>
+                <option value="Splunk 2012">Splunk 2012</option>
+                <option value="SplunkLive! Amsterdam 2013">SplunkLive! Amsterdam 2013</option>
+                <option value="SplunkLive! Atlanta 2013">SplunkLive! Atlanta 2013</option>
+                <option value="SplunkLive! Boston 2013">SplunkLive! Boston 2013</option>
+                <option value="SplunkLive! Detroit 2013">SplunkLive! Detroit 2013</option>
+                <option value="SplunkLive! Frankfurt 2013">SplunkLive! Frankfurt 2013</option>
+                <option value="SplunkLive! Hamburg 2013">SplunkLive! Hamburg 2013</option>
+                <option value="SplunkLive! Kansas City 2013">SplunkLive! Kansas City 2013</option>
+                <option value="SplunkLive! London 2013">SplunkLive! London 2013</option>
+                <option value="SplunkLive! Minneapolis 2013">SplunkLive! Minneapolis 2013</option>
+                <option value="SplunkLive! Munich 2013">SplunkLive! Munich 2013</option>
+                <option value="SplunkLive! NYC 2013">SplunkLive! NYC 2013</option>
+                <option value="SplunkLive! Philly 2013">SplunkLive! Philly 2013</option>
+                <option value="SplunkLive! SF 2013">SplunkLive! SF 2013</option>
+                <option value="SplunkLive! Stockholm 2013">SplunkLive! Stockholm 2013</option>
+                <option value="SplunkLive! Washington DC 2013">SplunkLive! Washington DC 2013</option>
+                <option value="SplunkLive! Zurich 2013">SplunkLive! Zurich 2013</option>
+                <option value="Splunk Live Chicago 2013">Splunk Live Chicago 2013</option>
+                <option value="Splunk Live Raleigh 2013">Splunk Live Raleigh 2013</option>
+                <option value="SplunkLive Zurich 2013">SplunkLive Zurich 2013</option>
+                <option value="SPLUNK User Conference 2013">SPLUNK User Conference 2013</option>
+                <option value="SpringOne 2GX 2012">SpringOne 2GX 2012</option>
+                <option value="St. Louis Days of .NET 2012">St. Louis Days of .NET 2012</option>
+                <option value="Stack Overflow">Stack Overflow</option>
+                <option value="STARCANADA 2013">STARCANADA 2013</option>
+                <option value="STAREAST 2013">STAREAST 2013</option>
+                <option value="STARWEST  2012">STARWEST  2012</option>
+                <option value="Starwest 2013">Starwest 2013</option>
+                <option value="Structure EU London Sept 13">Structure EU London Sept 13</option>
+                <option value="Summer Jax 2011">Summer Jax 2011</option>
+                <option value="Summer Jax 2012">Summer Jax 2012</option>
+                <option value="Superlist">Superlist</option>
+                <option value="Super Splunk Live London 2013">Super Splunk Live London 2013</option>
+                <option value="Surge 2012">Surge 2012</option>
+                <option value="Surge 2013">Surge 2013</option>
+                <option value="Symfony Live London Sept 13">Symfony Live London Sept 13</option>
+                <option value="TechEd 2013">TechEd 2013</option>
+                <option value="TechEd Europe 2013">TechEd Europe 2013</option>
+                <option value="TechFest 2012">TechFest 2012</option>
+                <option value="Techtarget">Techtarget</option>
+                <option value="ukCMG 2013">ukCMG 2013</option>
+                <option value="UKOUG Applications Conference London 2013">UKOUG Applications Conference London 2013</option>
+                <option value="UKOUG Technology Conference">UKOUG Technology Conference</option>
+                <option value="Unknown Banner Ad">Unknown Banner Ad</option>
+                <option value="Upgrade Form">Upgrade Form</option>
+                <option value="VANJUG Memory Management in Java 2013">VANJUG Memory Management in Java 2013</option>
+                <option value="VANJUG Social Media Networking Tools 2013">VANJUG Social Media Networking Tools 2013</option>
+                <option value="VAR Partner Lite Campaign">VAR Partner Lite Campaign</option>
+                <option value="Velocity 2010">Velocity 2010</option>
+                <option value="Velocity 2011">Velocity 2011</option>
+                <option value="Velocity 2012">Velocity 2012</option>
+                <option value="Velocity Europe 2011">Velocity Europe 2011</option>
+                <option value="Velocity Europe 2012">Velocity Europe 2012</option>
+                <option value="Velocity London 2013">Velocity London 2013</option>
+                <option value="Velocity NYC 2013">Velocity NYC 2013</option>
+                <option value="Velocity Santa Clara 2013">Velocity Santa Clara 2013</option>
+                <option value="VisualStudioLive 2011">VisualStudioLive 2011</option>
+                <option value="VMWorld 2010">VMWorld 2010</option>
+                <option value="VSLive! Chicago 2013">VSLive! Chicago 2013</option>
+                <option value="VSLive! Orlando 2012">VSLive! Orlando 2012</option>
+                <option value="VSLive! Orlando 2013">VSLive! Orlando 2013</option>
+                <option value="VSLive! Redmond 2013">VSLive! Redmond 2013</option>
+                <option value="VSLive 2012">VSLive 2012</option>
+                <option value="VSLive Las Vegas 2012">VSLive Las Vegas 2012</option>
+                <option value="VSLive NY 2012">VSLive NY 2012</option>
+                <option value="VS Live WA 2012">VS Live WA 2012</option>
+                <option value="Webinar">Webinar</option>
+                <option value="Websphere User Group 2013">Websphere User Group 2013</option>
+                <option value="W-Jax 2010">W-Jax 2010</option>
+                <option value="W-JAX 2011">W-JAX 2011</option>
+                <option value="W-JAX 2012">W-JAX 2012</option>
+                <option value="W-Jax 2013">W-Jax 2013</option>
+                <option value="XebiaLabs Partner Day 2013">XebiaLabs Partner Day 2013</option>
+                <option value="ZendCon PHP 2012">ZendCon PHP 2012</option>
+                <option value="ZendCon PHP 2013">ZendCon PHP 2013</option>
+                <option value="Zoominfo">Zoominfo</option>
+            </select>
+            <select class="Partner__c form-control">
+                <option value="">--None--</option><option value="AGSI">AGSI</option>
+                <option value="Amazon">Amazon</option>
+                <option value="Apica Systems">Apica Systems</option>
+                <option value="Blackboard">Blackboard</option>
+                <option value="BMC">BMC</option>
+                <option value="CloudBees">CloudBees</option>
+                <option value="Cloudops">Cloudops</option>
+                <option value="Datavail">Datavail</option>
+                <option value="Dominion Digital">Dominion Digital</option>
+                <option value="Grid Robotics">Grid Robotics</option>
+                <option value="HP Cloud">HP Cloud</option>
+                <option value="IT Source Technologies">IT Source Technologies</option>
+                <option value="J9Tech">J9Tech</option>
+                <option value="Keynote">Keynote</option>
+                <option value="Kuali">Kuali</option>
+                <option value="Microsoft">Microsoft</option>
+                <option value="MSP">MSP</option>
+                <option value="MXI">MXI</option>
+                <option value="Newton Technology Group">Newton Technology Group</option>
+                <option value="NTT Europe">NTT Europe</option>
+                <option value="OpSource">OpSource</option>
+                <option value="Prelert">Prelert</option>
+                <option value="RightScale">RightScale</option>
+                <option value="Scicom">Scicom</option>
+                <option value="SHI">SHI</option>
+                <option value="SOASTA">SOASTA</option>
+                <option value="Splunk">Splunk</option>
+            </select>
+            <select class="rkpi2__rk_DefaultVisibility__c form-control">
+                <option value="">--None--</option>
+                <option value="On">On</option>
+                <option value="Off">Off</option>
+            </select>
+            <select class="Priority__c form-control">
+                <option value="">--None--</option><option value="1- TradeShow Click">1- TradeShow Click</option>
+                <option value="1- Webpage visit w phone">1- Webpage visit w phone</option>
+                <option value="1- Lite w/ phone">1- Lite w/ phone</option>
+                <option value="1- Campaign Response">1- Campaign Response</option>
+                <option value="1- Drip Campaign Response">1- Drip Campaign Response</option>
+                <option value="1- 60 pts w/ phone">1- 60 pts w/ phone</option>
+                <option value="2- TradeShow Opens">2- TradeShow Opens</option>
+                <option value="2- Campaign Clicks">2- Campaign Clicks</option>
+                <option value="3- Lite w/o phone">3- Lite w/o phone</option>
+                <option value="3- Webpage visit w/o phone">3- Webpage visit w/o phone</option>
+                <option value="3- 60 pts w/o phone">3- 60 pts w/o phone</option>
+                <option value="1- Webinar Attended">1- Webinar Attended</option>
+                <option value="1- Webinar Registered">1- Webinar Registered</option>
+                <option value="1- Superlist">1- Superlist</option>
+            </select>
+            <select class="PPC__c form-control">
+                <option value="">--None--</option><option value="Sourceforge">Sourceforge</option>
+                <option value="Dzone">Dzone</option>
+                <option value="Stackoverflow">Stackoverflow</option>
+                <option value="Javaranch">Javaranch</option>
+                <option value="Techtarget">Techtarget</option>
+                <option value="InfoQ">InfoQ</option>
+                <option value="JavaPerformanceTuning">JavaPerformanceTuning</option>
+                <option value="Google Search">Google Search</option>
+            </select>
+            <select class="Registration_Status__c form-control">
+                <option value="">--None--</option><option value="Draft">Draft</option>
+                <option value="Pending Review">Pending Review</option>
+                <option value="Approved">Approved</option>
+                <option value="Rejected">Rejected</option>
+            </select>
+            <select class="rkpi2__rk_RetrievalFlag__c form-control">
+                <option value="">--None--</option>
+                <option value="On">On</option>
+                <option value="Off">Off</option>
+            </select>
+            <select class="Territory__c form-control">
+                <option value="">--None--</option><option value="West Coast">West Coast</option>
+                <option value="Central">Central</option>
+                <option value="Northeast">Northeast</option>
+                <option value="Southeast">Southeast</option>
+                <option value="International">International</option>
+                <option value="Reseller">Reseller</option>
+                <option value="Mid-Atlantic">Mid-Atlantic</option>
+                <option value="Federal Gov.">Federal Gov.</option>
+            </select>
+            <select class="Time_Zone__c form-control">
+                <option value="">--None--</option><option value="Pacific">Pacific</option>
+                <option value="Central">Central</option>
+                <option value="Mountain">Mountain</option>
+                <option value="Eastern">Eastern</option>
+            </select>
+            <select class="Withdraw_Reason__c form-control" >
+                <option value="">--None--</option>
+                <option value="Angry Person">Angry Person</option>
+                <option value="Bad Data">Bad Data</option>
+                <option value="Competitor">Competitor</option>
+                <option value="Employee">Employee</option>
+                <option value="Existing APM - CA Wylie">Existing APM - CA Wylie</option>
+                <option value="Existing APM - dynaTrace">Existing APM - dynaTrace</option>
+                <option value="Existing APM - HP">Existing APM - HP</option>
+                <option value="Existing APM - IBM ITCAM">Existing APM - IBM ITCAM</option>
+                <option value="Existing APM - New Relic">Existing APM - New Relic</option>
+                <option value="Existing APM tool">Existing APM tool</option>
+                <option value="No Longer at Company">No Longer at Company</option>
+                <option value="No Longer with Company">No Longer with Company</option>
+                <option value="Not Interested">Not Interested</option>
+                <option value="Not Right Person/ No Referral">Not Right Person/ No Referral</option>
+                <option value="Other Application Stacks">Other Application Stacks</option>
+                <option value="Referral">Referral</option>
+                <option value="Tech Stack - PHP">Tech Stack - PHP</option>
+                <option value="Tech Stack - Python">Tech Stack - Python</option>
+                <option value="Tech Stack - Ruby on Rails">Tech Stack - Ruby on Rails</option>
+            </select>
+            <select class="Database__c form-control" >
+                <option value="">--None--</option>
+                <option value="DB2">DB2</option>
+                <option value="MySQL">MySQL</option>
+                <option value="NetApp">NetApp</option>
+                <option value="Oracle">Oracle</option>
+                <option value="PostgreSQL">PostgreSQL</option>
+                <option value="SQL Server">SQL Server</option>
+                <option value="Sybase">Sybase</option>
+            </select>
+            <select class="Existing_APM_Solution_s__c form-control" >
+                <option value="">--None--</option>
+                <option value="Compuware DynaTrace">Compuware DynaTrace</option>
+                <option value="New Relic">New Relic</option>
+                <option value="CA Wily">CA Wily</option>
+                <option value="HP">HP</option>
+                <option value="IBM ITCAM">IBM ITCAM</option>
+                <option value="IBM Tivoli">IBM Tivoli</option>
+                <option value="Microsoft Avicode">Microsoft Avicode</option>
+                <option value="Opnet">Opnet</option>
+                <option value="OpTier">OpTier</option>
+                <option value="Oracle">Oracle</option>
+                <option value="Precise">Precise</option>
+                <option value="Quest Foglight">Quest Foglight</option>
+            </select>
+            <select class="Handraiser_Form__c form-control" >
+                <option value="">--None--</option>
+                <option value=".NET Trial">.NET Trial</option>
+                <option value="30-Day Trial">30-Day Trial</option>
+                <option value="Contact Us">Contact Us</option>
+                <option value="Domestic Pricing">Domestic Pricing</option>
+                <option value="EUM Integration">EUM Integration</option>
+                <option value="International Pricing">International Pricing</option>
+                <option value="Upgrade">Upgrade</option>
+            </select>
+            <select class="Trade_Show_Name__c form-control">
+                <option value="">--None--</option>
+                <option value="ApacheCon 2011">ApacheCon 2011</option>
+                <option value="Basta! .NET 2012">Basta! .NET 2012</option>
+                <option value="BbWorld 2011">BbWorld 2011</option>
+                <option value="BbWorld 2012">BbWorld 2012</option>
+                <option value="Beta .net UG">Beta .net UG</option>
+                <option value="CAMP IT 2012">CAMP IT 2012</option>
+                <option value="Cassandra Summit 2013">Cassandra Summit 2013</option>
+                <option value="Cedar Rapids .NET UG 2013">Cedar Rapids .NET UG 2013</option>
+                <option value="Central Iowa Software Symposium 2012">Central Iowa Software Symposium 2012</option>
+                <option value="Cloud Connect 2010">Cloud Connect 2010</option>
+                <option value="Cloud Connect 2011">Cloud Connect 2011</option>
+                <option value="Cloud Connect 2012">Cloud Connect 2012</option>
+                <option value="DevConnections (.NET) 2011">DevConnections (.NET) 2011</option>
+                <option value="DevConnections 2011">DevConnections 2011</option>
+                <option value="Devoxx 2012">Devoxx 2012</option>
+                <option value="Educause 2012">Educause 2012</option>
+                <option value="FOSE 2011">FOSE 2011</option>
+                <option value="Game Developers Conference 2013">Game Developers Conference 2013</option>
+                <option value="Gartner Data Conf 2010">Gartner Data Conf 2010</option>
+                <option value="Houston .Net User Group">Houston .Net User Group</option>
+                <option value="Houston TechFest 2012">Houston TechFest 2012</option>
+                <option value="Iowa .NET User Group 2012">Iowa .NET User Group 2012</option>
+                <option value="JavaOne 2011">JavaOne 2011</option>
+                <option value="JavaOne 2012">JavaOne 2012</option>
+                <option value="JAX 2012">JAX 2012</option>
+                <option value="JAX London 2011">JAX London 2011</option>
+                <option value="JAX SJ 2011">JAX SJ 2011</option>
+                <option value="Jazoon Zurich, Switzerland 2011">Jazoon Zurich, Switzerland 2011</option>
+                <option value="JBoss 2010">JBoss 2010</option>
+                <option value="JBoss 2011">JBoss 2011</option>
+                <option value="JBoss 2012">JBoss 2012</option>
+                <option value="JFall JUG NL 2012">JFall JUG NL 2012</option>
+                <option value="LA .NET User Group 2013">LA .NET User Group 2013</option>
+                <option value="Lisa 2013">Lisa 2013</option>
+                <option value="MAD Expo 2012">MAD Expo 2012</option>
+                <option value="Microsoft Tech ed (.NET) 2011">Microsoft Tech ed (.NET) 2011</option>
+                <option value="Microsoft TechEd 2012">Microsoft TechEd 2012</option>
+                <option value="MS Cloud 2012">MS Cloud 2012</option>
+                <option value="MSP World 2012">MSP World 2012</option>
+                <option value="NY Java Sig 2012">NY Java Sig 2012</option>
+                <option value="OSCON 2012">OSCON 2012</option>
+                <option value="Oscon 2013">Oscon 2013</option>
+                <option value="QCon 2010">QCon 2010</option>
+                <option value="Qcon 2011">Qcon 2011</option>
+                <option value="QCon 2012">QCon 2012</option>
+                <option value="QCon SF 2012">QCon SF 2012</option>
+                <option value="RTECC Chicago 2012">RTECC Chicago 2012</option>
+                <option value="RTECC Detroit 2012">RTECC Detroit 2012</option>
+                <option value="SD JUG 2012">SD JUG 2012</option>
+                <option value="Server Side Symposium 2011">Server Side Symposium 2011</option>
+                <option value="SF .NET UG 2012">SF .NET UG 2012</option>
+                <option value="SF JUG 2012">SF JUG 2012</option>
+                <option value="Splunk 2012">Splunk 2012</option>
+                <option value="SpringOne 2012">SpringOne 2012</option>
+                <option value="St. Louis Days of .NET 2012">St. Louis Days of .NET 2012</option>
+                <option value="STARWEST 2012">STARWEST 2012</option>
+                <option value="Summer Jax 2011">Summer Jax 2011</option>
+                <option value="Surge 2012">Surge 2012</option>
+                <option value="Velocity 2010">Velocity 2010</option>
+                <option value="Velocity 2011">Velocity 2011</option>
+                <option value="Velocity 2012">Velocity 2012</option>
+                <option value="Velocity 2013">Velocity 2013</option>
+                <option value="Velocity Europe 2011">Velocity Europe 2011</option>
+                <option value="Velocity Europe 2012">Velocity Europe 2012</option>
+                <option value="VisualStudioLive 2011">VisualStudioLive 2011</option>
+                <option value="VMWorld 2010">VMWorld 2010</option>
+                <option value="VS Live! 2013">VS Live! 2013</option>
+                <option value="VSLive 2012">VSLive 2012</option>
+                <option value="W-Jax 2010">W-Jax 2010</option>
+                <option value="W-JAX 2011">W-JAX 2011</option>
+                <option value="W-JAX 2012">W-JAX 2012</option>
+                <option value="ZendCon PHP 2012">ZendCon PHP 2012</option>
+                <option value="ZendCon PHP 2013">ZendCon PHP 2013</option>
+            </select>
+    
+            <!-- lookup --> 
+    
+            <!--<apex:inputField id="gap" value="{!leadObject.Global_Alliance_Partner__c}" required="false"/>-->
+            <!--<apex:inputField value="{!leadObject.infer2__Infer_Score_ID__c}" styleClass="infer2__Infer_Score_ID__c"  required="false"/>
+            <apex:inputField value="{!leadObject.mkto_si__MSIContactId__c}" styleClass="mkto_si__MSIContactId__c"  required="false"/>
+            <apex:inputField value="{!leadObject.Partner_Account_Owner__c}" styleClass="Partner_Account_Owner__c"  required="false"/>
+            <apex:inputField value="{!leadObject.Partner_Involved__c}" styleClass="Partner_Involved__c"  required="false"/>
+            <apex:inputField value="{!leadObject.OwnerId}" styleClass="OwnerId"  required="false"/>-->
+    
+            <!-- date -->
+            <input id="dateFiled" class="date form-control" onfocus="DatePicker.pickDate(true, this.id, false);" size="12" type="text"/>
+    
+            <!-- datetime -->
+            <input id="datetimeField" class="datetime form-control" onfocus="DatePicker.pickDate(true, this.id, true);" size="20" type="text"/>
+    
+            <!-- checkbox -->
+            <select class="checkboxField form-control">
+                <option>--None--</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+        </div><!-- /Lead Field Value-->
+      
+      </apex:form>
+    </div>
+  </body>
+</apex:page>

@@ -1,0 +1,172 @@
+<apex:page standardController="Opportunity"
+	extensions="PortalControllerLicense" docType="html-5.0"
+	action="{!initAction}">
+	<apex:PageMessages escape="false"></apex:PageMessages>
+	<apex:form >
+		<apex:pageBlock >
+			<apex:pageBlockButtons >
+				<apex:commandButton value="Provision" action="{!saveObject}" />
+				<apex:commandButton value="Cancel" />
+			</apex:pageBlockButtons>
+			<!-- License Details -->
+			<apex:pageBlockSection id="licenseDetails" title="License Details" columns="2">
+				<apex:pageBlockSectionItem id="productTypeSection">
+					<apex:outputLabel value="Edition"></apex:outputLabel>
+					<apex:outputLabel value="{!licenseObj.edition}"></apex:outputLabel>
+					<!-- apex:selectList value="{!licenseObj.edition}"
+						id="productType" styleClass="product_type" multiselect="false"
+						size="1">
+						<apex:actionSupport event="onchange" rerender="licenseDetails,licenseProducts"/>
+						<apex:selectOptions value="{!editionSelectOptions}"></apex:selectOptions>
+					</apex:selectList> -->
+				</apex:pageBlockSectionItem>
+				
+				<apex:pageBlockSectionItem id="deploymentSection">
+					<apex:outputLabel value="Deployment Option"></apex:outputLabel>
+					<apex:selectList value="{!licenseObj.deployment.type}"
+						id="productType" styleClass="product_type" multiselect="false"
+						size="1">
+						<apex:actionSupport event="onchange" rerender="licenseDetails,licenseProducts"/>
+						<apex:selectOptions value="{!productTypeSelectOptions}"></apex:selectOptions>
+					</apex:selectList>
+				</apex:pageBlockSectionItem>
+
+				<apex:PageBlockSectionItem id="expiryDateSection">
+					<apex:outputLabel value="License Expiration Date"></apex:outputLabel>
+					<apex:input type="datetime" value="{!licenseObj.expiration_date}" />
+				</apex:PageBlockSectionItem>
+
+				<apex:PageBlockSectionItem id="theSectionItem2" rendered="{!licenseObj.deployment.type == 'saas'}">
+					<apex:outputLabel value="Customer SaaS URL" id="customURLLbl" />
+					<apex:outputpanel >
+						<apex:input type="text"
+							value="{!licenseObj.deployment.attributes.hostname}"
+							style="width:450" />
+						<apex:outputLabel id="customURLLbl2"
+							value=".ssaas.appdynamics.com" />
+					</apex:outputpanel>
+				</apex:PageBlockSectionItem>
+
+				<apex:PageBlockSectionItem rendered="{!licenseObj.deployment.type == 'saas'}">
+					<apex:outputLabel value="SAAS Account" />
+					<apex:input type="text"
+						value="{!licenseObj.deployment.attributes.account_name}"
+						style="width:450" />
+				</apex:PageBlockSectionItem>
+
+				<apex:PageBlockSectionItem rendered="{!licenseObj.deployment.type == 'saas'}">
+					<apex:outputLabel value="SAAS User" />
+					<apex:input value="{!licenseObj.deployment.attributes.user_name}"
+						style="width:450" />
+				</apex:PageBlockSectionItem>
+
+				<apex:PageBlockSectionItem rendered="{!licenseObj.deployment.type == 'saas'}">
+					<apex:outputLabel value="SAAS Password" />
+					<apex:input value="{!licenseObj.deployment.attributes.password}"
+						style="width:450" />
+				</apex:PageBlockSectionItem>
+
+				<apex:PageBlockSectionItem rendered="{!licenseObj.deployment.type == 'saas'}">
+					<apex:outputLabel value="SAAS Password" />
+					<apex:input value="{!licenseObj.deployment.attributes.access_key}"
+						style="width:450" />
+				</apex:PageBlockSectionItem>
+
+				<apex:PageBlockSectionItem id="macSection" rendered="{!licenseObj.deployment.type == 'onprem'}">
+					<apex:outputLabel value="MAC Address" id="macLblId"></apex:outputLabel>
+					<apex:input value="{!licenseObj.deployment.attributes.mac_address}"
+						id="macValId" />
+				</apex:PageBlockSectionItem>
+			</apex:pageBlockSection>
+			<apex:pageBlockSection id="licenseProducts" title="License Products" collapsible="false"
+				columns="1">
+				<apex:repeat id="agentsRepeat" value="{!productCategories}"
+					var="agentCategory">
+					<div class="hideCurrDate">
+						<apex:pageBlockSection id="agentsSection"
+							title="{!agentCategory} Products" columns="1" collapsible="true">
+							<apex:pageBlockTable value="{!categoryBasedProducts[agentCategory]}" var="licUnit"
+								border="0">
+								<apex:column headerValue="Agent Type" width="150">
+									<apex:outputLabel value="{!licUnit.name}" />
+								</apex:column>
+								<apex:column headerValue="Product Edition" width="200">
+									<apex:selectList value="{!licUnit.edition}" size="1" 
+										styleClass="product_type" multiselect="false"
+										rendered="{!licenseObj.deployment.type == 'saas' && licenseObj.edition == 'pro'}">
+										<apex:actionSupport event="onchange" rerender="licenseProducts"/>
+										<apex:selectOptions value="{!licUnit.editionSelectOptions}"></apex:selectOptions>
+									</apex:selectList>
+									<apex:outputLabel value="{!licUnit.edition}" rendered="{!!(licenseObj.deployment.type == 'saas' && licenseObj.edition == 'pro')}"/>
+								</apex:column>
+								<apex:column headerValue="Expiration Date" width="200">
+									<apex:input type="text" value="{!licUnit.expiration_date}" 
+										rendered="{!licUnit.edition == 'pro-trial' && licenseObj.deployment.type == 'saas' && licenseObj.edition == 'pro'}"/>
+									<apex:outputLabel value="{!licUnit.expiration_date}" 
+										rendered="{!!(licUnit.edition == 'pro-trial' && licenseObj.deployment.type == 'saas' && licenseObj.edition == 'pro')}"/>
+								</apex:column>
+								<apex:column headerValue="Licensing Model" width="120">
+									<apex:selectList value="{!licUnit.model}" size="1" 
+										styleClass="model" multiselect="false"
+										rendered="{!licUnit.edition == 'pro' && licenseObj.deployment.type == 'saas' && licenseObj.edition == 'pro'}">
+										<apex:actionSupport event="onchange" rerender="licenseProducts"/>
+										<apex:selectOptions value="{!licUnit.modelSelectOptions}"></apex:selectOptions>
+									</apex:selectList>
+									<apex:outputLabel value="{!licUnit.model}" 
+										rendered="{!!(licUnit.edition == 'pro' && licenseObj.deployment.type == 'saas' && licenseObj.edition == 'pro')}">
+										<apex:actionSupport event="onchange" rerender="licenseProducts"/>
+									</apex:outputLabel>
+								</apex:column>
+								<apex:column headerValue="Units" width="80">
+									<apex:input value="{!licUnit.units}" >
+										<apex:actionSupport event="onchange" rerender="licenseProducts"/>
+									</apex:input>
+								</apex:column>
+								<apex:column headerValue="Max Units" width="80">
+									<apex:input value="{!licUnit.max_units}" 
+									rendered="{!!(licUnit.model == 'Fixed' || licUnit.model=='fixed')}"/>
+									<apex:outputLabel value="{!licUnit.max_units}" 
+									rendered="{!(licUnit.model == 'Fixed' || licUnit.model=='fixed')}"/>
+									
+								</apex:column>
+								<apex:column headerValue="Data Retention (in Days)" width="80"
+									headerClass="data-retention-{!agentCategory}"
+									styleClass="data-retention-{!agentCategory}">
+									<apex:input value="{!licUnit.retention}" rendered="{!agentCategory=='ANALYTICS'}"/>
+								</apex:column>
+								<apex:column ></apex:column>
+							</apex:pageBlockTable>
+						</apex:pageBlockSection>
+					</div>
+				</apex:repeat>
+			</apex:pageBlockSection>
+			<apex:pageBlockSection title="License Users" collapsible="false"
+				columns="1">
+					<apex:pageBlockTable value="{!licenseUsers}" var="lu"
+						border="0">
+						<apex:column headerValue="Need License Email?" width="200">
+							<apex:inputCheckbox value="{!lu.needLicenseEmail}" disabled="{!lu.isPrimary}"/>
+							{!lu.needLicenseEmail}
+						</apex:column>
+						<apex:column headerValue="Need Service Email?" width="120">
+							<apex:inputCheckbox value="{!lu.needServiceEmail}"  disabled="{!lu.isPrimary}"/>
+							{!lu.needServiceEmail}
+						</apex:column>
+						<apex:column headerValue="Email" width="150">
+							<apex:outputLabel value="{!lu.email}" />
+						</apex:column>
+						<apex:column headerValue="First Name" width="200">
+							<apex:input type="text" value="{!lu.firstName}" />
+						</apex:column>
+						<apex:column headerValue="Last Name" width="200">
+							<apex:input type="text" value="{!lu.lastName}" />
+						</apex:column>
+						<apex:column headerValue="Type" width="80">
+							<apex:inputCheckBox value="{!lu.isPrimary}" disabled="true"/>
+							{!lu.isPrimary}
+						</apex:column>	
+					</apex:pageBlockTable>
+				</apex:pageBlockSection>
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>

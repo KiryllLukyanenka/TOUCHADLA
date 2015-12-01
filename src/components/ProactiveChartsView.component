@@ -1,0 +1,63 @@
+<apex:component >
+	<apex:attribute name="metricsData"
+		description="Chart Data for a proactive metric"
+		type="ProactiveViewModelMetric" required="required" />
+	
+	<apex:attribute name="metric"
+		description="Proactive Metric used for Charting"
+		type="String"
+		required="required"
+	/>
+	
+	<apex:attribute name="chartKey"
+		description="Proactive Metric used for Charting"
+		type="String"
+		required="required"
+	/>
+	
+	<apex:pageBlockSection columns="1" title="{!metricsData.chartDataMap[chartKey].title}">
+		<apex:outputPanel rendered="{!metric=='LOGIN_STATS'}" styleClass="chartForKey_{!chartKey} chartContainer">	
+			
+			<apex:chart name="{!chartKey}"
+				data="{!metricsData.chartDataMap[chartKey].controllerAccountsSummaryLoginChartData}"
+				height="600" width="100%"
+				rendered="{!(chartKey=='Controller-All')}"  >
+				<apex:axis type="Category" position="bottom" fields="controller" 
+	            	title="Controller">
+	            	<apex:chartLabel rotate="270"/>
+	            	
+	            </apex:axis>
+	           
+	            <apex:axis type="Numeric" position="left" fields="loginCount" maximum="100" steps="10"
+	            	title="# of Logins"/>
+				<apex:barSeries orientation="vertical" axis="bottom" 
+	            	xField="{!metricsData.chartDataMap[chartKey].chartConfigProperties['labelField']}" 
+	            	yField="{!metricsData.chartDataMap[chartKey].chartConfigProperties['dataField']}"
+	            	colorsProgressWithinSeries="true"
+	            	showInLegend="true"/>
+				<!-- apex:legend position="right" />-->
+			</apex:chart>
+			
+			<apex:chart name="{!chartKey}Account"
+				rendered="{!!(chartKey=='Controller-All')}"
+				data="{!metricsData.chartDataMap[chartKey].controllerAccountsSummaryLoginChartData}"
+				height="600" width="100%" >
+				<apex:axis type="Category" position="bottom" fields="account" 
+	            	title="Account">
+	            	<apex:chartLabel rotate="270"/>
+	            	
+	            </apex:axis>
+	           
+	            <apex:axis type="Numeric" position="left" fields="loginCount" maximum="100" steps="10"
+	            	title="# of Logins"/>
+				<apex:barSeries orientation="vertical" axis="bottom" 
+	            	xField="{!metricsData.chartDataMap[chartKey].chartConfigProperties['labelField']}" 
+	            	yField="{!metricsData.chartDataMap[chartKey].chartConfigProperties['dataField']}"
+	            	colorsProgressWithinSeries="true"
+	            	showInLegend="true"/>
+				<!-- apex:legend position="right" />-->
+			</apex:chart>
+			
+		</apex:outputPanel>
+	</apex:pageBlockSection>
+</apex:component>

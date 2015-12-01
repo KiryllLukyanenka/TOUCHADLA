@@ -1,0 +1,8 @@
+<apex:page standardController="Contact"><!--  extensions="ContactADUADetailController">
+    <apex:pageBlock >
+  <apex:pageblockSection columns="2">
+      <apex:outputField value="{!adua.Enable_Access__c}"/>
+      <apex:outputField value="{!adua.Accesible_Systems__c}"/>
+  </apex:pageblockSection>
+  </apex:pageBlock> -->
+</apex:page>

@@ -1,0 +1,39 @@
+<apex:component controller="DataViewController">
+<apex:attribute name="reportTitle"  
+        description="Report Title" 
+        type="String" 
+        required="required" />
+	<apex:attribute name="query" 
+        description="SOQL Needed for displaying the data" 
+        type="String" 
+        required="required"
+        assignTo="{!soql}" />
+    <apex:attribute name="timeFilterField"  
+        description="Field to be used for time filtering" 
+        type="String" 
+        required="required"
+        assignTo="{!dateTimeFilterField}" />
+    <apex:attribute name="timeFilterRange"  
+        description="Time Range to get data for. Accepted values LAST 3 MONTHS/LAST 6 MONTHS/LAST YEAR"
+        type="String" 
+        required="required"
+        assignTo="{!timeRange}" />
+    <apex:attribute name="startTime"  
+        description="Date time value to filter data. Retrieves any data after this time value"
+        type="String" required="required"
+        assignTo="{!timeFilterStartTime}" />
+    <apex:attribute name="endTime"  
+        description="Date time value to filter data. Retrieves any data before this time value, If null defaulted to now"
+        type="String"
+        required="required"
+        assignTo="{!timeFilterEndTime}"/>
+    <apex:attribute name="reload" description="some description" type="boolean" 
+    required="required" assignTo="{!refreshData}"/>
+    <apex:pageBlock >
+    	<apex:pageBlockTable value="{!dataValueMapList}" var="row" width="100%">
+    		<apex:repeat value="{!columnAccessVars}" var="colAccVarName">
+    			<apex:column headerValue="{!colAccVarName}" value="{! row[colAccVarName]}"></apex:column>
+    		</apex:repeat>
+    	</apex:pageBlockTable>	
+    	</apex:pageBlock>
+</apex:component>

@@ -1,0 +1,98 @@
+<apex:page id="thePage" standardController="Opportunity" extensions="ClaimLicenseController" action="{!filterContacts}">
+<apex:pageMessages />
+    <apex:form >
+        <apex:pageBlock title="Claim License" rendered="{!IF(currentView==0,true,false)}">
+            <apex:pageBlockSection columns="1" title="Select Contact(s) from which self-service licenses to be claimed">
+                    <apex:repeat value="{!contactsList}" var="ct">
+                        <apex:pageBlockSectionItem >
+                            <apex:inputCheckBox value="{!ct.selected}"/>
+                            <apex:outputText ><apex:outputLink value="/{!ct.contactObj.Id}">{!ct.contactObj.Name} ({!ct.contactObj.Email})</apex:outputLink></apex:outputText>
+                        </apex:pageBlockSectionItem>
+                    </apex:repeat>
+            </apex:pageBlockSection>
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Get Licenses" action="{!getLicensesToBeClaimed}">
+                </apex:commandButton>
+                <apex:commandButton value="Cancel" action="{!doCancel}"/>
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+        <apex:pageBlock id="claimLicSection" rendered="{!IF(currentView==1,true,false)}">
+            
+            <apex:pageBlockSection title="Claim License - Choose the licenses to be claimed">
+                <apex:pageBlockTable value="{!licensesToClaim}" var="lic" width="100%">
+                    <apex:column headerValue="Selected?">
+                        <apex:inputCheckBox value="{!lic.selected}"/>
+                    </apex:column>
+                    <apex:column headerValue="Contact">
+                        <apex:outputLink value="/{!lic.ContactObj.Id}">{!lic.ContactObj.Name} ({!lic.contactObj.Email})</apex:outputLink>
+                    </apex:column>
+                    <apex:column value="{!lic.licenseObj.License_Expiry_Date__c}"/>
+                    <apex:column value="{!lic.licenseObj.Product_Type__c}"/>
+                    <apex:column value="{!lic.licenseObj.Stage__c}"/>
+                    <apex:column value="{!lic.licenseObj.Java_Agents_Rollup__c}"/>
+                    <apex:column value="{!lic.licenseObj.Net_Agents_Rollup__c}"/>
+                    <apex:column value="{!lic.licenseObj.Custom_URL_Name__c}"/>
+                </apex:pageBlockTable>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Claim Licenses" action="{!doPostSave}">
+                </apex:commandButton>
+                <apex:commandButton value="Cancel" action="{!doCancel}"/>
+            </apex:pageBlockButtons>
+            </apex:pageBlock>
+        <apex:pageBlock title="Claim License Summary" rendered="{!IF(currentView==2,true,false)}">
+        <apex:pageBlockSection >
+            <apex:pageBlockTable value="{!licensesToClaim}" var="lic" width="100%">
+                    <apex:column headerValue="License">
+                        <apex:outputLink value="/{!lic.licenseObj.Id}">{!lic.licenseObj.Id}</apex:outputLink>
+                    </apex:column>
+                    <apex:column headerValue="Opportunity">
+                        <apex:outputLink value="/{!opportunityObj.Id}">{!opportunityObj.Name}</apex:outputLink>
+                    </apex:column>
+                    <apex:column value="{!lic.licenseObj.License_Expiry_Date__c}"/>
+                    <apex:column value="{!lic.licenseObj.Product_Type__c}"/>
+                    <apex:column value="{!lic.licenseObj.Stage__c}"/>
+                    <apex:column value="{!lic.licenseObj.Java_Agents_Rollup__c}"/>
+                    <apex:column value="{!lic.licenseObj.Net_Agents_Rollup__c}"/>
+                    <apex:column value="{!lic.licenseObj.Custom_URL_Name__c}"/>
+                    <apex:column headerValue="Self Service User">
+                        <apex:outputLink value="/{!lic.ContactObj.Id}">{!lic.ContactObj.Name} ({!lic.contactObj.Email})</apex:outputLink>
+                    </apex:column>
+                </apex:pageBlockTable>
+                </apex:pageBlockSection>
+                <apex:pageBlockButtons > 
+                <apex:commandButton value="Close" action="{!doCancel}"/>
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+        <apex:pageBlock rendered="{!IF(currentView==3,true,false)}">
+            <apex:pageBlockSection title="All Licenses Claimed for this Opportunity's Account">
+                <apex:pageBlockTable value="{!allLicensesClaimed}" var="lic" width="100%">
+                    <apex:column headerValue="License">
+                        <apex:outputLink value="/{!lic.licenseObj.Id}">{!lic.licenseObj.Id}</apex:outputLink>
+                    </apex:column>
+                    <apex:column headerValue="Opportunity">
+                        <apex:outputLink value="/{!opportunityObj.Id}">{!opportunityObj.Name}</apex:outputLink>
+                    </apex:column>
+                    <apex:column value="{!lic.licenseObj.License_Expiry_Date__c}"/>
+                    <apex:column value="{!lic.licenseObj.Product_Type__c}"/>
+                    <apex:column value="{!lic.licenseObj.Stage__c}"/>
+                    <apex:column value="{!lic.licenseObj.Java_Agents_Rollup__c}"/>
+                    <apex:column value="{!lic.licenseObj.Net_Agents_Rollup__c}"/>
+                    <apex:column value="{!lic.licenseObj.Custom_URL_Name__c}"/>
+                    <!-- apex:column headerValue="Self Service User">
+                        <apex:outputLink value="/{!lic.ContactObj.Id}">{!lic.ContactObj.Name} ({!lic.contactObj.Email})</apex:outputLink>
+                    </apex:column-->
+                </apex:pageBlockTable>
+            </apex:pageBlockSection>
+            <apex:pageBlockButtons > 
+                <apex:commandButton value="Close" action="{!doCancel}"/>
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+        <!--apex:pageBlock >
+            <apex:pageBlockSection collapsible="true" title="Debug">
+                <apex:outputLabel value="Value here: {!claimLicPageLoadingText}"/>
+            </apex:pageBlockSection>
+        </apex:pageBlock-->
+    </apex:form>
+</apex:page>

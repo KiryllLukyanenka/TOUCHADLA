@@ -1,0 +1,312 @@
+<apex:page id="thePage" standardController="License_Opportunity__c"
+    extensions="Opportunity_LicenseController" action="{!provisionInit}">
+    <apex:includeScript value="{!$Resource.License_Page_JavaScript}"/>
+    <apex:PageMessages ></apex:PageMessages>
+    <apex:form >
+        <apex:sectionHeader title="{!pageTitle}" />
+        <apex:pageBlock title="License Details" id="theBlock">
+            <apex:pageblockButtons >
+                <apex:commandButton value="{!saveButtonTitle}"
+                    action="{!saveObject}" />
+                <apex:commandButton value="Cancel" action="{!cancel}" />
+            </apex:pageblockButtons>
+            <script>
+                        function setFoucsOnLoad(){}
+            </script>
+            <apex:pageBlockSection columns="4" id="theSection">
+                <apex:pageBlockSectionItem id="productTypeSection">
+                    <apex:outputLabel value="Deployment Option"></apex:outputLabel>
+                    <apex:selectList value="{!productTypeSelected}" id="productType"
+                        multiselect="false" size="1"
+                        onchange="changeLicenseType(this,'{!$Component.theBlock.theSection.theSectionItem2.customURLLbl}','{!$Component.theBlock.theSection.theSectionItem2.customURL}','{!$Component.theBlock.theSection.theSectionItem3.customURLLbl2}','{!$Component.theBlock.theSection.eumSection.eumLbl}','{!$Component.theBlock.theSection.eumSection.eumVal}','{!$Component.theBlock.theSection.macSection.macLblId}','{!$Component.theBlock.theSection.macSection.macValId}','{!$Component.theBlock.theSection.permLicSection.permLicLbl}','{!$Component.theBlock.theSection.permLicSection.permancentLicVal}','{!$Component.theBlock.theSection.perpetualLicSection.perpetualLicLbl}','{!$Component.theBlock.theSection.perpetualLicSection.perpetualLicVal}','{!$Component.theBlock.theSection.coRadiantSection.coRadiantLbl}','{!$Component.theBlock.theSection.coRadiantSection.coRadiantVal}','{!licenseOpCode}','{!oldProductType}','{!$Component.theBlock.theSection.expiryDateSection.expiryDate}');">
+                        <apex:selectOptions value="{!productTypeSelectOptions}"></apex:selectOptions>
+                    </apex:selectList>
+                    <!--apex:inputField value="{!licenseDetailObj.Product_Type__c}" id="productType" required="true"
+                         onchange="changeLicenseType(this,'{!$Component.theBlock.theSection.theSectionItem2.customURLLbl}','{!$Component.theBlock.theSection.theSectionItem2.customURL}','{!$Component.theBlock.theSection.theSectionItem3.customURLLbl2}','{!$Component.theBlock.theSection.eumSection.eumLbl}','{!$Component.theBlock.theSection.eumSection.eumVal}','{!$Component.theBlock.theSection.macSection.macLblId}','{!$Component.theBlock.theSection.macSection.macValId}','{!$Component.theBlock.theSection.permLicSection.permLicLbl}','{!$Component.theBlock.theSection.permLicSection.permancentLicVal}','{!$Component.theBlock.theSection.perpetualLicSection.perpetualLicLbl}','{!$Component.theBlock.theSection.perpetualLicSection.perpetualLicVal}','{!$Component.theBlock.theSection.coRadiantSection.coRadiantLbl}','{!$Component.theBlock.theSection.coRadiantSection.coRadiantVal}','{!licenseOpCode}','{!oldProductType}');">
+                    </apex:inputField-->
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+
+                <apex:pageBlockSectionItem id="permLicSection"
+                    rendered="{!showPermanentLicense}">
+                    <apex:outputLabel id="permLicLbl" value="Permanent License?" />
+                    <apex:inputField id="permancentLicVal"
+                        value="{!licenseDetailObj.Is_Permanent__c}"
+                        onclick="togglePerpetualLicense('{!$Component.theBlock.theSection.permLicSection.permancentLicVal}','{!$Component.theBlock.theSection.productTypeSection.productType}','{!$Component.theBlock.theSection.perpetualLicSection.perpetualLicLbl}','{!$Component.theBlock.theSection.perpetualLicSection.perpetualLicVal}','{!$Component.theBlock.theSection.macSection.macLblId}','{!$Component.theBlock.theSection.macSection.macValId}','{!$Component.theBlock.theSection.expiryDateSection.expiryDate}');" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem rendered="{!showPermanentLicense}">
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem rendered="{!showPermanentLicense}">
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem rendered="{!showPermanentLicense}">
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem id="perpetualLicSection"
+                    rendered="{!showPermanentLicense}">
+                    <apex:outputLabel value="Perpetual License?" id="perpetualLicLbl" />
+                    <apex:inputField value="{!licenseDetailObj.Is_Perpetual__c}"
+                        id="perpetualLicVal"
+                        onclick="handlePerpetualLicenseClick('{!$Component.theBlock.theSection.perpetualLicSection.perpetualLicVal}', '{!$Component.theBlock.theSection.expiryDateSection.expiryDate}');" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem rendered="{!showPermanentLicense}">
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem rendered="{!showPermanentLicense}">
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem rendered="{!showPermanentLicense}">
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+                <apex:PageBlockSectionItem id="expiryDateSection">
+                    <apex:outputLabel value="Expiry Date"></apex:outputLabel>
+                    <apex:inputField id="expiryDate"
+                        value="{!licenseDetailObj.License_Expiry_Date__c}" />
+                </apex:PageBlockSectionItem>
+
+                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+
+                <apex:PageBlockSectionItem id="theSectionItem2">
+                    <apex:outputLabel value="Customer SaaS URL" id="customURLLbl" />
+                    <apex:inputField id="customURL"
+                        value="{!licenseDetailObj.Custom_URL_Name__c}" style="width:450" />
+                </apex:PageBlockSectionItem>
+                <apex:PageBlockSectionItem id="theSectionItem3">
+                    <apex:outputLabel id="customURLLbl2" value=".saas.appdynamics.com" />
+                </apex:PageBlockSectionItem>
+
+                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+                
+                <apex:PageBlockSectionItem rendered="{!showMacAddress}"
+                    id="macSection">
+                    <apex:outputLabel value="MAC Address" id="macLblId"></apex:outputLabel>
+                    <apex:inputField value="{!licenseDetailObj.MAC_Address__c}"
+                        id="macValId" />
+                </apex:PageBlockSectionItem>
+                <apex:pageBlockSectionItem rendered="{!showMacAddress}">
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem rendered="{!showMacAddress}">
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem rendered="{!showMacAddress}">
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Java Agents"></apex:outputLabel>
+                    <apex:inputField style="disable:true"
+                        value="{!licenseDetailObj.Server_Agents__c}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value=".Net Agents"></apex:outputLabel>
+                    <apex:inputField value="{!licenseDetailObj.Net_Agents__c}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem rendered="{!machineAgentsShown}">
+                    <apex:outputLabel value="Additional Machine Agents"></apex:outputLabel>
+                    <apex:inputField value="{!licenseDetailObj.Machine_Agents__c}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem rendered="{!machineAgentsShown}">
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem rendered="{!machineAgentsShown}">
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem rendered="{!machineAgentsShown}">
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+                <apex:PageBlockSectionItem id="eumSection">
+                    <apex:OutputLabel id="eumLbl" value="Is EUM?"></apex:OutputLabel>
+                    <apex:inputField id="eumVal" value="{!licenseDetailObj.Is_EUM__c}"
+                        onclick="handleEUMCoradiantURL('{!$Component.theBlock.theSection.eumSection.eumVal}','{!$Component.theBlock.theSection.productTypeSection.productType}','{!$Component.theBlock.theSection.coRadiantSection.coRadiantLbl}','{!$Component.theBlock.theSection.coRadiantSection.coRadiantVal}');">
+                    </apex:inputField>
+                </apex:PageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+                <apex:PageBlockSectionItem id="coRadiantSection">
+                    <apex:OutputLabel id="coRadiantLbl"
+                        value="Coradiant Integration URL"></apex:OutputLabel>
+                    <apex:inputField id="coRadiantVal"
+                        value="{!licenseDetailObj.Coradiant_Integration_URL__c}" />
+                </apex:PageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Notes"></apex:outputLabel>
+                    <apex:inputField value="{!licenseDetailObj.Reason__c}" />
+                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+
+            <apex:pageBlockSection columns="1">
+                <apex:pageBlockSection id="contactsSection"
+                    title="Email Notifications" columns="1">
+                    <apex:pageBlockTable value="{!oppContacts}" var="ct" id="ctTable">
+                    	<apex:column headerValue="Contact">
+                    		<apex:outputLink value="/{!ct.contactObj.Id}">{!ct.contactObj.Name}</apex:outputLink>
+                    	</apex:column>
+                    	<apex:column headerValue="Needs Email?">
+                    		<apex:outputField value="{!ct.contactObj.Needs_Email__c}" rendered="{!ct.PrimaryContact}"/>
+                    		<apex:inputField value="{!ct.contactObj.Needs_Email__c}" rendered="{!ct.NonPrimaryContact}"/>
+                    	</apex:column>
+                    	<apex:column headerValue="Primary Contact?" >
+                    		<apex:inputCheckBox value="{!ct.PrimaryContact}" disabled="true"/>
+                    	</apex:column>
+                    	<apex:column headerValue="Email">
+                    		<apex:inputField value="{!ct.contactObj.Email}"/>
+                    	</apex:column>
+                    	<apex:column headerValue="Download Center">
+                    		<apex:outputField value="{!ct.contactObj.Download__c}" rendered="{!ct.PrimaryContact}"/>
+                    		<apex:inputField value="{!ct.contactObj.Download__c}" rendered="{!ct.NonPrimaryContact}"/>
+                    	</apex:column>
+                    	<apex:column headerValue="Help Center">
+                    		<apex:outputField value="{!ct.contactObj.ZenDesk__c}" rendered="{!ct.PrimaryContact}"/>
+                    		<apex:inputField value="{!ct.contactObj.ZenDesk__c}" rendered="{!ct.NonPrimaryContact}"/>
+                    	</apex:column>
+                    </apex:pageBlockTable>
+                    <apex:InputField value="{!licenseDetailObj.Ad_hoc_Email_Ids__c}" style="align: left; width: 90%;"/>
+                    <apex:pageBlockSection columns="3">
+                    	<apex:pageBlockSectionItem >
+		                	<apex:outputLabel value="Account Manager"/>
+		                	<apex:outputLabel value="{!accountManager}"/>
+		                </apex:pageBlockSectionItem>
+		                <apex:pageBlockSectionItem >
+		                	<apex:outputLabel value="Technical Owner"/>
+		                	<apex:outputLabel value="{!technicalOwner}"/>
+		                </apex:pageBlockSectionItem>
+		                <apex:pageBlockSectionItem >
+		                	<apex:outputLabel value="Sales Rep"/>
+		                	<apex:outputLabel value="{!salesRep}"/>
+		                </apex:pageBlockSectionItem>
+                    </apex:pageBlockSection>
+                </apex:pageBlockSection>
+				
+				
+				<script>
+			        disableComponents('{!licenseOpCode}','{!$Component.theBlock.theSection.theSectionItem2.customURLLbl}','{!$Component.theBlock.theSection.theSectionItem2.customURL}','{!$Component.theBlock.theSection.theSectionItem3.customURLLbl2}','{!$Component.theBlock.theSection.macSection.macLblId}','{!$Component.theBlock.theSection.macSection.macValId}','{!$Component.theBlock.theSection.eumSection.eumLbl}','{!$Component.theBlock.theSection.eumSection.eumVal}','{!$Component.theBlock.theSection.coRadiantSection.coRadiantLbl}','{!$Component.theBlock.theSection.coRadiantSection.coRadiantVal}','{!$Component.theBlock.theSection.productTypeSection.productType}','{!$Component.theBlock.theSection.permLicSection.permLicLbl}','{!$Component.theBlock.theSection.permLicSection.permancentLicVal}','{!$Component.theBlock.theSection.perpetualLicSection.perpetualLicLbl}','{!$Component.theBlock.theSection.perpetualLicSection.perpetualLicVal}','{!$Component.theBlock.theSection.expiryDateSection.expiryDate}');
+			    </script>
+			
+            </apex:pageBlockSection>
+
+        </apex:pageBlock>
+    </apex:form>
+
+
+</apex:page>

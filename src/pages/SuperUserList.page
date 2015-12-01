@@ -1,0 +1,341 @@
+<apex:page controller="SuperUserListController" id="page">
+  <!-- Bootstrap -->
+ <!-- Placed at the end of the document so the pages load faster -->
+    <script src="{!URLFOR($Resource.License, 'assets/js/jquery.min.js')}"></script>
+    <style type="text/css">
+        h2{font-size:14px;}
+        h1,h2,h3,h4,h5,h6 {margin-top:0px;margin-bottom:0px;}
+        .overlayBackground 
+        {
+            background-color: #000000;
+            border: medium none;
+            display: none;
+            opacity: 0.6;
+            -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=60)";
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 100; 
+        }
+        
+        #InlinEditDialog
+        {
+            position: fixed;
+            display: none;
+            visibility: hidden;
+            z-index: 101;
+        }
+        .topRight  
+        {
+            padding-right: 6px;
+            background: transparent url(/img/overlaytopright.gif) no-repeat top right;
+        }
+        .topLeft 
+        {
+            padding: 4px 2px 6px 12px;
+            background: transparent url(/img/overlaytopleft.gif) no-repeat top left;
+        }
+        .dialogClose 
+        { 
+            background-image: url(/img/func_icons/util/dialogClose16.gif);
+            background-position: 0px 0px;width:16px;
+            height:16px;
+            float: right;
+            cursor: pointer;
+            background-position: top left;
+        }
+        .dialogCloseOn 
+        { 
+            background-image: url(/img/func_icons/util/dialogClose16.gif);
+            background-position: 0px 0px;width:16px;
+            height:16px;
+            float: right;
+            cursor: pointer;
+            background-position: top right;
+        }
+       .middle
+       {
+            background-color: #f5f5f5;
+            border-left: 1px solid #393A3C;
+            border-right: 1px solid #393A3C;
+        }
+        .innerContent {
+            padding: 12px 16px 8px 20px;
+            overflow:auto;
+        }
+        div.inlineEditCompoundDiv
+        {
+                max-height: 480px;
+        }
+        .split 
+        {
+            border-left: 1px solid #919191;
+            border-right: 1px solid #919191;
+            background: transparent url(/img/overlaysplit.gif) repeat-x top;
+            height: 16px;
+            padding-left: 20px;
+        }
+        .buttons 
+        {
+            text-align: center;
+            padding-top: 12px;
+        }
+        .btn
+        {
+            margin: 0 10px 0 0;
+            min-width: 50px;
+        }
+        .bottomRight
+        {
+            height: 4px;
+            padding-right: 4px;
+            background: transparent url(/img/overlaybottomright.gif) no-repeat bottom right;
+        }
+        .bottomLeft
+        {
+            height: 4px;
+            background: transparent url(/img/overlaybottomleft.gif) no-repeat bottom left;
+        }
+    </style>
+  
+  <apex:form id="form" rendered="{!IsPrmSuperUser}">
+      <apex:sectionHeader title="{!PartnerName} Users"/>
+      <apex:actionFunction name="getUserList" action="{!retrieveUsers}"/> 
+      <apex:actionFunction name="inactiveUser" action="{!inactiveUser}"/>  
+      <apex:actionFunction name="activeUser" action="{!activateUser}"/>      
+      <apex:inputHidden value="{!UserId}" id="userId"/>
+      <apex:inputHidden value="{!SortFieldActiveUser}" id="sortFieldActiveUser"/>
+      <apex:inputHidden value="{!SortDescActiveUser}" id="sortDescActiveUser"/>
+      <apex:inputHidden value="{!SortFieldInActiveUser}" id="sortFieldInActiveUser"/>
+      <apex:inputHidden value="{!SortDescInActiveUser}" id="sortDescInActiveUser"/>
+      <script>
+          function sortActiveUser(fieldname)
+          {
+              var sortFIeldname = document.getElementById("page:form:sortFieldActiveUser");
+              var sortFIeldDescValue = document.getElementById("page:form:sortDescActiveUser");
+              sortFIeldname.value = fieldname;
+              if(sortFIeldDescValue.value != null && sortFIeldDescValue.value == '1')
+              {
+                  sortFIeldDescValue.value = '0';
+              }
+              else
+              {
+                  sortFIeldDescValue.value = '1';
+              }
+              getUserList();
+          }
+          
+          function sortInActiveUser(fieldname)
+          {
+              var sortFIeldname = document.getElementById("page:form:sortFieldInActiveUser");
+              var sortFIeldDescValue = document.getElementById("page:form:sortDescInActiveUser");
+              sortFIeldname.value = fieldname;
+              if(sortFIeldDescValue.value != null && sortFIeldDescValue.value == '1')
+              {
+                  sortFIeldDescValue.value = '0';
+              }
+              else
+              {
+                  sortFIeldDescValue.value = '1';
+              }
+              getUserList();
+          } 
+          
+          function showInactivePanel(userid)
+          {         
+              if("{!CurrentUserId}" == userid)
+              {
+                  alert("You cant inactivate yourself.");
+              }  
+              else
+              {   
+                  var theUserId = document.getElementById("page:form:userId");
+                  theUserId.value = userid;
+                   //$("#inactiveuser").modal();
+                   showInActivePop();
+              }
+          }
+          
+          function inactivateUser()
+          {              
+              inactiveUser();
+          }
+          
+          function showactivePanel(userid)
+          {              
+              var theUserId = document.getElementById("page:form:userId");
+              theUserId.value = userid;
+              //$("#activeuser").modal();
+              showActivePop();
+          }
+          
+          function activateUser()
+          {              
+              activeUser();
+          }
+          
+          function showInActivePop()
+          {
+              document.getElementById("InlinEditDialog2").style.visibility = "visible";
+                document.getElementById("background").style.display = "block";
+          }
+          
+          function closeInactivePop()
+         {
+            document.getElementById("InlinEditDialog2").style.visibility = "hidden";
+            document.getElementById("background").style.display = "none";
+         }
+        
+          function showActivePop()
+          {
+              document.getElementById("InlinEditDialog").style.visibility = "visible";
+                document.getElementById("background").style.display = "block";
+          }
+          
+          function closePop()
+        {
+            document.getElementById("InlinEditDialog").style.visibility = "hidden";
+            document.getElementById("background").style.display = "none";
+        }  
+      </script>
+      <apex:pageBlock >
+          <apex:pageBlockSection collapsible="false" columns="1" title="Active Users">
+              <apex:pageblockSectionItem >
+                  <apex:outputPanel id="pane2">
+                  <table class="list" border="0" cellpadding="0" cellspacing="0">
+                      <thead>
+                          <tr class="headerRow"> 
+                              <th scope="col" class="" style="width:20%"><a href="javascript:void(0)" onclick="sortActiveUser('Firstname')">First Name</a></th>
+                              <th scope="col" class="" style="width:20%"><a href="javascript:void(0)" onclick="sortActiveUser('Lastname')">Last Name</a></th>
+                              <th scope="col" class="" style="width:20%"><a href="javascript:void(0)" onclick="sortActiveUser('Email')">Email</a></th>
+                              <th scope="col" class="" style="width:20%"><a href="javascript:void(0)" onclick="sortActiveUser('LastLoginDate')">Last Login</a></th>
+                              <th scope="col" class="" style="width:20%">Action</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <apex:variable var="activeUserIndex" value="{!0}" />
+                          <apex:repeat value="{!ActiveUserList}" var="ActiveUser" id="repeat0">
+                              <tr class="{! IF((CEILING(activeUserIndex))/2 == 0, 'dataRow odd', 'dataRow even')}">
+                                  <td>
+                                    <a href="SuperUserDetail?id={!ActiveUser.theUser.id}&ContactId={!ActiveUser.theUser.COntactId}&pageType=contact">{!ActiveUser.theUser.Firstname}</a>
+                                </td>
+                                <td>
+                                    <a href="SuperUserDetail?id={!ActiveUser.theUser.id}&ContactId={!ActiveUser.theUser.COntactId}&pageType=contact">{!ActiveUser.theUser.Lastname}</a>
+                                </td>
+                                <td>
+                                    {!ActiveUser.theUser.Email}
+                                </td>
+                                <td>
+                                    <apex:outputText value="{0, date, MM/dd/yyyy}">
+                                        <apex:param value="{!ActiveUser.theUser.LastLoginDate}"/>
+                                    </apex:outputText>
+                                </td>
+                                <td>
+                                    <input type="button" value="Inactivate" class="btn" onclick="showInactivePanel('{!ActiveUser.Theuser.Id}')"/>
+                                </td>
+                              </tr>
+                          <apex:variable var="activeUserIndex" value="{!activeUserIndex+1}" />
+                          </apex:repeat>
+                      </tbody>
+                  </table>
+                  </apex:outputPanel>
+              </apex:pageblockSectionItem>
+          </apex:pageBlockSection>
+          <apex:pageBlockSection collapsible="false" columns="1" title="Inactive Users">
+              <apex:pageblockSectionItem >
+                  <apex:outputPanel id="pane2">
+                  <table class="list" border="0" cellpadding="0" cellspacing="0">
+                      <thead>
+                          <tr class="headerRow"> 
+                              <th scope="col" class="" style="width:20%"><a href="javascript:void(0)" onclick="sortInActiveUser('Firstname')">First Name</a></th>
+                              <th scope="col" class="" style="width:20%"><a href="javascript:void(0)" onclick="sortInActiveUser('Lastname')">Last Name</a></th>
+                              <th scope="col" class="" style="width:20%"><a href="javascript:void(0)" onclick="sortInActiveUser('Email')">Email</a></th>
+                              <th scope="col" class="" style="width:20%"><a href="javascript:void(0)" onclick="sortInActiveUser('LastLoginDate')">Last Login</a></th>
+                              <th scope="col" class="" style="width:20%">Action</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <apex:variable var="InactiveUserIndex" value="{!0}" />
+                          <apex:repeat value="{!InActiveUserList}" var="InActiveUser" id="repeat1">
+                              <tr class="{! IF((CEILING(InactiveUserIndex))/2 == 0, 'dataRow odd', 'dataRow even')}">
+                                  <td>
+                                    <a href="SuperUserDetail?id={!InActiveUser.theUser.id}&ContactId={!InActiveUser.theUser.COntactId}&pageType=contact">{!InActiveUser.theUser.Firstname}</a>
+                                </td>
+                                <td>
+                                    <a href="SuperUserDetail?id={!InActiveUser.theUser.id}&ContactId={!InActiveUser.theUser.COntactId}&pageType=contact">{!InActiveUser.theUser.Lastname}</a>
+                                </td>
+                                <td>
+                                    {!InActiveUser.theUser.Email}
+                                </td>
+                                <td>
+                                    <apex:outputText value="{0, date, MM/dd/yyyy}">
+                                        <apex:param value="{!InActiveUser.theUser.LastLoginDate}"/>
+                                    </apex:outputText>
+                                </td>
+                                <td>
+                                    <input type="button" value="Activate" class="btn" onclick="showactivePanel('{!InActiveUser.Theuser.Id}')"/>
+                                </td>
+                              </tr>
+                          <apex:variable var="InactiveUserIndex" value="{!InactiveUserIndex+1}" />
+                          </apex:repeat>
+                      </tbody>
+                  </table>
+                  </apex:outputPanel>
+              </apex:pageblockSectionItem>
+          </apex:pageBlockSection>
+      </apex:pageBlock>
+            <div id="InlinEditDialog" class="overlayDialog inlineEditDialog" style="max-width:600px; display:block;left:350px;  min-width:440px; top:150px;visibility:hidden;">
+               <div class="topRight">
+                   <div class="topLeft">
+                       <img id="InlineEditDialogX" onmouseover="this.className='dialogCloseOn'" onmouseout="this.className='dialogClose'" onclick="closePop()" class="dialogClose" src="/s.gif" />
+                       <h2 id="InlineEditDialogTitle">Message</h2>
+                   </div>
+               </div>
+               <div class="middle">
+                   <div class="innerContent" id="InlineEditDialogContent">
+                       <div class="activeField">
+                           <div class="inlineEditCompoundDiv" style="width:480px;">                         
+                                 <p>Please verify that this employee should be reactivated from the AppDynamics Partner Community. If the employee should be reactivated click “Activate”.</p>
+                                 <div style="width:100%;text-align:center;">
+                                 <button type="button" onclick="activateUser()" class="btn">Activate</button>
+                            <button type="button" class="btn" onclick="closePop()"> Cancel </button>
+                            </div>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+               <div class="bottomRight">
+                   
+                   <div class="bottomLeft"></div> 
+               </div>
+           </div>
+           <div id="InlinEditDialog2" class="overlayDialog inlineEditDialog" style="max-width:600; display:block;left:350px;  min-width:440px; top:150px;visibility:hidden;">
+               <div class="topRight">
+                   <div class="topLeft">
+                       <img id="InlineEditDialogX2" onmouseover="this.className='dialogCloseOn'" onmouseout="this.className='dialogClose'" onclick="closeInactivePop()" class="dialogClose" src="/s.gif" />
+                       <h2 id="InlineEditDialogTitle2">Message</h2>
+                   </div>
+               </div>
+               <div class="middle">
+                   <div class="innerContent" id="InlineEditDialogContent">
+                       <div class="activeField">
+                           <div class="inlineEditCompoundDiv" style="width:480px;">                         
+                                 <P>Please verify that this employee should be inactivated from the AppDynamics Partner Community. If the employee should be inactivated select the reason for inactivation and click “Inactivate”.</p>
+                               <div style="width:100%;text-align:center;">
+                               <button type="button" onclick="inactivateUser()" class="btn">Inactivate</button>
+                            <button type="button" class="btn" onclick="closeInactivePop()"> Cancel </button>
+                            </div>
+
+                           </div>
+                       </div>
+                   </div>
+                                  </div>
+               <div class="bottomRight">
+                   
+                   <div class="bottomLeft"></div> 
+               </div>
+           </div>
+           <div class="overlayBackground" id="background" style="width:3289px; height:1293px; display:none;position:fixed;"></div> 
+  </apex:form>
+   <apex:outputText rendered="{!Not(IsPrmSuperUser)}">You have no permission to view this page.</apex:outputText>
+</apex:page>

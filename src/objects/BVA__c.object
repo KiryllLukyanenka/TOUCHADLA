@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Follow</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <enableActivities>true</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <externalSharingModel>ReadWrite</externalSharingModel>
+    <fields>
+        <fullName>BVA_Kickoff_Date__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>The expected date of the first interview</inlineHelpText>
+        <label>BVA Kickoff Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Business__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <inlineHelpText>Indicates whether the business model has been attached to the opportunity</inlineHelpText>
+        <label>Business Model Attached to Opportunity</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Deal_Sheet_Supplied__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <inlineHelpText>Indicates if a deal sheet was supplied</inlineHelpText>
+        <label>Deal Sheet Supplied</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>EB_Definition_of_Good__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Description of &apos;what&apos; the EB described as a &apos;good&apos; outcome from the BVA (Pay-back period; ROI; Main Benefit areas, etc...)</inlineHelpText>
+        <label>EB Definition of Good</label>
+        <length>131072</length>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Html</type>
+        <visibleLines>10</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Echo_Back_Completed__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <inlineHelpText>To confirm that the echo back meeting took place</inlineHelpText>
+        <label>Echo Back Completed</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Echo_Back_Date__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>The scheduled date of the echo-back to the Economic Buyer</inlineHelpText>
+        <label>Echo Back Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Echo_back_PPT__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <inlineHelpText>Indicates whether the echo-back PPT has been attached to the opportunity</inlineHelpText>
+        <label>Echo-back PPT Attached to Opportunity</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Economic_Buyer_BVA_Meeting_Date__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Scheduled Date to meet with the EB to propose BVA and get answer to 3 questions</inlineHelpText>
+        <label>Economic Buyer BVA Meeting Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Economic_Buyer_EB_Meeting_Completed__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <inlineHelpText>To confirm that the EB meeting took place</inlineHelpText>
+        <label>Economic Buyer (EB) Meeting Completed</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Economic_Buyer_EB_Sponsorship_Confirme__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <inlineHelpText>Indicates whether the EB was happy to sponsor BVA</inlineHelpText>
+        <label>Economic Buyer Sponsorship Confirmed</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>General_BVA_Comments__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Used to add any relevant notes about the BVA</inlineHelpText>
+        <label>General BVA Comments</label>
+        <length>131072</length>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Html</type>
+        <visibleLines>10</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Internal_BVA_Review_Completed__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <inlineHelpText>To confirm that the internal review meeting took place</inlineHelpText>
+        <label>Internal BVA Review Completed</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Internal_BVA_review_meeting_date__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Scheduled Date of the internal meeting to decide on a Go/No-Go for the BVA (Attended by the FSR/ISR, Sales Manager, BVC, SE)</inlineHelpText>
+        <label>Internal BVA review meeting date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Introductory_Email_Sent__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <inlineHelpText>Confirms whether EB sent the introductory email</inlineHelpText>
+        <label>Introductory Email Sent</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Number_of_Interviews__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>The number of interviews held as part of the BVA</inlineHelpText>
+        <label>Number of Interviews</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Number_of_People_in_TDDs__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Indicates the number of people that have been through a TDD _before_ the BVA</inlineHelpText>
+        <label>Number of People in TDDs</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Number_of_People_interviewed__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>The total number of people interviewed as part of the BVA</inlineHelpText>
+        <label>Number of People interviewed</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Opportunity__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Opportunity</label>
+        <referenceTo>Opportunity</referenceTo>
+        <relationshipLabel>BVAs</relationshipLabel>
+        <relationshipName>BVAs</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Status__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Pipeline:BVA known, no definite date set
+Scheduled:EB meeting set; list of interviewees created;date set for interview
+In Progress:After EB meeting;before EB echo-back
+Complete:Echo-back to EB completed
+Abandoned: BVA stopped;FSR/ISR says not required</inlineHelpText>
+        <label>Status</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Pipeline</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Scheduled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>In Progress</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Complete</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Abandoned</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Value_Pyramid_Supplied__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <inlineHelpText>Indicates whether a Value Pyramid was supplied</inlineHelpText>
+        <label>Value Pyramid Supplied</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <label>BVA</label>
+    <listViews>
+        <fullName>All</fullName>
+        <columns>Status__c</columns>
+        <columns>Opportunity__c</columns>
+        <columns>OWNER.ALIAS</columns>
+        <columns>NAME</columns>
+        <columns>CREATEDBY_USER</columns>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+        <language>en_US</language>
+    </listViews>
+    <listViews>
+        <fullName>BVA_Detail</fullName>
+        <columns>Status__c</columns>
+        <columns>Opportunity__c</columns>
+        <columns>NAME</columns>
+        <columns>CREATEDBY_USER</columns>
+        <filterScope>Mine</filterScope>
+        <label>My BVAs - Detail</label>
+        <language>en_US</language>
+    </listViews>
+    <listViews>
+        <fullName>Whole_team</fullName>
+        <columns>OWNER.FIRST_NAME</columns>
+        <columns>OWNER.LAST_NAME</columns>
+        <columns>BVA_Kickoff_Date__c</columns>
+        <columns>Opportunity__c</columns>
+        <columns>Status__c</columns>
+        <columns>NAME</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>Status__c</field>
+            <operation>equals</operation>
+            <value>Pipeline</value>
+        </filters>
+        <label>Whole team - Pipeline</label>
+        <language>en_US</language>
+    </listViews>
+    <nameField>
+        <displayFormat>BVA-{0}</displayFormat>
+        <label>BVA Name</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>BVAs</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ReadWrite</sharingModel>
+</CustomObject>

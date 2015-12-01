@@ -1,0 +1,19 @@
+{
+    "username": "anna@touchpointcrm.com.license", 
+    "environment": "sandbox", 
+    "project_name": "touchpointcrm SAND", 
+    "workspace": "D:\\MavensmateProjects", 
+    "org_url": "", 
+    "namespace": "", 
+    "id": "LBTSL324VE7W590PK1ER5K2C9HXNBRKL", 
+    "metadata_container": "1dc180000005LfKAAU", 
+    "subscription": [
+        "ApexClass", 
+        "ApexComponent", 
+        "ApexPage", 
+        "ApexTrigger", 
+        "StaticResource", 
+        "CustomObject", 
+        "Profile"
+    ]
+}

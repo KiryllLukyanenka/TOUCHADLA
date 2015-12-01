@@ -1,0 +1,7 @@
+<apex:page standardController="License_Opportunity__c" 
+extensions="DelLicenseOpportunityController" action="{!deleteAction}">
+    <apex:pageMessages />
+  <apex:pageBlock >
+    <apex:outputLink value="/{!licOpp.License__c}">Go back to License</apex:outputLink>
+  </apex:pageBlock>
+</apex:page>

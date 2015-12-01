@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Follow</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <enableActivities>true</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>false</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <externalSharingModel>ReadWrite</externalSharingModel>
+    <fields>
+        <fullName>Bridge_Letter__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Bridge Letter</label>
+        <referenceTo>SSAE_16_Review__c</referenceTo>
+        <relationshipLabel>SSAE-16 Reviews</relationshipLabel>
+        <relationshipName>SSAE_16_Reviews</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Carve_out_s_of_sub_service_providers_fr__c</fullName>
+        <externalId>false</externalId>
+        <label>Carve-out(s) of sub-service providers fr</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Date_of_Service_Auditor_Report__c</fullName>
+        <externalId>false</externalId>
+        <label>Date of Service Auditor Report</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Engagement_Team_Response_to_Gap_Period__c</fullName>
+        <externalId>false</externalId>
+        <label>Engagement Team Response to Gap Period</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Financial_Statement_Date__c</fullName>
+        <externalId>false</externalId>
+        <label>Financial Statement Date</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Fraud_noncompliance_with_laws_and_regul__c</fullName>
+        <externalId>false</externalId>
+        <label>Fraud, noncompliance with laws and regul</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Gap_Period_End__c</fullName>
+        <externalId>false</externalId>
+        <label>Gap Period End</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Gap_Period_Start__c</fullName>
+        <externalId>false</externalId>
+        <label>Gap Period Start</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>If_qualified_engagement_team_response__c</fullName>
+        <externalId>false</externalId>
+        <label>If &apos;qualified,&apos; engagement team response</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Report_Period_12_Months__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Report Period &lt; 12 Months?</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Report_Period_End__c</fullName>
+        <externalId>false</externalId>
+        <label>Report Period End</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Report_Period_Start__c</fullName>
+        <externalId>false</externalId>
+        <label>Report Period Start</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Report_Scope__c</fullName>
+        <externalId>false</externalId>
+        <label>Report Scope</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Report_Title__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Complete Title of Report</inlineHelpText>
+        <label>Report Title</label>
+        <length>155</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Report_Type__c</fullName>
+        <externalId>false</externalId>
+        <label>Report Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Type I</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Type II</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>SOC_I_II__c</fullName>
+        <externalId>false</externalId>
+        <label>SOC I/II</label>
+        <picklist>
+            <picklistValues>
+                <fullName>SOC I</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>SOC II</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Service_Auditor__c</fullName>
+        <externalId>false</externalId>
+        <label>Service Auditor</label>
+        <picklist>
+            <picklistValues>
+                <fullName>PricewaterhouseCoopers LLP</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Deloitte &amp; Touche LLP</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Ernst &amp; Young LLP</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>KPMG LLP</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>BDO</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Technology__c</fullName>
+        <deleteConstraint>Restrict</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Technology</label>
+        <referenceTo>Technology__c</referenceTo>
+        <relationshipLabel>SSAE-16 Reviews</relationshipLabel>
+        <relationshipName>SSAE_16_Reviews</relationshipName>
+        <required>true</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Type_of_Service_Auditor_Report__c</fullName>
+        <externalId>false</externalId>
+        <label>Type of Service Auditor Report</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Qualified</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Unqualified</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <label>SSAE-16 Review</label>
+    <listViews>
+        <fullName>All</fullName>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <nameField>
+        <label>SSAE-16 Review Name</label>
+        <type>Text</type>
+    </nameField>
+    <pluralLabel>SSAE-16 Reviews</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ReadWrite</sharingModel>
+</CustomObject>

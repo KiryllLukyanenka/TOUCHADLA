@@ -1,0 +1,53 @@
+<apex:page standardController="MaintenanceNotification__c"><!--  
+	extensions="AlpassoMaintenanceController">
+  <apex:pageMessages ></apex:pageMessages>
+  <apex:form >
+  <apex:pageBlock id="thePage" >
+      <apex:pageBlockButtons >
+          <apex:commandButton value="Send Mail Notifications" action="{!notify}"/>
+      </apex:pageBlockButtons>
+      <apex:pageBlockSection columns="3" >
+          <apex:inputField value="{!maintenanceNotification.Maintenance_Type__c}">
+          	<apex:actionSupport event="onchange" action="{!typeChangeAction}" rerender="thePage"/>
+          </apex:inputField>
+          <apex:outputLabel ></apex:outputLabel>
+          <apex:outputLabel ></apex:outputLabel>
+          <apex:pageBlockSectionItem rendered="{!showControllers}">
+          <apex:outputLabel value="Select a SaaS Controller"/>
+          <apex:selectList value="{!selectedController}" 
+              multiselect="false" size="1">
+              <apex:selectOptions value="{!controllerList}"></apex:selectOptions>
+              <apex:actionSupport event="onchange" action="{!controllerChangeAction}" rerender="thePage"/>
+          </apex:selectList>
+          </apex:pageBlockSectionItem>
+          <apex:outputLabel ></apex:outputLabel>
+          <apex:outputLabel ></apex:outputLabel>
+          <apex:inputField value="{!maintenanceNotification.Maintenance_Start_Date__c}"/>
+          <apex:inputField value="{!maintenanceNotification.Maintenance_Start_Hour__c}"/>
+          <apex:inputField value="{!maintenanceNotification.Maintenance_Start_Minute__c}"/>
+          <apex:inputField value="{!maintenanceNotification.Maintenance_End_Date__c}"/>
+          <apex:inputField value="{!maintenanceNotification.Maintenance_End_Hour__c}"/>
+          <apex:inputField value="{!maintenanceNotification.Maintenance_End_Minute__c}"/>
+          <apex:outputField value="{!maintenanceNotification.Status__c}"/>
+      </apex:pageBlockSection>
+      <apex:pageBlockTable title="User Accounts being notified" rendered="{!showUserAccounts}" value="{!licenseCustomers}" var="customer">
+      		<apex:column width="250" headerValue="Account">
+			<apex:outputLink target="_parent" value="{!URLFOR($Action.Account.View, customer.accountObj.Id)}">{!customer.accountObj.Name}</apex:outputLink>
+            </apex:column>
+            <apex:column width="250" headerValue="Opportunity">
+            <apex:outputLink target="_parent" value="{!URLFOR($Action.Opportunity.View, customer.opportunityObj.Id)}">{!customer.opportunityObj.Name}</apex:outputLink>
+            </apex:column>
+            <apex:column width="250" headerValue="License">
+			<apex:outputLink target="_parent" value="{!URLFOR($Action.LicenseDetail__c.View, customer.licenseObj.Id)}">{!customer.licenseObj.Custom_URL_Name__c}</apex:outputLink>
+            </apex:column>
+            <!-- 
+            <apex:column width="250" headerValue="Contact">
+            <apex:outputLink target="_parent" value="{!URLFOR($Action.Contact.View, customer.primaryContact.Id)}">{!customer.primaryContact.Name}</apex:outputLink>
+            </apex:column> -->
+            <!-- 
+            <apex:column width="250" headerValue="Email Ids" value="{!customer.emailIds}">
+            </apex:column>
+      </apex:pageBlockTable>
+  </apex:pageBlock>
+  </apex:form> -->
+</apex:page>

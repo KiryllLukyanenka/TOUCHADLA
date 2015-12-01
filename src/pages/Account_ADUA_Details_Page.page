@@ -1,0 +1,3 @@
+<!-- ADUA Page-->
+<apex:page StandardController="Account">
+</apex:page>

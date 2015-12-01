@@ -1,0 +1,3 @@
+<apex:page controller="AssignAccountTerritoryCOntroller" action="{!assignTerritory}">
+  
+</apex:page>

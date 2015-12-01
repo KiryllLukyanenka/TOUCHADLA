@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>List</customSettingsType>
+    <customSettingsVisibility>Protected</customSettingsVisibility>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>Account_Weight__c</fullName>
+        <defaultValue>1</defaultValue>
+        <description>Weight to apply to responses on account contacts</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Default weight to apply to every response on an Account contact</inlineHelpText>
+        <label>Account Weight</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Additional_Instances__c</fullName>
+        <externalId>false</externalId>
+        <label>Additional Instances</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Attribution_For_Account_Contacts_Only__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Attribution For Account Contacts Only</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>CloseDateCutoff__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>When true, do not include any responses after the close date even if the opportunity is open</description>
+        <externalId>false</externalId>
+        <label>Close Date Cut-off</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Currency_Field_Name__c</fullName>
+        <externalId>false</externalId>
+        <label>Currency Field Name</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>DateFilter__c</fullName>
+        <defaultValue>&quot;open&quot;</defaultValue>
+        <description>Filters responses to consider - DaysFromClose applies to the opportunity closed or created date, or no filter. Values are &apos;close&apos;, &apos;open&apos;, &apos;none&apos;</description>
+        <externalId>false</externalId>
+        <label>DateFilter</label>
+        <length>8</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Enabled__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>True when influence model is enabled</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enable or disable the influence model</inlineHelpText>
+        <label>Enabled</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Include_Zero_Amount_Influence__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Include zero amount opportunity influence in the influence detail capture</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Include zero amount opportunity influence in the influence detail capture</inlineHelpText>
+        <label>Include Zero Amount Influence</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Lead_Account_Lookup_Field__c</fullName>
+        <externalId>false</externalId>
+        <label>Lead Account Lookup Field</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lead_Response_Weight__c</fullName>
+        <defaultValue>0</defaultValue>
+        <externalId>false</externalId>
+        <inlineHelpText>Default weight applied to every lead tied to the account based on the Lead&apos;s Account Field</inlineHelpText>
+        <label>Lead Response Weight</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Search_Days__c</fullName>
+        <description>Number of days before opportunity create date to search for responses. Null for no filter.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Number of days before opportunity create date to search for responses</inlineHelpText>
+        <label>Search Days</label>
+        <precision>6</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <label>Account Model Setting</label>
+</CustomObject>

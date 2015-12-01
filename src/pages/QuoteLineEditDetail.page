@@ -1,0 +1,5 @@
+<apex:page StandardController="QuoteLineItem" action="{!redirectEdiAll}" extensions="QuoteLineItemClass">
+<!-- <apex:form >
+<apex:inputhidden value="{!QuoteLineItem.quoteId}"/>
+</apex:form> -->  
+</apex:page>

@@ -1,0 +1,20 @@
+<apex:component controller="ProactiveStatsController">
+    <apex:attribute name="accountId_param"
+        type="String"
+        description="Account ID for which metric will be displayd"
+        assignTo="{!accountId}"
+    />
+    <apex:attribute name="metric_param"
+        type="String"
+        description="Proactive Metric. Should always to be SUMAMRY"
+        assignTo="{!metric}"
+        required="required"
+    />
+    <apex:attribute name="reload_param"
+        type="Boolean"
+        description="Relaod flag"
+        required="required"
+        assignTo="{!reload}"
+    />
+    <c:PortalGenericDataGridComponent title="Summary of Account" dataset="{!ruleSummaryList}"/>
+</apex:component>

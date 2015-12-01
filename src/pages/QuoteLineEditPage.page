@@ -1,0 +1,105 @@
+<apex:page StandardController="Quote"  extensions="QuoteLinePageExt" action="{!editQuoteLine}">
+<!-- <apex:form >
+<apex:pageblock >
+<apex:pagemessages />
+<apex:pageblockbuttons >
+<apex:commandbutton value="Save" action="{!Save}"/>
+<apex:commandbutton value="Cancel" action="{!Cancel}"/>
+</apex:pageblockbuttons>
+ <apex:inputhidden value="{!Quote.Pricebook2Id }"/>
+   <apex:inputhidden value="{!Quote.RecordTypeId }"/>
+   <apex:inputhidden value="{!Quote.Partner_Margin__c }"/>
+   <apex:inputhidden value="{!Quote.Number_Of_Yrs__c}"/>
+     <apex:inputhidden value="{!Quote.Support_Percent__c}"/>
+  <apex:inputhidden value="{!Quote.Perpetual_Total_Volume_Discount__c}"/>   
+   <apex:inputhidden value="{!Quote.One_Time_Discount_Perpetual__c}"/>
+   <apex:inputhidden value="{!Quote.Perpetual_License_total_del__c}"/>
+    check-- {!custType}
+  
+   <br/>
+<apex:pageblocktable value="{!wrapperList}" var="w">
+
+<apex:column >
+<apex:facet name="header">
+Product
+
+
+</apex:facet>
+<apex:outputfield value="{!w.prod.Name}"/>
+<b>
+<apex:outputtext rendered="{!w.SupportItem}" value=" - Perpetual Support Item"/>
+</b>
+</apex:column>
+
+<apex:column >
+<apex:facet name="header">
+Quantity
+</apex:facet>
+<apex:inputfield value="{!w.qli.Quantity}" rendered="{!!w.SupportItem}"/>
+<apex:outputfield value="{!w.qli.Quantity}" rendered="{!w.SupportItem}"/>
+</apex:column>
+
+<apex:column >
+<apex:facet name="header">
+List Price
+</apex:facet>
+{!priceMap[w.prod.Id].UnitPrice}
+</apex:column>
+
+
+<apex:column >
+
+<apex:facet name="header">
+Volume Discount %
+</apex:facet>
+<apex:inputfield value="{!w.qli.Volume_Discount__c}" rendered="{!AND(w.SupportItem=false,w.Volume=true)}"/>
+
+</apex:column>
+
+
+<apex:column >
+<apex:facet name="header">
+One time Disc%
+</apex:facet>
+<apex:inputfield value="{!w.qli.Field_Discount__c}" rendered="{!AND(w.SupportItem=false,w.OneTimeDiscount=true)}"/>
+</apex:column>
+
+<apex:column >
+<apex:facet name="header">
+SalesPrice
+</apex:facet>
+
+
+<apex:inputField value="{!w.qli.UnitPrice}" id="uPrice" rendered="{!(OR(IF(w.prod.Family = 'Service',True, False),IF(w.prod.Family = 'Renewal',True, False),IF(w.prod.Family = 'SaaS Mgmnt Fee',True, False)))}"/>
+<apex:inputtext value="{!w.UnitPrice}" disabled="true" rendered="{!NOT(OR(IF(w.prod.Family = 'Service',True, False),IF(w.prod.Family = 'Renewal',True, False),IF(w.prod.Family = 'SaaS Mgmnt Fee',True, False)))}"/>
+</apex:column>
+
+<apex:column >
+<apex:facet name="header">
+Support %
+</apex:facet>
+
+<apex:inputfield value="{!Quote.Support_Percent__c}" required="true" rendered="{!w.PerpetualSupport}"/>
+</apex:column>
+
+<apex:column >
+<apex:facet name="header">
+# Years
+</apex:facet>
+
+<apex:inputfield value="{!Quote.Number_Of_Yrs__c}" required="true" rendered="{!w.PerpetualSupport}"/>
+</apex:column>
+
+<apex:column rendered="{!w.PartnerMargin}">
+<apex:facet name="header">
+Partner Margin Applied
+</apex:facet>
+
+<apex:outputfield value="{!w.qli.Partner_Margin_Applied__c}"/>
+</apex:column>
+
+</apex:pageblocktable>
+
+</apex:pageblock>
+</apex:form> -->
+</apex:page>

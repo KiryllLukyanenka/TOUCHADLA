@@ -1,0 +1,4 @@
+<apex:page standardController="Quote">
+    <apex:outputLabel rendered="{!AND(quote.Notes__c != null, NOT(quote.Submitted__c))}" style="font-size: medium; font-weight:bold;background-color:red;"> You must submit this Quote For Approval
+  </apex:outputLabel>
+</apex:page>

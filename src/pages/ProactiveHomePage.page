@@ -1,0 +1,186 @@
+<apex:page standardController="Account" extensions="ProactiveHomePageController"
+	action="{!initAction}" docType="html-5.0">
+	<style>
+.footer {
+	min-height: 60px;
+	padding: 0 15px;
+}
+
+.brand {
+	float: left;
+	width: 240px;
+	height: 80px;
+	position: relative;
+}
+
+.header-brand {
+	width: 450px;
+}
+
+.header-logo {
+	height: 100%;
+	position: absolute;
+}
+
+.header-logo .logo-image {
+	height: 90%;
+	margin-left: 30px;
+	position: absolute;
+}
+
+.header-slogan-container {
+	float: left;
+	margin-top: 25px;
+	font-size: 16px;
+}
+ .pageDescription {
+font-size: 1.8em;
+font-weight: normal;
+line-height: 1.1em;
+}
+</style>
+<script type="text/javascript">
+   var j$ = jQuery.noConflict();
+</script> 
+	<apex:pageMessages />
+	<header class="header fixed-top clearfix">
+			<!-- Spacer -->
+			<!-- Header Logo -->
+			<div class="brand header-brand">
+				<div class="header-logo">
+					<img class="logo-image"
+						src="https://proactive.appdynamics.com/images/Proactive-noslo-color-01.png" />
+				</div>
+				<div class="sidebar-toggle-box visible-xs">
+					<div class="fa fa-bars"></div>
+				</div>
+			</div>
+
+			<div class="header-slogan-container hidden-sm hidden-xs">
+				<div class="header-slogan logo-a faded" style="opacity: 0;">
+					The missing link in Customer Success. Proactive.</div>
+				<div class="header-slogan logo-b" style="opacity: 1;">Drive
+					Customer Adoption. Be Proactive.</div>
+				<div class="header-slogan logo-c faded" style="opacity: 0;">
+					Know your customers. Be Proactive.</div>
+			</div>
+			<!--logo end-->
+
+			<div class="nav notify-row" id="top_menu">
+				<!--  notification start -->
+				<!--  notification end -->
+			</div>
+		</header>
+	<apex:pageBlock >
+	
+		<apex:pageBlockSection columns="2" collapsible="false">
+			<apex:facet name="header">
+				<apex:outputPanel >
+					<pre><h1 class="pageDescription">Proactive Stats for Account:  <a href="/{!accountId}">{!accountObj.Name}</a>  Health Status: {!healthSummary}   Health Score: {!healthScore}  </h1></pre>
+				</apex:outputPanel>
+			</apex:facet>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Account Manager"/>
+				<a href='{!accountObj.Owner.Id}'>{!accountObj.Owner.Name}</a>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Technical Account Manager"/>
+				<a href='{!accountObj.Technical_Account_Manager__r.Id}'>{!accountObj.Technical_Account_Manager__r.Name}</a>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="# of Contacts"/>
+				<a href='/003?rlid=RelatedContactList&id={!accountId}'>{!contacts.size}</a>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="# of Opportunities"/>
+				<a href='/006?rlid=RelatedOpportunityList&id={!accountId}'>{!opportunities.size}</a>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="# of Licenses"/>
+				<a href='/apex/Account_OpportunityLicenses_Page?id={!accountId}'>{!licenses.size}</a>
+			</apex:pageBlockSectionItem>
+		</apex:pageBlockSection>
+		
+		<apex:pageBlockSection collapsible="false" columns="1">
+			<apex:facet name="header">
+			
+					<apex:outputPanel styleClass="pageDescription">
+						<apex:outputPanel rendered="{!!(metric=='SUMMARY')}">
+							<a href="/apex/ProactiveHomePage?account_id={!accountId}&metric=SUMMARY"><input type="button" value="Account Summary" class="brandPrimaryBgr zen-active primaryPalette"/></a>
+						</apex:outputPanel>
+						<apex:outputLabel value="Account Summary" rendered="{!(metric=='SUMMARY')}"/>
+						
+						<apex:outputPanel rendered="{!!(metric=='USAGE_TREND')}">
+							<a href="/apex/ProactiveHomePage?account_id={!accountId}&metric=USAGE_TREND"><input type="button" value="Usage Trend" class="brandPrimaryBgr zen-active primaryPalette"/></a>
+						</apex:outputPanel>
+						<apex:outputLabel value="Usage Trend" rendered="{!(metric=='USAGE_TREND')}"/>
+						
+						<apex:outputPanel rendered="{!!(metric=='ACCOUNT_STATS')}">
+							<a href="/apex/ProactiveHomePage?account_id={!accountId}&metric=ACCOUNT_STATS"><input type="button" value="Account Stats" class="brandPrimaryBgr zen-active primaryPalette"/></a>
+						</apex:outputPanel>
+						<apex:outputLabel value="Account Stats" rendered="{!(metric=='ACCOUNT_STATS')}"/>
+						
+						<apex:outputPanel rendered="{!!(metric=='LOGIN_STATS')}">
+							<a href="/apex/ProactiveHomePage?account_id={!accountId}&metric=LOGIN_STATS"><input type="button" value="Login Stats" class="brandPrimaryBgr zen-active primaryPalette"/></a>
+						</apex:outputPanel>
+						
+						<apex:outputLabel value="Login Stats" rendered="{!(metric=='LOGIN_STATS')}"/>
+						
+						<apex:outputPanel >
+							<a href="https://proactive.appdynamics.com/#/account/{!accountObj.Id}" target="_blank"><input type="button" value="Launch Proactive" class="brandPrimaryBgr zen-active primaryPalette"/></a>
+						</apex:outputPanel>
+						
+						<!-- apex:outputPanel rendered="{!!(metric=='LICENSE_USAGE')}">
+							<a href="/apex/ProactiveHomePage?account_id={!accountId}&metric=LICENSE_USAGE"><input type="button" value="License Usage"/></a>
+						</apex:outputPanel>
+						<apex:outputLabel value="License Usage" rendered="{!(metric=='LICENSE_USAGE')}"/> -->
+						
+					</apex:outputPanel>
+			</apex:facet>
+		</apex:pageBlockSection>
+		<apex:pageBlockSection columns="1" rendered="{!(metric=='ACCOUNT_STATS' || metric=='LOGIN_STATS')}">
+			<c:ProactiveStatsVC account_id="{!accountID}"
+						metric_attrib="{!metric}" title="{!title}"
+						filter_by_attrib="{!filterByColumnNames}"
+						reload_attrib="true" />
+		</apex:pageBlockSection>
+		<apex:pageBlockSection columns="1" rendered="{!metric=='SUMMARY'}">
+			<c:ProactiveSummaryVC accountId_param="{!accountID}"
+						metric_param="{!metric}"
+						reload_param="true" />
+		</apex:pageBlockSection>
+		
+		<apex:pageBlockSection columns="1" rendered="{!metric=='USAGE_TREND'}">
+			<c:ProactiveUsageTrend accountId_param="{!accountID}"
+						metric_param="{!metric}"
+						reload_param="true" />
+		</apex:pageBlockSection>
+		<!-- apex:tabPanel switchType="cleint" selectedTab="accountStats" >
+		
+			<apex:tab label="Account Stats" name="accountStats" id="accountStats">
+				<apex:pageBlockSection columns="1">
+					
+				</apex:pageBlockSection> 
+			</apex:tab>
+			<apex:tab label="Login Stats" name="loginStats" id="loginStats">
+				<apex:pageBlockSection columns="1">
+					<c:ProactiveStatsVC account_id="{!accountID}"
+						metric_attrib="LOGIN_STATS" title="Login Report for all the controller accounts of customer in Last 30 Days"
+						filter_by_attrib="Controller URL,Account"
+						reload_attrib="true" />
+				</apex:pageBlockSection>
+			</apex:tab-->
+			
+			
+			<!-- apex:tab label="License Usage" name="licenseUsage" id="licenseUsage">
+				<apex:pageBlockSection columns="1">
+					<c:PortalLicenseUsageVC license="{!null}"
+						demo="true"
+						metric_attrib="License_Usage" 
+						title="License Usage Report"
+						reload_attrib="true" />
+				</apex:pageBlockSection>
+			</apex:tab>-->
+		<!-- </apex:tabPanel>-->
+	</apex:pageBlock>
+</apex:page>

@@ -1,0 +1,5 @@
+<apex:page standardController="LicenseDetail__c" 
+    extensions="LicenseContactsController" 
+    action="{!initAction}">
+    <apex:pageMessages />
+</apex:page>

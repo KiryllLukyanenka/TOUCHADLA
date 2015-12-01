@@ -1,0 +1,24 @@
+<apex:page standardController="Account" extensions="PortalLicenseTestHelper">
+	<apex:pageMessages />
+	<apex:form >
+		<apex:pageBlock title="Setup Test Accounts for Licensing">
+			<apex:pageBlockButtons >
+				<apex:commandButton value="Setup Test Data" action="{!setupTestAccountAndRelatedEntries}"/>
+			</apex:pageBlockButtons>
+			<apex:pageBlockSection columns="1">
+				<apex:pageBlockSectionItem >
+					<apex:outputLabel value="Enter Account Name Prefix:"/>
+					<apex:inputText value="{!accountNamePrefix}"/>
+				</apex:pageBlockSectionItem>
+				<apex:pageBlockSectionItem >
+					<apex:outputLabel value="#of Contacts"/>
+					<apex:inputText value="{!numberOfContacts}"/>
+				</apex:pageBlockSectionItem>
+				<apex:pageBlockSectionItem >
+					<apex:outputLabel value="Opportunity Per Contact?:"/>
+					<apex:inputCheckBox value="{!opportunityPerContact}"/>
+				</apex:pageBlockSectionItem>
+			</apex:pageBlockSection>
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>

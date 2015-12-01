@@ -1,0 +1,318 @@
+<apex:component controller="PortalControllerLicenseAgents" id="theAgentsComponent">
+<style type="text/css">
+    	.data-retention-APM {
+    		display: none;
+    	}
+    	.data-retention-EUM {
+    		display: none;
+    	}
+    	.data-retention-Synthetic {
+    		display: none;
+    	}
+    </style>
+    <apex:includeScript value="{!$Resource.Jquery_script}"/>
+     <script>
+
+		function editionChange(licModule){
+			var editionSelected = jQuery(".edition_"+licModule).val();
+			var currentLicModel = jQuery(".licensingModel_"+licModule).val();
+			Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.PortalControllerLicenseAgents.getLicensingModel}',
+            licModule, editionSelected,currentLicModel,
+            function(result, event){
+                if (event.status) {
+                    // Get DOM IDs for HTML and Visualforce elements like this
+                    if(editionSelected=='PRO'){
+                    	jQuery(".licensingModel_"+licModule).show();
+                    	jQuery(".lblLicensingModel_"+licModule).hide();
+                    	jQuery(".expirationDate_"+licModule).hide();
+                    	jQuery(".lblExpirationDate_"+licModule).show();
+                    }else{
+                    	jQuery(".licensingModel_"+licModule).hide();
+                    	jQuery(".lblLicensingModel_"+licModule).show();
+                    	jQuery(".expirationDate_"+licModule).show();
+                    	jQuery(".lblExpirationDate_"+licModule).hide();
+                    }
+                    jQuery(".licensingModel_"+licModule).val(result);
+                    jQuery(".lbllicensingModel_"+licModule).val(result);
+                    licensingModelChange(licModule);
+                } else if (event.type === 'exception') {
+				}
+            },
+            {escape: true}
+	        );
+	    }
+
+	    function licensingModelChange(licModule){
+	    	//console.log('License Model Change:'+licModule);
+			var editionSelected = jQuery(".edition_"+licModule).val();
+			var currentLicModel = jQuery(".licensingModel_"+licModule).val();
+			var currentCount = parseInt(jQuery(".count_"+licModule).val());
+			var currentMaxCount = parseInt(jQuery(".maxCount_"+licModule).val());
+			if(currentCount == NaN){
+				currentCount = 0;
+			}
+			if(currentMaxCount == NaN){
+				currentMaxCount = 0;
+			}
+
+			if(currentLicModel=='FIXED'){
+            	jQuery(".maxCount_"+licModule).hide();
+            	jQuery(".lblMaxCount_"+licModule).show();
+            }else{
+            	jQuery(".maxCount_"+licModule).show();
+            	jQuery(".lblMaxCount_"+licModule).hide();
+            }
+			jQuery(".count_"+licModule).show();
+            jQuery(".lblCount_"+licModule).hide();
+
+    		if(currentLicModel == 'VARIABLE'){
+           		jQuery(".count_"+licModule).hide();
+           		jQuery(".lblCount_"+licModule).show();
+           	}
+           	//updateMaxCount(licModule);
+           	licenseModulesPageLoad(lastlicenseedition);
+	    }
+
+	    function handleProLicenseModule(licModule,isPro){
+	    	//jQuery(".licensingModel_"+licModule).prop('disabled',!isPro);
+	    	jQuery(".expiryDate_"+licModule).prop('disabled',!isPro);
+	    	//jQuery("._"+licModule).prop('disabled',!isPro);
+	    }
+
+	    function productTypeSelectionChange(licenseedition){
+	    	callUIRefresh();
+	    }
+
+	    function expiryDateSelection(){
+	    	var accExpDate = jQuery(".accountExpiryDate").val();
+	    	//console.log('ExpiryDate:'+accExpDate);
+	    	jQuery(".expirationDate").each(function(index){
+   				jQuery(this).val(accExpDate);
+   			});
+   			jQuery(".lblExpirationDate").each(function(index){
+   				jQuery(this).text(accExpDate+"");
+   			});
+	    }
+	    var lastlicenseedition;
+	    function licenseModulesPageLoad(licenseedition){
+	    	lastlicenseedition = licenseedition;
+
+	    	var prodTypeSelected = jQuery(".product_type").val();
+	    	//console.log("licensemodulepage load-prodtype:"+prodTypeSelected);
+	    	//console.log("licensemodulepage load-licenseedition:"+licenseedition);
+	    	//console.log(prodTypeSelected == 'Hosted (SaaS)');
+	    	if(prodTypeSelected == 'Hosted (SaaS)'){
+	    		if(licenseedition == 'paid'){
+	    			enableNewUIControls();
+	    		}
+	    		else{
+	    			disableNewUIControls();
+	    		}
+	    	}else{
+	    		disableNewUIControls();
+	    	}
+
+	    	if(licenseedition == 'view'){
+	    		disableAllControls();
+	    	}else{
+	    		expiryDateSelection();
+	    		jQuery(".edition_Synthetic").show();
+   				jQuery(".lblEdition_Synthetic").hide();
+	    	}
+	    }
+
+	    function enableNewUIControls(){
+	    	jQuery(".edition").show();
+   			jQuery(".lblEdition").hide();
+   			jQuery(".expirationDate").show();
+   			jQuery(".lblExpirationDate").hide();
+   			jQuery(".licensingModel").show();
+   			jQuery(".lblLicensingModel").hide();
+   			jQuery(".count").show();
+   			jQuery(".lblCount").hide();
+   			jQuery(".maxCount").show();
+   			jQuery(".lblMaxCount").hide();
+
+   			jQuery(".licensingModel").each(function(index){
+   				//console.log('Value:'+jQuery(this).val());
+   				if(jQuery(this).val() == 'FIXED'){
+   					//console.log('Parent:'+jQuery(this).parent().html());
+   					jQuery(this).parent().parent().find('.maxCount').hide();
+   					//console.log(jQuery(this).parent().parent().find('.maxCount'));
+   					jQuery(this).parent().parent().find('.lblMaxCount').show();
+   				}
+   			});
+   			jQuery(".edition").each(function(index){
+   				//console.log('Value:'+jQuery(this).val());
+   				if(jQuery(this).val() == 'PRO_TRIAL'){
+   					//console.log('Parent:'+jQuery(this).parent().parent().html());
+   					jQuery(this).parent().parent().find('.lblExpirationDate').hide();
+   					jQuery(this).parent().parent().find('.expirationDate').show();
+   				}else{
+   					//console.log('Parent:'+jQuery(this).parent().parent().html());
+   					jQuery(this).parent().parent().find('.lblExpirationDate').show();
+   					jQuery(this).parent().parent().find('.expirationDate').hide();
+   				}
+   			});
+
+   			jQuery(".retentionPeriod").show();
+   			jQuery(".lblRetentionPeriod").hide();
+	    }
+
+	    function disableNewUIControls(){
+	    	jQuery(".edition").hide();
+   			jQuery(".lblEdition").show();
+   			jQuery(".expirationDate").hide();
+   			jQuery(".lblExpirationDate").show();
+   			jQuery(".licensingModel").hide();
+   			jQuery(".lblLicensingModel").show();
+   			jQuery(".count").show();
+   			jQuery(".lblCount").hide();
+   			jQuery(".maxCount").hide();
+   			jQuery(".lblMaxCount").show();
+
+   			jQuery(".retentionPeriod").hide();
+   			jQuery(".lblRetentionPeriod").show();
+	    }
+
+
+	    function disableAllControls(){
+	    	jQuery(".edition").hide();
+   			jQuery(".lblEdition").show();
+   			jQuery(".expirationDate").hide();
+   			jQuery(".lblExpirationDate").show();
+   			jQuery(".licensingModel").hide();
+   			jQuery(".lblLicensingModel").show();
+   			jQuery(".count").hide();
+   			jQuery(".lblCount").show();
+   			jQuery(".maxCount").hide();
+   			jQuery(".lblMaxCount").show();
+   			jQuery(".retentionPeriod").hide();
+   			jQuery(".lblRetentionPeriod").show();
+	    }
+
+	    function licenseAgentCountChange(){
+	    	var prodTypeSelected = jQuery(".product_type").val();
+	    	var retentionEditable = false;
+	    	jQuery(".licensingModel").each(function(index){
+   				if(jQuery(this).val() == 'FIXED'){
+   					jQuery(this).parent().parent().find('.maxCount').hide();
+   					//console.log(jQuery(this).parent().parent().find('.maxCount'));
+   					jQuery(this).parent().parent().find('.lblMaxCount').show();
+   				}else{
+   					jQuery(this).parent().parent().find('.maxCount').show();
+   					//console.log(jQuery(this).parent().parent().find('.maxCount'));
+   					jQuery(this).parent().parent().find('.lblMaxCount').hide();
+   				}
+   				if(prodTypeSelected == "On-Premise"){
+					jQuery(this).parent().parent().find('.lblRetentionPeriod').show();
+	 				jQuery(this).parent().parent().find('.retentionPeriod').hide();
+	 			}else{
+	 				if(lastlicenseedition == 'paid'){
+	 					jQuery(this).parent().parent().find('.retentionPeriod').show();
+	 					jQuery(this).parent().parent().find('.lblRetentionPeriod').hide();
+	 				}else{
+	 					jQuery(this).parent().parent().find('.lblRetentionPeriod').show();
+	 					jQuery(this).parent().parent().find('.retentionPeriod').hide();
+	 				}
+				}
+   			});
+	    }
+
+	</script>
+
+	<apex:attribute name="licenseControllerParam"
+        description="Controller interface"
+        type="AbstractLicenseController"
+        required="required"
+        assignTo="{!licenseController}"/>
+	<apex:repeat id="agentsRepeat" value="{!licenseAgentCategories}"
+		var="agentCategory">
+		<div class="hideCurrDate">
+		<apex:pageBlockSection id="agentsSection"
+			title="{!agentCategory} Products" columns="1" collapsible="true">
+			<apex:pageBlockTable value="{!categoryLicenseAgentsMap[agentCategory]}"
+				var="licUnit" border="0">
+				<apex:column headerValue="Agent Type" width="150">
+					<apex:outputLabel value="{!licUnit.title}" />
+				</apex:column>
+				<apex:column headerValue="Product Edition" width="200">
+					<apex:selectList value="{!licUnit.selectedProductEdition}"
+						id="prodEdition" multiselect="false" size="1"
+						styleClass="edition_{!licUnit.agentUIClassName} edition"
+						style="display:none">
+						<apex:actionSupport event="onchange" action="{!licenseEditionChange}"
+							rerender="licensingModel,lblLicensingModel,countInput,lblCountInput,maxCountInput,maxCountLbl,eumWeb,eumWebPanel,eumMobile,eumMobilePanel"
+							oncomplete="editionChange('{!licUnit.agentUIClassName}');">
+						</apex:actionSupport>
+						<apex:selectOptions value="{!licUnit.productEditionSelectOptions}">
+						</apex:selectOptions>
+
+					</apex:selectList>
+					<apex:outputLabel value="{!licUnit.licAgent['Edition__c']}"
+						 style="display:none"
+						styleClass="lblEdition_{!licUnit.agentUIClassName} lblEdition"/>
+				</apex:column>
+				<apex:column headerValue="Expiration Date" width="200">
+					<apex:inputField value="{!licUnit.licAgent['Expiration_Date__c']}"
+						style="display:none"
+						styleClass="expirationDate_{!licUnit.agentUIClassName} expirationDate" />
+					<apex:outputText value="{0,date,MM'/'dd'/'yyyy}" style="display:none"
+						styleClass="lblExpirationDate_{!licUnit.agentUIClassName} lblExpirationDate" >
+					    <apex:param value="{!licUnit.licAgent.Expiration_Date__c}" />
+					</apex:outputText>
+				</apex:column>
+				<apex:column headerValue="Licensing Model" width="120">
+					<apex:selectList value="{!licUnit.selectedProductLicensingModel}"
+						id="licensingModel" multiselect="false" size="1"
+						styleClass="licensingModel_{!licUnit.agentUIClassName} licensingModel"
+						style="display:none">
+						<apex:actionSupport event="onchange" action="{!licensingModelChange}"
+							rerender="countInput,lblCountInput,maxCountInput,maxCountLbl"
+							oncomplete="licensingModelChange('{!licUnit.agentUIClassName}');">
+						</apex:actionSupport>
+						<!-- apex:actionSupport event="onchange" action="{!licensingModelChangeEventHandler}"/> -->
+						<apex:selectOptions value="{!licUnit.productLicensingModelSelectOptions}">
+						</apex:selectOptions>
+					</apex:selectList>
+					<apex:outputLabel id="lblLicensingModel" value="{!licUnit.licAgent['Licensing_Model__c']}"
+						 style="display:none"
+						styleClass="lblLicensingModel_{!licUnit.agentUIClassName} lblLicensingModel"/>
+				</apex:column>
+				<apex:column headerValue="Units" width="80">
+					<apex:inputField id="countInput" value="{!licUnit.licAgent['Count__c']}"
+						styleClass="count_{!licUnit.agentUIClassName} count"
+						style="display:none">
+						<apex:actionSupport event="onchange" action="{!licenseAgentCountChange}"
+							rerender="maxCountInput,maxCountLbl, dataRetention, dataRetentionLbl"
+							oncomplete="licenseAgentCountChange();">
+						</apex:actionSupport>
+					</apex:inputField>
+					<apex:outputLabel id="lblCountInput"  value="{!licUnit.licAgent['Count__c']}"
+						styleClass="lblCount_{!licUnit.agentUIClassName} lblCount" />
+				</apex:column>
+				<apex:column headerValue="Max Units" width="80">
+					<apex:inputField id="maxCountInput" value="{!licUnit.licAgent['Max_Agents__c']}"
+						styleClass="maxCount_{!licUnit.agentUIClassName} maxCount"
+						style="display:none"/>
+					<apex:outputLabel id="maxCountLbl" value="{!licUnit.licAgent['Max_Agents__c']}"
+						styleClass="lblMaxCount_{!licUnit.agentUIClassName} lblMaxCount"
+						style="display:none"/>
+				</apex:column>
+				<apex:column headerValue="Data Retention (in Days)" width="80"
+					headerClass="data-retention-{!agentCategory}"
+					styleClass="data-retention-{!agentCategory}">
+					<apex:inputField id="dataRetention" value="{!licUnit.licAgent['Retention_Period__c']}"
+						styleClass="retentionPeriod_{!licUnit.licAgent.Agent_Type__c} retentionPeriod"
+						style="display:none"/>
+					<apex:outputLabel id="dataRetentionLbl" value="{!licUnit.licAgent['Retention_Period__c']}"
+						styleClass="lblRetentionPeriod_{!licUnit.licAgent.Agent_Type__c} lblRetentionPeriod"
+						style="display:none"/>
+				</apex:column>
+				<apex:column ></apex:column>
+			</apex:pageBlockTable>
+		</apex:pageBlockSection>
+		</div>
+	</apex:repeat>
+</apex:component>

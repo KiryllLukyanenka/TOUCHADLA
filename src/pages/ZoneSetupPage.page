@@ -1,0 +1,3 @@
+<apex:page standardController="Zone__c" extensions="ZoneSetupPageController" action="{!createZones}">
+    Zones Created
+</apex:page>

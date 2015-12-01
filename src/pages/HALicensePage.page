@@ -1,0 +1,36 @@
+<apex:page standardController="LicenseDetail__c" 
+    extensions="HALicenseController" action="{!initAction}">
+       <apex:pageMessages ></apex:pageMessages>
+    <apex:form >
+        <apex:pageBlock title="Create HA License">
+            <apex:pageblockButtons >
+                <apex:commandButton value="Create HA License" action="{!doHaSave}"/>
+                <apex:commandButton value="Cancel" action="{!cancel}"/>
+            </apex:pageblockButtons>
+            
+            <apex:pageblockSection columns="2">
+                <apex:outputField value="{!licenseDetailObj.License_Expiry_Date__c}"/>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Failover Node Mac Address"/>
+                    <apex:InputField value="{!licenseDetailObj.MAC_Address__c}"/>
+                </apex:pageBlockSectionItem>
+                <apex:repeat value="{!licAgentInfoList}" var="licUnit">
+						<apex:pageBlockSectionItem >
+							<apex:outputLabel value="{!licUnit.licAgent['Agent_Type__c']} Agents"/>
+							<apex:outputLabel value="{!ROUND(licUnit.licAgent['Count__c'],0)}"/>
+						</apex:pageBlockSectionItem>
+					</apex:repeat>
+                <apex:pageBlockSectionItem >
+                	<apex:outputLabel value="EUM Web"/>
+					<apex:outputLabel value="{!eumWebDisplayString}"/>
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >
+                	<apex:outputLabel value="EUM Mobile"/>
+					<apex:outputLabel value="{!eumMobileDisplayString}"/>
+                </apex:pageBlockSectionItem>
+                <apex:outputField value="{!licenseDetailObj.Product_Type__c}"/>
+            </apex:pageblockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

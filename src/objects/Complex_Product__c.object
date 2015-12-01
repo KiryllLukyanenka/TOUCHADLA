@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>List</customSettingsType>
+    <customSettingsVisibility>Protected</customSettingsVisibility>
+    <description>This custom setting will be used to breakdown the contents of a complex product.</description>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>Number_of_Cards__c</fullName>
+        <description>This is the number of Library Cards for this product.</description>
+        <externalId>false</externalId>
+        <label>Number of Cards</label>
+        <precision>6</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Number_of_Training_Units__c</fullName>
+        <description>This is the number of training units for this product.</description>
+        <externalId>false</externalId>
+        <label>Number of Training Units</label>
+        <precision>6</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Product_Code__c</fullName>
+        <description>This is the product code</description>
+        <externalId>false</externalId>
+        <label>Product Code</label>
+        <length>100</length>
+        <required>true</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>Complex Product</label>
+</CustomObject>

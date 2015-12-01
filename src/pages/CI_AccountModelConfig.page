@@ -1,0 +1,100 @@
+<apex:page controller="CI_AccountModelConfigController" title="Account and Opportunity Contact Role Model Configuration" >
+    <apex:SectionHeader title="Account Model Configuration" >
+        <apex:form >
+            <apex:pageMessages />
+            <apex:pageblock mode="edit">
+                <apex:pageblocksection columns="2" title="General configuration">
+                    <apex:inputField value="{!configobject.Enabled__c}"/>
+                    <apex:outputtext value="Enable or disable this campaign influence model" />
+                    <apex:inputfield value="{!configobject.Search_Days__c}" />
+                    <apex:outputtext value="Only responses within this many days before opportunity create or close are considered (depending on date filter). Null for no filter." />                    
+	                <apex:selectRadio label="Date Filter" value="{!configobject.DateFilter__c}" layout="pageDirection" >
+	                    <apex:selectOption itemvalue="create" itemlabel="From opportunity create date" />
+	                    <apex:selectOption itemValue="close" itemlabel="From opportunity close date" />
+	                </apex:selectRadio>                    
+	                <apex:outputText value="Specify the type of filter to apply - only responses within the filtered date range are considered (except for the first touch response that is always considered)." />
+	                <apex:selectList label="Currency Field" value="{!configobject.Currency_Field_Name__c}" size="1" multiselect="false"> 
+	                    <apex:selectOptions value="{!currencyFieldOptions}" />                        
+	                </apex:selectList>
+	                <apex:outputText value="Select the Opportunity currency field to use in influence calculations." />
+	                <apex:selectList label="Lead's Account Field" value="{!configobject.Lead_Account_Lookup_Field__c}" size="1" multiselect="false"> 
+	                    <apex:selectOptions value="{!leadAccountFieldOptions}" />                        
+	                </apex:selectList>
+	                <apex:outputText value="Select the Account lookup field on the Lead object to include leads in influence calculations." />	                	                                                        
+                    <apex:inputfield value="{!noRoleWeightConfig.Weight__c}" label="Role Weight Default"/>
+                    <apex:outputtext value="Weight given to contact roles that have no label." />                                                                 
+                    <apex:inputfield value="{!configobject.Account_Weight__c}" /> 
+                    <apex:outputtext value="Weight on each response on a contact." />
+                    <apex:inputfield value="{!configobject.Lead_Response_Weight__c}" />
+                    <apex:outputtext value="Default weight applied to every lead tied to the account based on the Lead's Account Field" />                    
+                    <apex:inputfield value="{!configobject.Include_Zero_Amount_Influence__c}" />
+                    <apex:outputtext value="Capture influence detail information even for opportunities with a zero or null amount." />
+                    <apex:inputfield value="{!configobject.Attribution_For_Account_Contacts_Only__c}" />
+                    <apex:outputtext value="Attribute influence for contacts related to the Opportunity's contact roles only if the contacts are also realted to the Account." />                    
+                </apex:pageblocksection>      
+
+                <apex:pageblocksection columns="1" title="Role weights">
+                    <apex:pageBlockTable value="{!AvailableRoles}" var="role" >
+                        <apex:column headerValue="Role">
+                            <apex:outputText value="{!RoleLabels[role]}"  />
+                        </apex:column>
+                        <apex:column headerValue="Weight">
+                            <apex:inputField value="{!WeightInfo[role].Weight__c}"/>
+                        </apex:column>        
+                        <apex:column headerValue="Exclude From Influence">
+                            <apex:inputCheckbox value="{!WeightInfo[role].Exclude_From_Influence__c}"/>
+                        </apex:column>                                            
+                    </apex:pageBlockTable>                                                    
+                </apex:pageblocksection>        
+                
+                <apex:pageblocksection columns="2" title="Exclude Campaigns By Type">
+                    <apex:pageBlockTable value="{!AvailableCampaignTypes2}" var="type" >
+                        <apex:column headerValue="Campaign Type">
+                            <apex:outputText value="{!CampaignTypeLabels[type]}" />
+                        </apex:column>
+                        <apex:column headerValue="Exclude From Influence">
+                            <apex:inputField value="{!CampaignTypeExclude[type].Exclude__c}"/>
+                        </apex:column>                         
+                    </apex:pageBlockTable>
+                    <apex:pageBlockTable value="{!oppTypeExcludeList}" var="oppType" >
+                        <apex:column headerValue="Opportunity Type">
+                            <apex:outputText value="{!oppType.typeVal}" />
+                        </apex:column>
+                        <apex:column headerValue="Exclude From Influence">
+                            <apex:inputCheckbox value="{!oppType.exclude}"/>
+                        </apex:column>                         
+                    </apex:pageBlockTable>                                                                              
+                </apex:pageblocksection>
+
+                <apex:pageblocksection columns="2" title="Campaign specific weights">
+                    <apex:repeat value="{!AvailableCampaignTouches}" var="type" >
+                        <apex:outputText value="{!type}" />
+                        <apex:inputField value="{!WeightInfoCampaign[type].Weight__c}"/>
+                    </apex:repeat>                                             
+                </apex:pageblocksection>
+
+                <apex:pageblockSection title="Instance control" columns="5">
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Current Instance" />
+                        <apex:outputText value="{!IF(InstanceNumber=0,'Default',TEXT(InstanceNumber))}" />
+                    </apex:pageBlockSectionItem>
+                    <apex:pageblockSectionItem >
+                        <apex:outputlabel value="Additional Instances" />
+                        <apex:outputText value="{!AdditionalInstanceCount}" />
+                    </apex:pageblockSectionItem>
+                    <apex:commandButton value="Create Instance" action="{!CreateInstance}"/>
+                    <apex:commandButton rendered="{!And(InstanceNumber>0, InstanceNumber=AdditionalInstanceCount)}" value="Delete Instance" action="{!DeleteLastInstance}" />
+                </apex:pageblockSection>
+                <apex:pageBlockSection columns="1">
+                    <apex:outputtext value="Note: Configuration changes are not saved when creating or deleting instances." />
+                </apex:pageBlockSection>
+
+                <apex:pageBlockButtons >
+                    <apex:commandButton value="Save and return" action="{!Save}"/>
+                    <apex:commandButton value="Cancel" immediate="true" action="{!Cancel}"/>
+                </apex:pageBlockButtons>
+
+            </apex:pageblock>
+        </apex:form>
+    </apex:SectionHeader>
+</apex:page>

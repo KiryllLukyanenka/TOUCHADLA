@@ -1,0 +1,25 @@
+<apex:page standardController="Opportunity"><!--  extensions="Opportunity_PrimaryContactRoleController">
+    <apex:pageMessages ></apex:pageMessages>
+    <apex:form >
+        <apex:pageblock title="Assign Primary Contact Role for the Opportunity">
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Assign" action="{!savePrimaryContact}" disabled="{!disableAssign}"/>
+                <apex:commandButton value="Cancel" action="{!doCancel}"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection >
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Select Contact"/>
+                    <apex:selectList value="{!selectedPrimayContactId}" multiselect="false" size="1">
+                        <apex:selectOptions value="{!primaryContactInputSelectOptions}"/>
+                    </apex:selectList>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Select Role"/>
+                    <apex:selectList value="{!selectedContactRole}" multiselect="false" size="1">
+                        <apex:selectOptions value="{!contactRoleSelectOptions}"/>
+                    </apex:selectList>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+        </apex:pageblock>
+    </apex:form> -->
+</apex:page>

@@ -1,0 +1,43 @@
+<apex:page controller="PartnerCampaignsController" tabStyle="Partner_Campaigns__tab">
+    <apex:sectionHeader title="Partner Campaigns"/>
+    <apex:form >
+        <apex:pageblock >
+            <apex:pageblockButtons location="top">
+                <apex:commandButton value="New" action="{!CreateNewPartnerCampaign}"/>
+            </apex:pageblockButtons>
+            <apex:pageblockSection collapsible="false" columns="1" title="Partner Campaign List">
+                <apex:pageblockSectionItem >
+                    <apex:outputPanel >
+                    <apex:outputPanel id="listcampaigns" rendered="{!PartnerCampaigns.size > 0}">
+                      <table class="list" border="0" cellpadding="0" cellspacing="0">
+                          <thead>
+                              <tr class="headerRow"> 
+                                  <th scope="col" class="">Partner Account Region</th>
+                                  <th scope="col" class="">Campaign</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              <apex:variable var="campaignIndex" value="{!0}" />
+                              <apex:repeat value="{!PartnerCampaigns}" var="partnerCampaign" id="repeat0">
+                                  <tr class="{! IF((CEILING(campaignIndex))/2 == 0, 'dataRow odd', 'dataRow even')}">
+                                      <td>
+                                        <a href="NewEditPartnerCampaign?id={!partnerCampaign.id}">{!partnerCampaign.Partner_Region__c}</a>
+                                    </td>
+                                    <td>
+                                        {!partnerCampaign.Campaign__r.Name}
+                                    </td>                                   
+                                  </tr>
+                              <apex:variable var="campaignIndex" value="{!campaignIndex+1}" />
+                              </apex:repeat>
+                          </tbody>
+                      </table>
+                      </apex:outputPanel>
+                      <apex:outputPanel id="resultPanel2" rendered="{!PartnerCampaigns.size = 0}" layout="block" style="background-color:#FFF;border-width:1px; border-style:solid;border-color: #D4DADC;color: #000;text-align:center;padding:10px">
+                        No records to display.
+                    </apex:outputPanel>
+                    </apex:outputPanel>
+                </apex:pageblockSectionItem>
+            </apex:pageblockSection>
+        </apex:pageblock>
+    </apex:form>  
+</apex:page>

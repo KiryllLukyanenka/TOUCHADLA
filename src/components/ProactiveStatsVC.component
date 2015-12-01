@@ -1,0 +1,41 @@
+<apex:component controller="ProactiveStatsController">
+	<apex:attribute name="account_id"  
+        description="Account ID" 
+        type="String" 
+        required="required" 
+        assignTo="{!accountID}"/>
+     <apex:attribute name="title"
+     description="Page Title" 
+     	type="String"
+     	required="required"
+     	assignTo="{!pageTitle}"/>
+     <apex:attribute name="metric_attrib"
+    	 description="Proactive Metric as ACCOUNT_STATS,LOGIN_STATS,..." 
+	     type="String"
+	     required="required"
+	     assignTo="{!metric}"/>
+	 <apex:attribute name="reload_attrib"
+    	 description="Boolean to invoke reload of the component" 
+	     type="Boolean"
+	     required="required"
+	     assignTo="{!reload}"/>
+	 
+	 <apex:attribute name="filter_by_attrib"
+    	 description="Filtering Column Names separated by comma" 
+	     type="String"
+	     required="required"/>
+	 
+	 <apex:outputPanel rendered="{!!statsDataRows.isEmpty}">
+		<c:ProactiveViewMetric metricsData="{!uiData}"
+			rendered="{!metric=='LOGIN_STATS'}" />
+		<apex:pageBlockSection columns="1" title="Metrics Raw Data">
+			<c:PortalGenericDataGridComponent title="{!title}"
+				dataset="{!statsDataRows}" filter_by_attrib="{!filter_by_attrib}" />
+		</apex:pageBlockSection>
+	</apex:outputPanel>
+	<apex:outputPanel rendered="{!statsDataRows.isEmpty}">
+		No Data present for the {!metric} for the given account. 
+		Please contact proactive@appdynamics.com for more help/troubleshooting the data issue.
+	</apex:outputPanel>
+     
+</apex:component>

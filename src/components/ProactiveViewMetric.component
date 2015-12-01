@@ -1,0 +1,86 @@
+<apex:component controller="ProactiveControllerViewMetric">
+	<apex:attribute name="metricsData"
+		description="Data Recieved from Proactive Server for a particular metric"
+		type="ProactiveViewModelMetric" 
+		required="required" 
+		assignTo="{!metricData}"/>
+
+	
+	<script>
+		function controllerSelectionHandler(){
+			applyControllerSelection();
+			jQuery("#chartsPanel").hide();
+			jQuery("#chartsPanel").show();
+		}
+		
+		jQuery(document).ready(function(){
+			console.log('Calling Rearrange Charts');
+			setTimeout(
+			  function() 
+			  {
+			    rearrangeCharts();
+			  }, 5000);
+		});
+		
+		function rearrangeCharts(){
+			var chartItems = jQuery.find("div[id*='chart-']");
+			var chartContainers = jQuery.find(".chartContainer");
+			jQuery(chartItems).remove()
+			for(var i=0;i<chartItems.length;i++){  
+				jQuery(chartContainers[i]).append(chartItems[i]);
+			}
+			jQuery(jQuery.find(".metricChartContainer")).hide();
+			jQuery(jQuery.find(".metricChartContainer")[0]).show();
+		}
+		
+		function showChart(){
+			var selected = jQuery(jQuery.find(".chartMetricSelectList")[0]).val();
+			console.log("Metric Selected:" + selected);
+			jQuery(jQuery.find(".metricChartContainer")).hide();
+			jQuery(jQuery.find(".metricChartContainer_"+selected)).show();
+		}
+	</script>
+	
+
+	<apex:form >
+		<apex:outputPanel >
+			<apex:actionFunction name="applyControllerSelection"
+			action="{!applySelection}"
+			status="actionStatusDisplay" rerender="chartsPanel"/>
+			<apex:outputLabel value="Select the Trend of Login for:" />
+			
+			<!-- select id="someList"
+				onchange="jQuery('.selectedHiddenChartKey').val(jQuery(this).val()); applyControllerSelection();">
+				<apex:repeat value="{!metricsData.chartKeysList}" var="chartKey">
+					<option value="{!chartKey}">{!chartKey}</option>
+				</apex:repeat>
+			</select>
+
+			<apex:inputText value="{!selectedChartKey}"
+				id="selectedItemHidden" styleClass="selectedHiddenChartKey"
+				>
+				</apex:inputText>-->
+			
+			<apex:selectList value="{!metricsData.selectedChartKey}"
+				multiselect="false" size="1" styleClass="chartMetricSelectList" onchange="showChart();">
+				<apex:selectOptions value="{!metricData.chartSelectOptions}"/>		
+		</apex:selectList>
+		<apex:actionStatus id="actionStatusDisplay"
+                    startText="loading..." stopText=""/>
+			
+		</apex:outputPanel>
+		
+	</apex:form>
+	
+	<apex:pageBlockSection columns="1">
+		<apex:repeat value="{!metricsData.chartKeysList}" var="repeatervar">	
+			<apex:outputPanel id="chartsPanel" styleClass="metricChartContainer_{!repeatervar} metricChartContainer">
+				
+				<c:ProactiveChartsView id="chartComp"
+				metricsData="{!metricsData}"
+				chartKey="{!repeatervar}"
+				metric="LOGIN_STATS" />
+			</apex:outputPanel>
+		</apex:repeat>
+	</apex:pageBlockSection>
+</apex:component>

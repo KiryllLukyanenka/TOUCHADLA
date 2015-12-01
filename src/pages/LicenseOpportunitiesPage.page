@@ -1,0 +1,5 @@
+<apex:page standardController="License_Opportunity__c" extensions="LicenseOpportunityViewController" 
+    action="{!redirectToLicense}">
+  <!-- Begin Default Content REMOVE THIS -->
+  <!-- End Default Content REMOVE THIS -->
+</apex:page>

@@ -1,0 +1,2339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CreatePdf</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>EmailQuote</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Follow</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>NewQuote</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SyncQuote</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>AccountId</fullName>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Account_Name_for_Email_Temp__c</fullName>
+        <description>Needed for Legal Approval Needed for Special Terms email template that is sent to Legal once a quote has been submitted for approval to display Account Name of Quote.</description>
+        <externalId>false</externalId>
+        <formula>Opportunity.Account.Name</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Account Name for Email Temp</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>AdditionalName</fullName>
+    </fields>
+    <fields>
+        <fullName>Americas__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(ISPICKVAL(Opportunity.Project_Region__c , &quot;Americas&quot;),TRUE,FALSE)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Americas</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Annual_Custom_Payments__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Annual Custom Payments</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Annual_Equal_Payments__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Annual Equal Payments</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Approval_Status__c</fullName>
+        <externalId>false</externalId>
+        <formula>CASE(  Quote_Approval_Status__c  ,
+&quot;Not Submitted&quot;, IMAGE(&quot;/servlet/servlet.FileDownload?file=015S0000000TvHR&quot;,&quot;Red&quot;,16,16),
+&quot;Submitted For Approval&quot;, IMAGE(&quot;/servlet/servlet.FileDownload?file=015S0000000TvHT&quot;,&quot;Amber&quot;,16,16),
+&quot;Approved&quot;, IMAGE(&quot;/servlet/servlet.FileDownload?file=015S0000000TvHJ&quot;,&quot;Green&quot;,16,16),
+&quot;Approval Not Required&quot;, IMAGE(&quot;/servlet/servlet.FileDownload?file=015S0000000TvHJ&quot;,&quot;Green&quot;,16,16),&quot;&quot;)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Red: Quote Requires Submission
+Amber: Quote is submitted for Approval
+Green: Quote Approved or Doesn&apos;t Require Submission</inlineHelpText>
+        <label>Approval Status</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>BMXB__Annual_Recurring_Total__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Total Monthly Recurring Revenue multiplied by Number of Terms (In Months)</description>
+        <externalId>false</externalId>
+        <formula>BMXB__Monthly_Recurring_Total__c * 12</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Total Monthly Recurring Revenue multiplied by Number of Terms (In Months)</inlineHelpText>
+        <label>Annual Recurring Total</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>BMXB__Contract_Term_Months__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The number of months for which the contract will be valid.</inlineHelpText>
+        <label>Contract Term (Months)</label>
+        <precision>5</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>BMXB__Daily_Price__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>BMXB__Annual_Recurring_Total__c / 365</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Daily Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>BMXB__End_Date2__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>End Date</label>
+        <required>false</required>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>BMXB__End_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>DATE(YEAR( BMXB__Start_Date__c ) + floor((month(BMXB__Start_Date__c) + BMXB__Contract_Term_Months__c )/12) + 
+if(and(month(BMXB__Start_Date__c)=12,BMXB__Contract_Term_Months__c&gt;=12),-1,0), 
+if( mod( month(BMXB__Start_Date__c) + BMXB__Contract_Term_Months__c , 12 ) = 0, 12 , mod( month(BMXB__Start_Date__c) +BMXB__Contract_Term_Months__c, 12 )), 
+min( day(BMXB__Start_Date__c), 
+case( 
+max( mod( month(BMXB__Start_Date__c) + BMXB__Contract_Term_Months__c , 12 ) , 1), 
+9,30, 
+4,30, 
+6,30, 
+11,30, 
+2,28+IF(MOD(YEAR( BMXB__Start_Date__c ) + floor((month(BMXB__Start_Date__c) + BMXB__Contract_Term_Months__c )/12) + 
+if(and(month(BMXB__Start_Date__c)=12,BMXB__Contract_Term_Months__c&gt;=12),-1,0), 4) = 0, 1, 0), 
+31 
+) 
+) 
+)-1 + ROUND( (BMXB__Contract_Term_Months__c - FLOOR(BMXB__Contract_Term_Months__c)) * 
+CASE( 
+MOD( MONTH(BMXB__Start_Date__c) + FLOOR(BMXB__Contract_Term_Months__c) , 12 ), 
+9,30, 
+4,30, 
+6,30, 
+11,30, 
+2,28 + IF(MOD(YEAR( BMXB__Start_Date__c ) + floor((month(BMXB__Start_Date__c) + BMXB__Contract_Term_Months__c )/12) + 
+if(and(month(BMXB__Start_Date__c)=12,BMXB__Contract_Term_Months__c&gt;=12),-1,0), 4) = 0, 1, 0), 
+31 
+), 0 
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>End Date</label>
+        <required>false</required>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>BMXB__First_Year_Contract_Value__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF(  BMXB__Contract_Term_Months__c &gt; 12, BMXB__One_time_Total__c +  BMXB__Annual_Recurring_Total__c,  BMXB__Total_Contract_Value__c )</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>First Year Contract Value</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>BMXB__Monthly_Recurring_Total__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Sum of all Monthly Recurring Revenue</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Sum of all Monthly Recurring Revenue</inlineHelpText>
+        <label>Monthly Recurring Total</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>BMXB__Number_of_Line_Items_Needing_Approval__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Number of Line Items Needing Approval</label>
+        <summaryFilterItems>
+            <field>QuoteLineItem.BMXB__Requires_Approval__c</field>
+            <operation>equals</operation>
+            <value>True</value>
+        </summaryFilterItems>
+        <summaryForeignKey>QuoteLineItem.QuoteId</summaryForeignKey>
+        <summaryOperation>count</summaryOperation>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>BMXB__One_time_Total__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Total of all one-time (non-recurring) charges</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Total of all one-time (non-recurring) charges</inlineHelpText>
+        <label>One-time Total</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>BMXB__Quote_Approved__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Quote Approved</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>BMXB__Start_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date on which contract begins</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Date on which contract begins</inlineHelpText>
+        <label>Start Date</label>
+        <required>false</required>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>BMXB__Submitted_for_Approval__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Submitted for Approval</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>BMXB__Total_Contract_Value__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF( !ISBLANK(BMXB__End_Date2__c) &amp;&amp; !ISBLANK(BMXB__Start_Date__c), (BMXB__End_Date2__c + 1 - BMXB__Start_Date__c) * BMXB__Daily_Price__c, 0 )   +  BMXB__One_time_Total__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Total Contract Value</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>BMXP__Primary_Quote__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Primary Quote</label>
+        <referenceTo>Quote</referenceTo>
+        <relationshipLabel>Optional Quote</relationshipLabel>
+        <relationshipName>Optional_Quote</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Bill_To_Address__c</fullName>
+        <description>Partner Billing Address</description>
+        <externalId>false</externalId>
+        <formula>Contact.MailingStreet &amp; BR() &amp;
+Contact.MailingCity &amp; &quot;,&quot; &amp; Contact.MailingState &amp; &quot; &quot; &amp;
+Contact.MailingPostalCode &amp; BR()
+&amp;Contact.MailingCountry</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Bill To Address</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Bill_To_Email__c</fullName>
+        <externalId>false</externalId>
+        <formula>Contact.Email</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Bill To Email</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Bill_To_Name__c</fullName>
+        <externalId>false</externalId>
+        <formula>Contact.Account.Name</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Bill To Name</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>BillingName</fullName>
+    </fields>
+    <fields>
+        <fullName>Case_Study__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <inlineHelpText>End User agrees to cooperate with AppDynamics in the creation of a customer case study, press release and certain other mutually agreed upon co-marketing commitments</inlineHelpText>
+        <label>Case Study</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>ContactId</fullName>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>ContractId</fullName>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Custom_Payment_Schedule_Notes__c</fullName>
+        <externalId>false</externalId>
+        <label>Custom Payment Schedule Notes</label>
+        <length>32768</length>
+        <type>Html</type>
+        <visibleLines>10</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Date_VAR_Contract_Signed__c</fullName>
+        <externalId>false</externalId>
+        <formula>Contact.Account.Date_VAR_Contract_Signed__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Date VAR Contract Signed</label>
+        <required>false</required>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Dedicated_Controller__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Dedicated Controller</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Description</fullName>
+    </fields>
+    <fields>
+        <fullName>Discount</fullName>
+    </fields>
+    <fields>
+        <fullName>Discount_LineItem__c</fullName>
+        <externalId>false</externalId>
+        <formula>Overall_Discount_Percentage__c / Line_Item_Count__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Discount/LineItem</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>EULA_URL__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(Americas__c=TRUE, HYPERLINK(&quot;https://legal.appdynamics.com/AppDynamics_EULA_(Americas)_2015.07.01.pdf&quot;, &quot;https://legal.appdynamics.com/AppDynamics_EULA_(Americas)_2015.07.01.pdf&quot;), HYPERLINK(&quot;https://legal.appdynamics.com/AppDynamics_EULA_(Non-Americas)_2015.07.01.pdf&quot;, &quot;https://legal.appdynamics.com/AppDynamics_EULA_(Non-Americas)_2015.07.01.pdf&quot;))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>EULA URL</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>EULA_or_Agreement_Type__c</fullName>
+        <description>EULA License Types</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Please select the type of EULA that governs this agreement.</inlineHelpText>
+        <label>Agreement Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Signed EULA</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Online On-Premise and SaaS EULA</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Partner</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Email</fullName>
+    </fields>
+    <fields>
+        <fullName>ExpirationDate</fullName>
+    </fields>
+    <fields>
+        <fullName>Fax</fullName>
+    </fields>
+    <fields>
+        <fullName>Federal_Distributor_Margin_Amount__c</fullName>
+        <externalId>false</externalId>
+        <formula>Total_Price_After_Partner_Margin__c  * Federal_Distributor_Margin__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Federal Distributor Margin Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Federal_Distributor_Margin__c</fullName>
+        <externalId>false</externalId>
+        <label>Federal Distributor Margin</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Federal_IP_Marking_Language__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <inlineHelpText>For Federal Deals Only***</inlineHelpText>
+        <label>Federal IP Marking Language</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Final_Discount__c</fullName>
+        <externalId>false</externalId>
+        <label>Final Discount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Final__c</fullName>
+        <externalId>false</externalId>
+        <formula>TotalPrice * (1- Final_Discount__c)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Final</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Flex_Licenses__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <inlineHelpText>End User shall be provided with additional licenses not to exceed 50% of the applicable number of Baseline Licenses</inlineHelpText>
+        <label>Flex Licenses</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>GrandTotal</fullName>
+    </fields>
+    <fields>
+        <fullName>Gross_Total_Price__c</fullName>
+        <description>The Total Price of Quote Line Items prior to One Time Discount, Partner Margin Discount, and Federal Distributor Margin Discounts are applied.</description>
+        <externalId>false</externalId>
+        <label>Gross Total Price</label>
+        <summarizedField>QuoteLineItem.Total_Price_Calculation__c</summarizedField>
+        <summaryFilterItems>
+            <field>QuoteLineItem.Product_Family__c</field>
+            <operation>notEqual</operation>
+            <value>Discount</value>
+        </summaryFilterItems>
+        <summaryForeignKey>QuoteLineItem.QuoteId</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>IsSyncing</fullName>
+    </fields>
+    <fields>
+        <fullName>Is_Partner__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Used for Validation rule: When you have a &quot;Partner&quot; EULA type this field is checked, causing the &quot;VAR Contract Date&quot; to be filled out.</description>
+        <externalId>false</externalId>
+        <label>Is Partner</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Issue_Date__c</fullName>
+        <description>Date at which the quote has been sent out to the potential buyer</description>
+        <externalId>false</externalId>
+        <label>Issue Date</label>
+        <required>false</required>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>License_Delivery_Contact__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>the person to whom the License is delivered</description>
+        <externalId>false</externalId>
+        <label>License Delivery Contact</label>
+        <referenceTo>Contact</referenceTo>
+        <relationshipLabel>Quotes (License Delivery Contact)</relationshipLabel>
+        <relationshipName>Quotes1</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>LineItemCount</fullName>
+    </fields>
+    <fields>
+        <fullName>Line_Item_Count__c</fullName>
+        <externalId>false</externalId>
+        <label>Line Item Count</label>
+        <summaryFilterItems>
+            <field>QuoteLineItem.UnitPrice</field>
+            <operation>greaterThan</operation>
+            <value>0</value>
+        </summaryFilterItems>
+        <summaryForeignKey>QuoteLineItem.QuoteId</summaryForeignKey>
+        <summaryOperation>count</summaryOperation>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Memo_Section__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <inlineHelpText>Notes from the quote will be added to the proposal if this box is checked.</inlineHelpText>
+        <label>Memo Section</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Month_Created__c</fullName>
+        <externalId>false</externalId>
+        <formula>CASE(MONTH(DATEVALUE(CreatedDate)), 1, &quot;01 - January&quot;, 2, &quot;02 - February&quot;, 3, &quot; 03 - March&quot;, 4, &quot; 04 - April&quot;, 5, &quot; 05 - May&quot;, 6, &quot;06 - June&quot;, 7, &quot;07 - July&quot;, 8, &quot;08 - August&quot;, 9, &quot;09 - September&quot;, 10, &quot;10 - October&quot;, 11, &quot;11 - November&quot;, 12, &quot;12 - December&quot;, &quot;None&quot;) &amp; &quot; &quot; &amp; TEXT(YEAR(DATEVALUE(CreatedDate)))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Month Created</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Name</fullName>
+    </fields>
+    <fields>
+        <fullName>Net_After_Partner_Discount_PreAug15__c</fullName>
+        <externalId>false</externalId>
+        <formula>Total_Price_Custom__c * (1 -    Partner_Margin__c )</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Net After Partner Discount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Net_Total_Price__c</fullName>
+        <externalId>false</externalId>
+        <formula>TotalPrice</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Net Total Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Notes_Approval_State__c</fullName>
+        <externalId>false</externalId>
+        <formula>CASE(Notes_Approval_Status__c , 
+&quot;Not Submitted&quot;, IMAGE(&quot;/servlet/servlet.FileDownload?file=01580000001JGx0&quot;,&quot;Red&quot;,16,16), 
+&quot;Rejected&quot;, IMAGE(&quot;/servlet/servlet.FileDownload?file=01580000001JGx0&quot;,&quot;Red&quot;,16,16), 
+&quot;Pending Approval&quot;, IMAGE(&quot;/servlet/servlet.FileDownload?file=01580000001JGx2&quot;,&quot;Amber&quot;,16,16), 
+&quot;Approved&quot;, IMAGE(&quot;/servlet/servlet.FileDownload?file=01580000001JGws&quot;,&quot;Green&quot;,16,16), 
+&quot;No Approval Required&quot;, IMAGE(&quot;/servlet/servlet.FileDownload?file=01580000001JGws&quot;,&quot;Green&quot;,16,16),&quot;&quot;)</formula>
+        <inlineHelpText>Green=No Approval Needed or Approved
+Amber=Pending Approval
+Red= Not Submitted or Rejected</inlineHelpText>
+        <label>Notes Approval State</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Notes_Approval_Status__c</fullName>
+        <description>A status update based on if notes have been added to the quote for customer purposes</description>
+        <externalId>false</externalId>
+        <label>Notes Approval Status</label>
+        <picklist>
+            <picklistValues>
+                <fullName>No Approval Required</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Not Submitted</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Pending Approval</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Approved</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Rejected</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Notes__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Please include notes here if you would like them to show up on the proposal</inlineHelpText>
+        <label>Notes</label>
+        <length>131072</length>
+        <type>Html</type>
+        <visibleLines>10</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Number_Of_Yrs__c</fullName>
+        <externalId>false</externalId>
+        <label>Number Of Yrs</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Number_of_Non_VSOE_Products__c</fullName>
+        <externalId>false</externalId>
+        <label>Number of Non VSOE Products</label>
+        <summaryFilterItems>
+            <field>QuoteLineItem.Standard_Non_VSOE__c</field>
+            <operation>equals</operation>
+            <value>True</value>
+        </summaryFilterItems>
+        <summaryForeignKey>QuoteLineItem.QuoteId</summaryForeignKey>
+        <summaryOperation>count</summaryOperation>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Number_of_VSOE_Products__c</fullName>
+        <externalId>false</externalId>
+        <label>Number of VSOE Products</label>
+        <summaryFilterItems>
+            <field>QuoteLineItem.Requires_VSOE_Approval__c</field>
+            <operation>equals</operation>
+            <value>True</value>
+        </summaryFilterItems>
+        <summaryForeignKey>QuoteLineItem.QuoteId</summaryForeignKey>
+        <summaryOperation>count</summaryOperation>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>One_Time_Discount_Calc_Total_Price__c</fullName>
+        <description>Roll up of Quote Line Item Total Price values used for calculating the One Time Discount Distribution across Quote Line Items related to the Quote.</description>
+        <externalId>false</externalId>
+        <label>One Time Discount Calc Total Price</label>
+        <summarizedField>QuoteLineItem.Total_Price_Calculation__c</summarizedField>
+        <summaryFilterItems>
+            <field>QuoteLineItem.New_or_Renewal__c</field>
+            <operation>notEqual</operation>
+            <value>Renewal Business</value>
+        </summaryFilterItems>
+        <summaryFilterItems>
+            <field>QuoteLineItem.Product_Family__c</field>
+            <operation>notEqual</operation>
+            <value>Discount</value>
+        </summaryFilterItems>
+        <summaryForeignKey>QuoteLineItem.QuoteId</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>One_Time_Discount_Percentage__c</fullName>
+        <defaultValue>0</defaultValue>
+        <description>The One Time Discount to be applied to the Total Price of the Quote.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter a One Time Discount to be applied against the Total Price of the Quote</inlineHelpText>
+        <label>One Time Discount %</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>13</scale>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>One_Time_Discount_Perpetual__c</fullName>
+        <description>summary of only the perpetual products one time discount</description>
+        <externalId>false</externalId>
+        <label>One Time Discount Perpetual</label>
+        <summarizedField>QuoteLineItem.Field_Discount_Amount__c</summarizedField>
+        <summaryFilterItems>
+            <field>QuoteLineItem.Product_Family__c</field>
+            <operation>equals</operation>
+            <value>Perpetual License</value>
+        </summaryFilterItems>
+        <summaryForeignKey>QuoteLineItem.QuoteId</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>One_Time_Discount_Total__c</fullName>
+        <externalId>false</externalId>
+        <label>One Time Discount Total</label>
+        <summarizedField>QuoteLineItem.One_Time_Discount_Amount__c</summarizedField>
+        <summaryForeignKey>QuoteLineItem.QuoteId</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>One_Time_Discount__c</fullName>
+        <description>This is the one time discount price based on the line item</description>
+        <externalId>false</externalId>
+        <label>One Time Discount</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Online_On_Premise_EULA__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Online On-Premise EULA</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Online_On_Premise_and_Saas_EULA__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Online On-Premise and Saas EULA</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Online_SaaS_EULA__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Online SaaS EULA</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Opp_Id__c</fullName>
+        <externalId>false</externalId>
+        <formula>Opportunity.Id</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Opp Id</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>OpportunityId</fullName>
+        <type>MasterDetail</type>
+    </fields>
+    <fields>
+        <fullName>Opportunity_Booked_Date__c</fullName>
+        <externalId>false</externalId>
+        <formula>Opportunity.Booked_Date__c</formula>
+        <label>Opportunity Booked Date</label>
+        <required>false</required>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Opportunity_Close_Date__c</fullName>
+        <externalId>false</externalId>
+        <formula>Opportunity.CloseDate</formula>
+        <label>Opportunity Close Date</label>
+        <required>false</required>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Opportunity_Owner__c</fullName>
+        <externalId>false</externalId>
+        <formula>Opportunity.OwnerId</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Opportunity Owner</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Opportunity_Stage__c</fullName>
+        <externalId>false</externalId>
+        <formula>TEXT(Opportunity.StageName )</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Opportunity Stage</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Order_Total_After_One_Time_Discount__c</fullName>
+        <externalId>false</externalId>
+        <formula>Subtotal_incl_Volume_Discount__c - One_Time_Discount_Total__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Order Total After One Time Discount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Overall_Discount_Percentage__c</fullName>
+        <description>Old Formula:  IF((Subtotal - One_Time_Discount__c - Partner_Margin_Amount__c) &gt; 0, 
+ 1 - ((TotalPrice + Partner_Margin_Amount__c - One_Time_Discount__c) / (Subtotal + Partner_Margin_Amount__c)),
+ 0)</description>
+        <externalId>false</externalId>
+        <formula>IF(
+Net_Total_Price__c &gt; 0,
+(Gross_Total_Price__c -  Net_Total_Price__c )/Gross_Total_Price__c,
+0)</formula>
+        <label>Overall Discount Percentage</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>PO_Required__c</fullName>
+        <defaultValue>true</defaultValue>
+        <externalId>false</externalId>
+        <label>PO Required</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Partner_Email__c</fullName>
+        <externalId>false</externalId>
+        <formula>Contact.Email</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Partner Email</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Partner_Margin_Amount__c</fullName>
+        <description>Total_Price_Custom__c - Net_After_Partner_Discount_PreAug15__c</description>
+        <externalId>false</externalId>
+        <formula>(Gross_Total_Price__c - One_Time_Discount__c)*Partner_Margin__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Total Partner Margin Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Partner_Margin_Discount_Calc_Total_Price__c</fullName>
+        <description>Roll up of Quote Line Item Total Price values used for calculating the Partner Margin Discount distribution across Quote Line Items related to the Quote.</description>
+        <externalId>false</externalId>
+        <label>Partner Margin Discount Calc Total Price</label>
+        <summarizedField>QuoteLineItem.Total_Price_Calculation__c</summarizedField>
+        <summaryFilterItems>
+            <field>QuoteLineItem.Product_Family__c</field>
+            <operation>notEqual</operation>
+            <value>Discount, Hosting, User Conference, Other</value>
+        </summaryFilterItems>
+        <summaryForeignKey>QuoteLineItem.QuoteId</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Partner_Margin_Discount__c</fullName>
+        <externalId>false</externalId>
+        <label>Partner Margin Discount %</label>
+        <precision>13</precision>
+        <required>false</required>
+        <scale>10</scale>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Partner_Margin_Total__c</fullName>
+        <externalId>false</externalId>
+        <label>Partner Margin Total</label>
+        <summarizedField>QuoteLineItem.Partner_Margin_Amount__c</summarizedField>
+        <summaryForeignKey>QuoteLineItem.QuoteId</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Partner_Margin__c</fullName>
+        <externalId>false</externalId>
+        <label>Partner Margin %</label>
+        <precision>8</precision>
+        <required>false</required>
+        <scale>5</scale>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Partner_Phone__c</fullName>
+        <externalId>false</externalId>
+        <formula>Contact.Phone</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Partner Phone</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Partner__c</fullName>
+        <externalId>false</externalId>
+        <formula>Contact.Account.Name</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Partner Account</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Partner_on_Quote__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Partner on Quote</label>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Quotes</relationshipLabel>
+        <relationshipName>Quotes</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Payment_Schedule__c</fullName>
+        <externalId>false</externalId>
+        <label>Payment Schedule</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Standard</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Annual Equal Payments</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Annual Custom Payments</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Custom</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Payment_Terms__c</fullName>
+        <externalId>false</externalId>
+        <label>Payment Terms</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Net 14</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Net 30</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Net 45</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Net 60</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Perpetual_After_Volume_Discount_Changed__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>A trigger should check this field when the Perpetual Total After Volume Discount Roll-up Summary field is changed.</description>
+        <externalId>false</externalId>
+        <label>Perpetual After Volume Discount Changed</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Perpetual_License_Volume_Discount_Total__c</fullName>
+        <description>Total of only the perpetual license volume discount</description>
+        <externalId>false</externalId>
+        <label>Perpetual License Volume Discount Total</label>
+        <summarizedField>QuoteLineItem.Volume_Discount_Amount__c</summarizedField>
+        <summaryFilterItems>
+            <field>QuoteLineItem.Product_Family__c</field>
+            <operation>equals</operation>
+            <value>Perpetual License</value>
+        </summaryFilterItems>
+        <summaryForeignKey>QuoteLineItem.QuoteId</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Perpetual_License_total_del__c</fullName>
+        <description>Total Value of products that fall in the perpetual license product family.</description>
+        <externalId>false</externalId>
+        <label>Perpetual License Total</label>
+        <summarizedField>QuoteLineItem.Total_Price_Static__c</summarizedField>
+        <summaryFilterItems>
+            <field>QuoteLineItem.Product_Family__c</field>
+            <operation>equals</operation>
+            <value>Perpetual License</value>
+        </summaryFilterItems>
+        <summaryForeignKey>QuoteLineItem.QuoteId</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Perpetual_Licenses_Subtotal__c</fullName>
+        <description>The sum value of the Subtotal (Total minus Volume Discount) field on all Perpetual License Quote Line Items on the Quote.</description>
+        <externalId>false</externalId>
+        <label>Perpetual Licenses Subtotal</label>
+        <summarizedField>QuoteLineItem.Subtotal_custom__c</summarizedField>
+        <summaryFilterItems>
+            <field>QuoteLineItem.Product_Family__c</field>
+            <operation>equals</operation>
+            <value>Perpetual License</value>
+        </summaryFilterItems>
+        <summaryForeignKey>QuoteLineItem.QuoteId</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Perpetual_Total_Volume_Discount__c</fullName>
+        <description>The sum Total Price of all Products on the Quote from the Perpetual License Family.</description>
+        <externalId>false</externalId>
+        <formula>Perpetual_License_total_del__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Perpetual Total After Volume Discount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Phone</fullName>
+    </fields>
+    <fields>
+        <fullName>Price_Lock_During_Term__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <inlineHelpText>The price per unit shall remain the same as those set forth in this Order Form</inlineHelpText>
+        <label>Price Lock During Term</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Primary_Contact__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>Primary contact at the end customer</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Primary person who should receive the invoice.</inlineHelpText>
+        <label>Primary Billing Contact</label>
+        <referenceTo>Contact</referenceTo>
+        <relationshipLabel>Quotes</relationshipLabel>
+        <relationshipName>Quotes</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Primary_Support_Contact__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>End customer Primary Support contact</description>
+        <externalId>false</externalId>
+        <label>Primary Support Contact</label>
+        <referenceTo>Contact</referenceTo>
+        <relationshipLabel>Quotes (Primary Support Contact)</relationshipLabel>
+        <relationshipName>Quotes2</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>QuoteToName</fullName>
+    </fields>
+    <fields>
+        <fullName>Quote_Approval_Level_1__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(Overall_Discount_Percentage__c&gt;=0.07,TRUE,FALSE)</formula>
+        <label>Quote Approval Level 1</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Quote_Approval_Level_2__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(Overall_Discount_Percentage__c&gt;=0.16,TRUE,FALSE)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Quote Approval Level 2</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Quote_Approval_Level_3__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(Overall_Discount_Percentage__c&gt;=0.25,TRUE,FALSE)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Quote Approval Level 3</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Quote_Approval_Level_4__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(Overall_Discount_Percentage__c&gt;=0.50,TRUE,FALSE)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Quote Approval Level 4</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Quote_Approval_State__c</fullName>
+        <externalId>false</externalId>
+        <formula>CASE(  Quote_Approval_Status__c  ,
+&quot;Not Submitted&quot;, IMAGE(&quot;/servlet/servlet.FileDownload?file=01580000001JGx0&quot;,&quot;Red&quot;,16,16),
+&quot;Rejected&quot;, IMAGE(&quot;/servlet/servlet.FileDownload?file=01580000001JGx0&quot;,&quot;Red&quot;,16,16),
+&quot;Pending Approval&quot;, IMAGE(&quot;/servlet/servlet.FileDownload?file=01580000001JGx2&quot;,&quot;Amber&quot;,16,16),
+&quot;Approved&quot;, IMAGE(&quot;/servlet/servlet.FileDownload?file=01580000001JGws&quot;,&quot;Green&quot;,16,16),
+&quot;Approval Not Required&quot;, IMAGE(&quot;/servlet/servlet.FileDownload?file=01580000001JGws&quot;,&quot;Green&quot;,16,16),&quot;&quot;)</formula>
+        <inlineHelpText>Green=No Approval Needed or Approved
+Amber=Pending Approval
+Red= Not Submitted or Rejected</inlineHelpText>
+        <label>Quote Approval State</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Quote_Approval_Status__c</fullName>
+        <description>Used in Red/Amber/Green Approval Status Calculation</description>
+        <externalId>false</externalId>
+        <label>Quote Approval Status</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Not Submitted</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Approval Not Required</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Pending Approval</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Approved</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Rejected</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Quote_Created__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>This gets checked by workflow once a quote gets created.</description>
+        <externalId>false</externalId>
+        <label>Quote Created</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Quote_Creator__c</fullName>
+        <externalId>false</externalId>
+        <formula>CreatedBy.FirstName+&apos; &apos;+CreatedBy.LastName</formula>
+        <label>Quote Creator</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Quote_Requires_Approval__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF( Sum_of_All_Approvals__c &gt;0 &amp;&amp;  BMXB__Quote_Approved__c = FALSE, IMAGE(&quot;/servlet/servlet.FileDownload?file=015S0000000TvHQ&quot;,&quot;Red&quot;),IMAGE(&quot;/servlet/servlet.FileDownload?file=015S0000000TvHI&quot;,&quot;Green&quot;))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Red: Quote Must Be submitted for approval
+Green: Approval Not Required</inlineHelpText>
+        <label>Quote Requires Approval?</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Requires_2nd_approval_count__c</fullName>
+        <externalId>false</externalId>
+        <label>Number of Line Items Needing Approval 2</label>
+        <summaryFilterItems>
+            <field>QuoteLineItem.Requires_Approval_2__c</field>
+            <operation>equals</operation>
+            <value>True</value>
+        </summaryFilterItems>
+        <summaryForeignKey>QuoteLineItem.QuoteId</summaryForeignKey>
+        <summaryOperation>count</summaryOperation>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Requires_3rd_Approval__c</fullName>
+        <externalId>false</externalId>
+        <label>Number of Line Items Needing Approval 3</label>
+        <summaryFilterItems>
+            <field>QuoteLineItem.Requires_Approval_3__c</field>
+            <operation>equals</operation>
+            <value>True</value>
+        </summaryFilterItems>
+        <summaryForeignKey>QuoteLineItem.QuoteId</summaryForeignKey>
+        <summaryOperation>count</summaryOperation>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Requires_Approval_4_Count__c</fullName>
+        <externalId>false</externalId>
+        <label>Number of Line Items Needing Approval 4</label>
+        <summaryFilterItems>
+            <field>QuoteLineItem.Requires_Approval_4__c</field>
+            <operation>equals</operation>
+            <value>True</value>
+        </summaryFilterItems>
+        <summaryForeignKey>QuoteLineItem.QuoteId</summaryForeignKey>
+        <summaryOperation>count</summaryOperation>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Sales_Rep_E_mail__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>The email that will appear on the proposal once it is generated</inlineHelpText>
+        <label>Sales Rep E-mail</label>
+        <required>false</required>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Sales_Rep_Email_fx__c</fullName>
+        <externalId>false</externalId>
+        <formula>Sales_Rep_Name__r.Email</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Sales Rep Email</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Sales_Rep_Name__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <inlineHelpText>Name that will show up on the quote</inlineHelpText>
+        <label>Sales Rep Name</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Quotes</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Sales_Rep_Phone_Number__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>The phone number that will appear on the proposal once it is generated.</inlineHelpText>
+        <label>Sales Rep Phone Number</label>
+        <required>false</required>
+        <type>Phone</type>
+    </fields>
+    <fields>
+        <fullName>Sales_Rep_Phone_fx__c</fullName>
+        <externalId>false</externalId>
+        <formula>Sales_Rep_Name__r.Phone</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Sales Rep Phone</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Services_Total_Price_For_PM__c</fullName>
+        <description>Rollup of Total Price for Quote Line Items where Product Family = Services.  Used to calculate Service Partner Margin Amount.</description>
+        <externalId>false</externalId>
+        <label>Services Total Price For PM</label>
+        <summarizedField>QuoteLineItem.Total_Price_Calculation__c</summarizedField>
+        <summaryFilterItems>
+            <field>QuoteLineItem.Product_Family__c</field>
+            <operation>equals</operation>
+            <value>Service</value>
+        </summaryFilterItems>
+        <summaryForeignKey>QuoteLineItem.QuoteId</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Ship_To_Address__c</fullName>
+        <externalId>false</externalId>
+        <formula>License_Delivery_Contact__r.MailingStreet  &amp; BR() &amp;
+License_Delivery_Contact__r.MailingCity &amp; &quot;,&quot; &amp; License_Delivery_Contact__r.MailingState &amp; &quot; &quot; &amp;
+License_Delivery_Contact__r.MailingPostalCode &amp; BR()
+&amp;License_Delivery_Contact__r.MailingCountry</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Ship To Address</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Ship_To_Name__c</fullName>
+        <externalId>false</externalId>
+        <formula>License_Delivery_Contact__r.Account.Name</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Ship To Name</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Ship_to_Email__c</fullName>
+        <externalId>false</externalId>
+        <formula>License_Delivery_Contact__r.Email</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Ship to Email</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>ShippingHandling</fullName>
+    </fields>
+    <fields>
+        <fullName>ShippingName</fullName>
+    </fields>
+    <fields>
+        <fullName>Signed_Agreement_Date__c</fullName>
+        <externalId>false</externalId>
+        <label>Signed EULA Date</label>
+        <required>false</required>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Signed_EULA__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Signed EULA</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Status</fullName>
+        <picklist>
+            <picklistValues>
+                <fullName>Draft</fullName>
+                <allowEmail>true</allowEmail>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Needs Review</fullName>
+                <allowEmail>true</allowEmail>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>In Review</fullName>
+                <allowEmail>true</allowEmail>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Approved</fullName>
+                <allowEmail>true</allowEmail>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Rejected</fullName>
+                <allowEmail>true</allowEmail>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Presented</fullName>
+                <allowEmail>true</allowEmail>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Accepted</fullName>
+                <allowEmail>true</allowEmail>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Denied</fullName>
+                <allowEmail>true</allowEmail>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Subject_to_AppDynamics_EULA__c</fullName>
+        <defaultValue>true</defaultValue>
+        <description>Check this box when the customer agrees to our Standard Software License EULA.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check this box when the customer agrees to our Standard Software License EULA.</inlineHelpText>
+        <label>Subject to AppDynamics EULA</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Subject_to_Std_Terms_of_VAR_Agreement__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>This deal is subject to the standard terms detailed in the AppDynamics VAR agreement signed by the partner.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>This deal is subject to the standard terms detailed in the AppDynamics VAR agreement signed by the partner.</inlineHelpText>
+        <label>Subject to Std Terms of VAR Agreement</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Submitted__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Submitted</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Subscription_Start_Date__c</fullName>
+        <externalId>false</externalId>
+        <label>Subscription Start Date</label>
+        <required>false</required>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Subtotal</fullName>
+    </fields>
+    <fields>
+        <fullName>Subtotal_For_Premium_Subscript_Support__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>This field is equal to the the sum of the Subtotal field for line items from the Perpetual License, SaaS Subcription, and On-Premise Subscription Product Families. 
+It is used to calculate line items from the Premium Subscriptions Support Product Family</inlineHelpText>
+        <label>Subtotal For Premium Subscript Support</label>
+        <summarizedField>QuoteLineItem.Subtotal_custom__c</summarizedField>
+        <summaryFilterItems>
+            <field>QuoteLineItem.Product_Family__c</field>
+            <operation>equals</operation>
+            <value>On-Premise Subscription, SaaS Subscription, Perpetual License</value>
+        </summaryFilterItems>
+        <summaryForeignKey>QuoteLineItem.QuoteId</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Subtotal_incl_Volume_Discount__c</fullName>
+        <description>Subtotal of all line items&apos; list price * months * quantity MINUS Volume Discount. I.e Price before Partner Margin Discount and One Time Discount.</description>
+        <externalId>false</externalId>
+        <label>Subtotal</label>
+        <summarizedField>QuoteLineItem.Subtotal_custom__c</summarizedField>
+        <summaryForeignKey>QuoteLineItem.QuoteId</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Sum_of_All_Approvals__c</fullName>
+        <description>Calculates total number of approvals needed for quote</description>
+        <externalId>false</externalId>
+        <formula>BMXB__Number_of_Line_Items_Needing_Approval__c +  Requires_2nd_approval_count__c +  Requires_3rd_Approval__c +  Requires_Approval_4_Count__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Sum of All Approvals</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Support_Percent__c</fullName>
+        <externalId>false</externalId>
+        <label>Support Percent</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Swap_Product_Licenses__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <inlineHelpText>During the term of this Order Form, End User may (once per calendar quarter and upon 24 business hours&apos; written notice) exchange licenses among the following types of Software units (AppDynamics Pro Edition for Java, PHP, .NET, or NodeJS)</inlineHelpText>
+        <label>Swap Product Licenses</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Tax</fullName>
+    </fields>
+    <fields>
+        <fullName>TotalPrice</fullName>
+    </fields>
+    <fields>
+        <fullName>Total_Before_Discounts__c</fullName>
+        <description>This field shows the Sum Total of all the Quote Line Items before any discounts.</description>
+        <externalId>false</externalId>
+        <formula>Subtotal_incl_Volume_Discount__c +  Volume_Discount_Total_Amt__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Total Before Discounts</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Total_Discount_Percentage__c</fullName>
+        <externalId>false</externalId>
+        <formula>1-( TotalPrice  / Total_Before_Discounts__c   )</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Total Discount Percentage</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Total_Due_AppDynamics__c</fullName>
+        <externalId>false</externalId>
+        <formula>TotalPrice</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Total Due AppDynamics</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Total_Due__c</fullName>
+        <description>Total Due without Field Discount</description>
+        <externalId>false</externalId>
+        <formula>TotalPrice - Volume_Discount_Total_Amt__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Total Due</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Total_Less_Partner_Margin__c</fullName>
+        <description>This field represents the Total Price of the Quote before any discount minus the amount taken off for Partner Margin.</description>
+        <externalId>false</externalId>
+        <formula>Total_Before_Discounts__c  -  Partner_Margin_Total__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Total Less Partner Margin</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Total_Price_After_Fed_Dist_Margin__c</fullName>
+        <externalId>false</externalId>
+        <formula>Gross_Total_Price__c - One_Time_Discount__c - Partner_Margin_Amount__c - Federal_Distributor_Margin_Amount__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Total Price After Fed. Dist. Margin</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Total_Price_After_Partner_Margin__c</fullName>
+        <externalId>false</externalId>
+        <formula>Gross_Total_Price__c - One_Time_Discount__c - Partner_Margin_Amount__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Total Price After Partner Margin</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Total_Price_Before_Partner_Margin__c</fullName>
+        <externalId>false</externalId>
+        <formula>TotalPrice+Partner_Margin_Amount__c +  Federal_Distributor_Margin_Amount__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Total Price Before Partner Margin</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Total_Price_Custom__c</fullName>
+        <description>Gross Total Price minus the One Time Discount amount.
+
+Referenced by code inserting Partner Margin SKU.</description>
+        <externalId>false</externalId>
+        <label>Total Price After One Time Discount</label>
+        <precision>12</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>VAR_Contract_Date__c</fullName>
+        <externalId>false</externalId>
+        <formula>Partner_on_Quote__r.Date_VAR_Contract_Signed__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>VAR Contract Date</label>
+        <required>false</required>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Volume_Discount_Total_Amt__c</fullName>
+        <externalId>false</externalId>
+        <label>Volume Discount Total</label>
+        <summarizedField>QuoteLineItem.Volume_Discount_Amount__c</summarizedField>
+        <summaryForeignKey>QuoteLineItem.QuoteId</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>We_have_read_agreed_to_terms__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Check this box when the customer has negotiated specific changes to the AppDynamics Standard EULA.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check this box when the customer has negotiated specific changes to the AppDynamics Standard EULA.   Be sure to fill in the date of the signed agreement.</inlineHelpText>
+        <label>Subject to the Agreement Dated:</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Year_1__c</fullName>
+        <externalId>false</externalId>
+        <label>Year 1</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Year_2__c</fullName>
+        <externalId>false</externalId>
+        <label>Year 2</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Year_3__c</fullName>
+        <externalId>false</externalId>
+        <label>Year 3</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <recordTypes>
+        <fullName>Awaiting_Approval</fullName>
+        <active>true</active>
+        <label>Awaiting Approval</label>
+        <picklistValues>
+            <picklist>EULA_or_Agreement_Type__c</picklist>
+            <values>
+                <fullName>Online On-Premise and SaaS EULA</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Partner</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Signed EULA</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Payment_Schedule__c</picklist>
+            <values>
+                <fullName>Annual Custom Payments</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Annual Equal Payments</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Custom</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Standard</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Payment_Terms__c</picklist>
+            <values>
+                <fullName>Net 14</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Net 30</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Net 45</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Net 60</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status</picklist>
+            <values>
+                <fullName>Accepted</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Approved</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Denied</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Draft</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>In Review</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Needs Review</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Presented</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Rejected</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Create_Quote</fullName>
+        <active>true</active>
+        <description>The Initial Create Quote Page Layout</description>
+        <label>Create Quote</label>
+        <picklistValues>
+            <picklist>EULA_or_Agreement_Type__c</picklist>
+            <values>
+                <fullName>Online On-Premise and SaaS EULA</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Partner</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Signed EULA</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Notes_Approval_Status__c</picklist>
+            <values>
+                <fullName>Approved</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>No Approval Required</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Not Submitted</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pending Approval</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Rejected</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Payment_Schedule__c</picklist>
+            <values>
+                <fullName>Annual Custom Payments</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Annual Equal Payments</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Custom</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Standard</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Payment_Terms__c</picklist>
+            <values>
+                <fullName>Net 14</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Net 30</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Net 45</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Net 60</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Quote_Approval_Status__c</picklist>
+            <values>
+                <fullName>Approval Not Required</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Approved</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Not Submitted</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pending Approval</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Rejected</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status</picklist>
+            <values>
+                <fullName>Accepted</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Approved</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Denied</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Draft</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>In Review</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Needs Review</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Presented</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Rejected</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Custom_Payment_Schedule</fullName>
+        <active>true</active>
+        <label>Custom Payment Schedule</label>
+        <picklistValues>
+            <picklist>EULA_or_Agreement_Type__c</picklist>
+            <values>
+                <fullName>Online On-Premise and SaaS EULA</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Partner</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Signed EULA</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Notes_Approval_Status__c</picklist>
+            <values>
+                <fullName>Approved</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>No Approval Required</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Not Submitted</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pending Approval</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Rejected</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Payment_Schedule__c</picklist>
+            <values>
+                <fullName>Annual Custom Payments</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Annual Equal Payments</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Custom</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Standard</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Payment_Terms__c</picklist>
+            <values>
+                <fullName>Net 14</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Net 30</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Net 45</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Net 60</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Quote_Approval_Status__c</picklist>
+            <values>
+                <fullName>Approval Not Required</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Approved</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Not Submitted</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pending Approval</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Rejected</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status</picklist>
+            <values>
+                <fullName>Draft</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Needs Review</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>New_Customer_Quote</fullName>
+        <active>true</active>
+        <description>Generate a quote for a customer</description>
+        <label>New Customer Quote</label>
+        <picklistValues>
+            <picklist>EULA_or_Agreement_Type__c</picklist>
+            <values>
+                <fullName>Online On-Premise and SaaS EULA</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Partner</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Signed EULA</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Notes_Approval_Status__c</picklist>
+            <values>
+                <fullName>Approved</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>No Approval Required</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Not Submitted</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pending Approval</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Rejected</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Payment_Schedule__c</picklist>
+            <values>
+                <fullName>Annual Custom Payments</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Annual Equal Payments</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Custom</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Standard</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Payment_Terms__c</picklist>
+            <values>
+                <fullName>Net 14</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Net 30</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Net 45</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Net 60</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Quote_Approval_Status__c</picklist>
+            <values>
+                <fullName>Approval Not Required</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Approved</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Not Submitted</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pending Approval</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Rejected</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status</picklist>
+            <values>
+                <fullName>Draft</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Needs Review</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Pending_Approval</fullName>
+        <active>true</active>
+        <description>Approval Layout without Start Sync</description>
+        <label>Pending Approval</label>
+        <picklistValues>
+            <picklist>EULA_or_Agreement_Type__c</picklist>
+            <values>
+                <fullName>Online On-Premise and SaaS EULA</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Partner</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Signed EULA</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Notes_Approval_Status__c</picklist>
+            <values>
+                <fullName>Approved</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>No Approval Required</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Not Submitted</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pending Approval</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Rejected</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Payment_Schedule__c</picklist>
+            <values>
+                <fullName>Annual Custom Payments</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Annual Equal Payments</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Custom</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Standard</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Payment_Terms__c</picklist>
+            <values>
+                <fullName>Net 14</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Net 30</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Net 45</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Net 60</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Quote_Approval_Status__c</picklist>
+            <values>
+                <fullName>Rejected</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status</picklist>
+            <values>
+                <fullName>Draft</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Needs Review</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <searchLayouts>
+        <lookupDialogsAdditionalFields>QUOTE.NAME</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>ACCOUNT.NAME</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>OPPORTUNITY.NAME</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>CONTACT.FULL_NAME</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Discount</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>GrandTotal</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>QUOTE.NAME</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>ACCOUNT.NAME</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>OPPORTUNITY.NAME</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>CONTACT.FULL_NAME</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Discount</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>GrandTotal</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>00N800000057KUe</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>QUOTE.PHONE</lookupPhoneDialogsAdditionalFields>
+        <searchResultsAdditionalFields>QUOTE.NAME</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>ACCOUNT.NAME</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>OPPORTUNITY.NAME</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>CONTACT.FULL_NAME</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Discount</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>GrandTotal</searchResultsAdditionalFields>
+    </searchLayouts>
+    <sharingModel>ControlledByParent</sharingModel>
+    <validationRules>
+        <fullName>Agreement_date_is_required</fullName>
+        <active>false</active>
+        <description>If &quot;Subject to Agreement&apos; field is checked, require date to be entered</description>
+        <errorConditionFormula>AND 
+(We_have_read_agreed_to_terms__c = TRUE,
+ISBLANK  (Signed_Agreement_Date__c )
+)</errorConditionFormula>
+        <errorMessage>Please enter date of signed agreement</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>BMXB__End_Date_Must_Be_Greater_Than_Start_Date</fullName>
+        <active>false</active>
+        <errorConditionFormula>BMXB__Start_Date__c &gt;  BMXB__End_Date2__c</errorConditionFormula>
+        <errorDisplayField>BMXB__End_Date2__c</errorDisplayField>
+        <errorMessage>End Date cannot be before Start Date</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>BMXB__No_Negative_Number_of_Terms</fullName>
+        <active>false</active>
+        <description>You cannot enter a negative number for Number of Terms (in Months)</description>
+        <errorConditionFormula>BMXB__Contract_Term_Months__c  &lt; 0</errorConditionFormula>
+        <errorMessage>You cannot enter a negative Number of Terms (in Months)</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Project_Eula_Required_on_Opportunity</fullName>
+        <active>false</active>
+        <errorConditionFormula>ISBLANK(TEXT(Opportunity.Project_Region__c))</errorConditionFormula>
+        <errorMessage>Add Project Country and Project EULA on Opportunity.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Restrict_Net_60_Payment_Terms</fullName>
+        <active>true</active>
+        <errorConditionFormula>AND( 
+ISPICKVAL( Payment_Terms__c,&quot;Net 60&quot;), 
+OR( 
+ISPICKVAL(PRIORVALUE(Payment_Terms__c), &quot;Net 14&quot;), 
+ISPICKVAL(PRIORVALUE(Payment_Terms__c), &quot;Net 30&quot;), 
+ISPICKVAL(PRIORVALUE(Payment_Terms__c), &quot;Net 45&quot;)), 
+$Profile.Name &lt;&gt; &quot;AppD Sys Admin&quot;, 
+$Profile.Name &lt;&gt; &quot;AppD Order Ops&quot;, 
+$Profile.Name &lt;&gt; &quot;System Administrator&quot;, 
+$Profile.Name &lt;&gt; &quot;AppD Legal&quot;, 
+$Profile.Name &lt;&gt; &quot;AppD Finance&quot;)</errorConditionFormula>
+        <errorDisplayField>Payment_Terms__c</errorDisplayField>
+        <errorMessage>Please Choose Net 30 or Net 45 or contact Order Ops</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Signed_EULA_Date_Required</fullName>
+        <active>true</active>
+        <errorConditionFormula>ISPICKVAL( EULA_or_Agreement_Type__c ,&quot;Signed EULA&quot;) &amp;&amp;  ISBLANK( Signed_Agreement_Date__c )</errorConditionFormula>
+        <errorDisplayField>Signed_Agreement_Date__c</errorDisplayField>
+        <errorMessage>Signed Agreement Date is required for signed EULA</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>VAR_Contract_Date_is_Required</fullName>
+        <active>false</active>
+        <description>If &quot;Is_Partner&quot; is checked,  VAR Contract Date require date to be entered</description>
+        <errorConditionFormula>AND 
+( Is_Partner__c = TRUE,
+ISBLANK  ( VAR_Contract_Date__c )
+)</errorConditionFormula>
+        <errorMessage>Please enter VAR Contract Date</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Value_required_for_One_Time_Discount</fullName>
+        <active>false</active>
+        <description>A value must be entered for One Time Discount. 0 may be entered.</description>
+        <errorConditionFormula>ISNULL( One_Time_Discount_Percentage__c )</errorConditionFormula>
+        <errorDisplayField>One_Time_Discount_Percentage__c</errorDisplayField>
+        <errorMessage>A value must be entered for One Time Discount. 0 may be entered.</errorMessage>
+    </validationRules>
+    <webLinks>
+        <fullName>Contact_OrderOps</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <linkType>url</linkType>
+        <masterLabel>Contact OrderOps</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <url>/500/e?cas4={!Account.Name}&amp;CF00N80000005Yfgw={!Quote.Name}&amp;RecordType=01280000000LzIJ&amp;ent=Case</url>
+    </webLinks>
+    <webLinks>
+        <fullName>QConfig__Clone_with_Configurations</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Clone with Configurations</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <url>window.location = &quot;{!$Site.Prefix}&quot; + &quot;/apex/{!IF(LEN($Setup.BMXB__Namespace__c.BMXB__config__c) &gt; 0, $Setup.BMXB__Namespace__c.BMXB__config__c + &quot;__&quot;, &quot;&quot;)}CloneWithChildren?id={!Quote.Id}&amp;childobjecttypes={!IF(LEN($Setup.BMXB__Namespace__c.BMXB__config__c) &gt; 0, $Setup.BMXB__Namespace__c.BMXB__config__c + &quot;__&quot;, &quot;&quot;)}Model__c&quot;;</url>
+    </webLinks>
+</CustomObject>

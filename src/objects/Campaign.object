@@ -1,0 +1,1438 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>AddCampaign</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>AdvancedSetup</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Follow</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>ActualCost</fullName>
+    </fields>
+    <fields>
+        <fullName>AmountAllOpportunities</fullName>
+    </fields>
+    <fields>
+        <fullName>AmountWonOpportunities</fullName>
+    </fields>
+    <fields>
+        <fullName>Audience__c</fullName>
+        <externalId>false</externalId>
+        <label>Audience</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Prospect</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Customer</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Partner</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Internal</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>MultiselectPicklist</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Booth_Sponsor_Cost__c</fullName>
+        <externalId>false</externalId>
+        <label>Booth/Sponsor Cost</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>BudgetedCost</fullName>
+    </fields>
+    <fields>
+        <fullName>CFCR_FCCRM_Campaign_Threshold__c</fullName>
+        <description>Full Circle CRM Field. If used - this number is evaluated as part of the engagement threshold for a new campaign response. Negative values are supported to create responses that below the engagement threshold irrespective of the lead/contact engagement threshold.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Full Circle CRM Field. If used - this number is evaluated as part of the engagement threshold for a new campaign response. Negative values are supported to create responses that below the engagement threshold irrespective of the lead/contact engagement th</inlineHelpText>
+        <label>FCCRM Campaign Threshold</label>
+        <precision>5</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CI_Exclude_From_Influence__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Exclude From Influence</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>CampaignMemberRecordTypeId</fullName>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Campaign_Sub_Type__c</fullName>
+        <externalId>false</externalId>
+        <label>Campaign Sub Type</label>
+        <picklist>
+            <controllingField>Campaign_Type__c</controllingField>
+            <picklistValues>
+                <fullName>Field Event</fullName>
+                <controllingFieldValues>Event</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Corporate Event</fullName>
+                <controllingFieldValues>Event</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sponsored User Group</fullName>
+                <controllingFieldValues>Event</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Hosted User Group</fullName>
+                <controllingFieldValues>Event</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Whitepaper</fullName>
+                <controllingFieldValues>Content Marketing</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Infographic</fullName>
+                <controllingFieldValues>Content Marketing</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>eBook</fullName>
+                <controllingFieldValues>Content Marketing</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Content Syndication</fullName>
+                <controllingFieldValues>Content Marketing</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Analyst Report</fullName>
+                <controllingFieldValues>Content Marketing</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Hosted Field Event</fullName>
+                <controllingFieldValues>Event</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Product</fullName>
+                <controllingFieldValues>Webinar</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Thought Leadership</fullName>
+                <controllingFieldValues>Webinar</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Company</fullName>
+                <controllingFieldValues>Webinar</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Campaign_Type__c</fullName>
+        <externalId>false</externalId>
+        <label>Campaign Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Contact Me</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Email</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Event</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Webinar</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3rd Party Lead Generation</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Self-Serve</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Content Marketing</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sales-Led</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Changes__c</fullName>
+        <description>What will we change next time?</description>
+        <externalId>false</externalId>
+        <inlineHelpText>What will we change next time we do a marketing activity similar to this?</inlineHelpText>
+        <label>Changes</label>
+        <required>false</required>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Clicked_Through__c</fullName>
+        <externalId>false</externalId>
+        <label>Clicked-Through</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Count__c</fullName>
+        <externalId>false</externalId>
+        <formula>1</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Count</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Country__c</fullName>
+        <description>Select all countries that are impacted by this campaign/program</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select all countries that are impacted by this campaign/program. Important to help focus and chase how we are following up leads.</inlineHelpText>
+        <label>Country</label>
+        <picklist>
+            <picklistValues>
+                <fullName>United States</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Canada</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>United Kingdom</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>France</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Netherlands</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Spain</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Belgium</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Italy</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Luxembourg</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Germany</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Austria</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Switzerland</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sweden</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Denmark</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>EMEA-wide</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Global</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Australia</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Indonesia</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Singapore</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Japan</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Malaysia</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>New Zealand</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>China</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Hong Kong</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Thailand</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>India</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>MultiselectPicklist</type>
+        <visibleLines>8</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Description</fullName>
+    </fields>
+    <fields>
+        <fullName>Emails_Opened__c</fullName>
+        <externalId>false</externalId>
+        <label>Emails Opened</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>EndDate</fullName>
+    </fields>
+    <fields>
+        <fullName>Event_ID__c</fullName>
+        <externalId>false</externalId>
+        <label>Event ID</label>
+        <length>10</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>ExpectedResponse</fullName>
+    </fields>
+    <fields>
+        <fullName>ExpectedRevenue</fullName>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Bypass_Nurture_Timeout__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If selected any responses to this campaign will ignore nurture timeout dates set on the lead/contact record.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If selected any responses to this campaign will ignore nurture timeout dates set on the lead/contact record.</inlineHelpText>
+        <label>Bypass Nurture Timeout</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Campaign_Notification_Override__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Allows you to override the defined Full Circle CRM Notification settings</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select when notifications should fire if different than what is in the Full Circle CRM Notification settings.</inlineHelpText>
+        <label>Campaign Notification Override</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Do Not Notify on Open</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Do Not Notify on Already Engaged</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Do Not Notify on Open or Already Engaged</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Campaign_Precedence__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Set to true if a newly generated response to this campaign should replace an existing active response.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Set to true if a newly generated response to this campaign should replace an existing active response.</inlineHelpText>
+        <label>Campaign Precedence</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Campaign_Sourced_By__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Used in the response intelligence tab to determine funnel attribution. Do not adjust these picklist values. Set as required on page layout.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Please select which team is driving this campaign.</inlineHelpText>
+        <label>Campaign Sourced By</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Marketing</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sales</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Partner</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Tracking</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Customer Success</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_CascadeParent__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Reference to cascaded parent campaign</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Indicates the parent campaign if this campaign was created as the result of a repeat response.</inlineHelpText>
+        <label>Cascade Parent</label>
+        <referenceTo>Campaign</referenceTo>
+        <relationshipLabel>Cascaded Campaigns</relationshipLabel>
+        <relationshipName>CascadeParent</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Cascade_Parent_ID__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Displays the ID of the Cascade Parent Campaign. Can be used for dynamic reports.</description>
+        <externalId>false</externalId>
+        <formula>FCRM__FCR_CascadeParent__r.Id</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Displays the ID of the Cascade Parent Campaign.</inlineHelpText>
+        <label>Cascade Parent ID</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_ClosedOpRevenueModel1__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Influenced revenue from responses related to closed-won campaigns</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Revenue Influenced by this campaign.</inlineHelpText>
+        <label>Influence Revenue</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_ClosedOpRevenueModel2__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Influenced revenue from responses related to closed-won campaigns (model 2)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Revenue Influenced by this campaign (model 2)</inlineHelpText>
+        <label>Influence Revenue (model 2)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_ClosedOpRevenueModel3__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Influenced revenue from responses related to closed-won campaigns (model 3)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Revenue Influenced by this campaign.(model 3)</inlineHelpText>
+        <label>Influence Revenue (model 3)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Cost_Per_Response_With_Repeats__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Cost Per Response with repeats is evaluated if the actual cost has a value and there are responses in the field Total Responses (with repeats) - else value is 0.</description>
+        <externalId>false</externalId>
+        <formula>IF ( 
+AND( 
+NOT(ISBLANK(ActualCost )), 
+NOT(ISBLANK( FCRM__FCR_Total_Responses_With_Repeats__c )),
+FCRM__FCR_Total_Responses_With_Repeats__c&gt;0), 
+ActualCost / FCRM__FCR_Total_Responses_With_Repeats__c, 
+0)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Populated if the actual cost has a value and there are responses in the field Total Responses (with repeats).</inlineHelpText>
+        <label>Cost Per Response (with repeats)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Cost_Per_Response__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Cost Per Response is evaluated if the actual cost has a value and there are responses, else value is 0.</description>
+        <externalId>false</externalId>
+        <formula>IF ( 
+AND( 
+NOT(ISBLANK(ActualCost )), 
+NOT(ISBLANK( NumberOfResponses)),
+NumberOfResponses&gt;0), 
+ActualCost / NumberOfResponses, 
+0)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Cost Per Response is evaluated if the actual cost has a value and there are responses, else value is 0.</inlineHelpText>
+        <label>Cost Per Response</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_LostOpRevenueModel1__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Influenced pipeline attributed to closed lost opportunities</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Influenced pipeline attributed to closed lost opportunities</inlineHelpText>
+        <label>Influence Lost</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_LostOpRevenueModel2__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Influenced pipeline attributed to closed lost opportunities from model 2</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Influenced pipeline attributed to closed lost opportunities from model 2</inlineHelpText>
+        <label>Influence Lost (model 2)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_LostOpRevenueModel3__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Influenced pipeline attributed to closed lost opportunities from model 3</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Influenced pipeline attributed to closed lost opportunities from model 3</inlineHelpText>
+        <label>Influence Lost (model 3)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Marketing_Region__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The region this campaign is running in.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The region this campaign is running in.</inlineHelpText>
+        <label>Marketing Region</label>
+        <picklist>
+            <picklistValues>
+                <fullName>APAC</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>EMEA</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Global</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>LATAM</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>NA</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Net_New_Names__c</fullName>
+        <deprecated>false</deprecated>
+        <description># of responses where the campaign member Net New Name field is true. This value is updated via 24 hour batch process.</description>
+        <externalId>false</externalId>
+        <inlineHelpText># of campaign members that are new names.</inlineHelpText>
+        <label># Net New Names</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Net_New_Response_Ratio__c</fullName>
+        <deprecated>false</deprecated>
+        <description>% of responses that are net new names.</description>
+        <externalId>false</externalId>
+        <formula>(FCRM__FCR_Net_New_Names__c /  NumberOfResponses) * 100</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Net New Response Percent</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_OpenOpRevenueModel1__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Revenue from responses related to open opportunities</description>
+        <externalId>false</externalId>
+        <label>Influence Pipeline</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_OpenOpRevenueModel2__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Revenue from responses related to open opportunities (model 2)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Revenue from responses related to open opportunities (model 2)</inlineHelpText>
+        <label>Influence Pipeline (model 2)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_OpenOpRevenueModel3__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Revenue from responses related to open opportunities (model 3)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Revenue from responses related to open opportunities (model 3)</inlineHelpText>
+        <label>Influence Pipeline (model 3)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_QR_s__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Number of Qualified Responses on this Campaign. Updated via batch update.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Number of Qualified Responses to this Campaign.</inlineHelpText>
+        <label># Qualified Responses</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_QR_to_Opportunity_Ratio__c</fullName>
+        <deprecated>false</deprecated>
+        <description>% of qualified responses that resulted in an opportunity</description>
+        <externalId>false</externalId>
+        <formula>(NumberOfOpportunities /  FCRM__FCR_QR_s__c ) * 100</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>% of qualified responses that resulted in an opportunity</inlineHelpText>
+        <label>QR to Opportunity %</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Qualified_Responses_With_Repeats__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Number of qualified responses including repeat (cascade) campaign responses. Updated by batch process every 24 hours. Data may not reflect most recent data depending on last update.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Number of qualified responses including repeat (cascade) campaign responses. Updated by batch process every 24 hours. Data may not reflect most recent data depending on last update.</inlineHelpText>
+        <label># Qualified Responses (with repeats)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Repeat_Campaign_Number__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If the campaign is a repeat (cascade) campaign, this indicates the number in the cascade.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If the campaign is a repeat (cascade) campaign, this field indicates the number in the cascade.</inlineHelpText>
+        <label>Repeat Campaign Number</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Repeat_Response_Timeout_Segments__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Indicates the minimum time allowed between responses to the same campaign by the same individual before they are added to a repeat campaign.  Without a value repeat responses will default to the global value.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Indicates the minimum time allowed between responses to the same campaign by the same individual before they are added to a repeat campaign.</inlineHelpText>
+        <label>Repeat Response Timeout Segments</label>
+        <picklist>
+            <picklistValues>
+                <fullName>2 Minutes</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>8 Hours</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1 Day</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>2 Days</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1 Week</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Repeat_Responses_Allowed__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>True if repeat responses are allowed for this campaign (i.e. cascading enabled).</description>
+        <externalId>false</externalId>
+        <inlineHelpText>True if repeat responses are allowed for this campaign (i.e. cascading enabled).</inlineHelpText>
+        <label>Repeat Responses Allowed</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Responses_to_Won__c</fullName>
+        <deprecated>false</deprecated>
+        <description>% of responses that converted to closed won opportunities.</description>
+        <externalId>false</externalId>
+        <formula>(NumberOfWonOpportunities /  NumberOfResponses) * 100</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>% of responses that resulted in a won opportunity.</inlineHelpText>
+        <label>% Responses Won</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Sales_Information__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Provide information for the Sales team on followup. Displayed on the lead/contact layout for Active Responses.</description>
+        <externalId>false</externalId>
+        <label>Sales Information</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_TotalOpRevenueModel1__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Total Influence Model 1</description>
+        <externalId>false</externalId>
+        <formula>FCRM__FCR_LostOpRevenueModel1__c + FCRM__FCR_OpenOpRevenueModel1__c + FCRM__FCR_ClosedOpRevenueModel1__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Total Influence Model 1</inlineHelpText>
+        <label>Total Influence</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_TotalOpRevenueModel2__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Total Influence Model 2</description>
+        <externalId>false</externalId>
+        <formula>FCRM__FCR_LostOpRevenueModel2__c + FCRM__FCR_OpenOpRevenueModel2__c + FCRM__FCR_ClosedOpRevenueModel2__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Total Influence Model 2</inlineHelpText>
+        <label>Total Influence (model2)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_TotalOpRevenueModel3__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Total Influence Model 3</description>
+        <externalId>false</externalId>
+        <formula>FCRM__FCR_LostOpRevenueModel3__c + FCRM__FCR_OpenOpRevenueModel3__c + FCRM__FCR_ClosedOpRevenueModel3__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Total Influence Model 3</inlineHelpText>
+        <label>Total Influence (model3)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FCRM__FCR_Total_Responses_With_Repeats__c</fullName>
+        <deprecated>false</deprecated>
+        <description>A count of the total responses to this campaign  and any repeat (cascade) campaign responses.Updated by batch process every 24 hours.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Total number of responses with any any repeat (cascade) campaign responses.Updated by batch process every 24 hours.</inlineHelpText>
+        <label>Total Responses (with repeats)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FC_Defer_To_Reanimation__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Defer To Reanimation</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>FC_Exclude_From_Reanimation__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Exclude From Reanimation</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>HierarchyActualCost</fullName>
+    </fields>
+    <fields>
+        <fullName>HierarchyAmountAllOpportunities</fullName>
+    </fields>
+    <fields>
+        <fullName>HierarchyAmountWonOpportunities</fullName>
+    </fields>
+    <fields>
+        <fullName>HierarchyBudgetedCost</fullName>
+    </fields>
+    <fields>
+        <fullName>HierarchyExpectedRevenue</fullName>
+    </fields>
+    <fields>
+        <fullName>HierarchyNumberOfContacts</fullName>
+    </fields>
+    <fields>
+        <fullName>HierarchyNumberOfConvertedLeads</fullName>
+    </fields>
+    <fields>
+        <fullName>HierarchyNumberOfLeads</fullName>
+    </fields>
+    <fields>
+        <fullName>HierarchyNumberOfOpportunities</fullName>
+    </fields>
+    <fields>
+        <fullName>HierarchyNumberOfResponses</fullName>
+    </fields>
+    <fields>
+        <fullName>HierarchyNumberOfWonOpportunities</fullName>
+    </fields>
+    <fields>
+        <fullName>HierarchyNumberSent</fullName>
+    </fields>
+    <fields>
+        <fullName>IsActive</fullName>
+    </fields>
+    <fields>
+        <fullName>Learns__c</fullName>
+        <description>What &apos;Learns&apos; did we have from this marketing activity?</description>
+        <externalId>false</externalId>
+        <label>Learns</label>
+        <required>false</required>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Name</fullName>
+    </fields>
+    <fields>
+        <fullName>NumberOfContacts</fullName>
+    </fields>
+    <fields>
+        <fullName>NumberOfConvertedLeads</fullName>
+    </fields>
+    <fields>
+        <fullName>NumberOfLeads</fullName>
+    </fields>
+    <fields>
+        <fullName>NumberOfOpportunities</fullName>
+    </fields>
+    <fields>
+        <fullName>NumberOfResponses</fullName>
+    </fields>
+    <fields>
+        <fullName>NumberOfWonOpportunities</fullName>
+    </fields>
+    <fields>
+        <fullName>NumberSent</fullName>
+    </fields>
+    <fields>
+        <fullName>OwnerId</fullName>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>ParentId</fullName>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Partner__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>Enter name of partner if this campaign is joint</description>
+        <externalId>false</externalId>
+        <label>Partner (if applicable)</label>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Campaigns</relationshipLabel>
+        <relationshipName>Campaigns</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>ROI_Closed_Won_Deals__c</fullName>
+        <description>ROI on bookings = Value of Won Opportunities / Total Cost</description>
+        <externalId>false</externalId>
+        <formula>AmountWonOpportunities / Total_Cost__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>ROI on bookings = Value of Won Opportunities / Total Cost</inlineHelpText>
+        <label>ROI (Closed Won Deals)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>1</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>ROI_Pipeline__c</fullName>
+        <description>Pipeline ROI (Total opportunity value / Total cost)</description>
+        <externalId>false</externalId>
+        <formula>AmountAllOpportunities / Total_Cost__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>ROI (Pipeline)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>1</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Region__c</fullName>
+        <externalId>false</externalId>
+        <label>Region</label>
+        <picklist>
+            <picklistValues>
+                <fullName>NA - East (up to start FY14)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>NA - Central</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>NA - North East</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>NA - South</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>NA - West</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>EMEA</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>EMEA - Southern</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>EMEA - Central</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>EMEA - UK &amp; Northern</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>APAC</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Global</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>MultiselectPicklist</type>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Sponsorship_Level__c</fullName>
+        <externalId>false</externalId>
+        <label>Sponsorship Level</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>StartDate</fullName>
+    </fields>
+    <fields>
+        <fullName>Status</fullName>
+        <picklist>
+            <picklistValues>
+                <fullName>In Progress</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Completed</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Aborted</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Planned</fullName>
+                <default>true</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Total_Cost__c</fullName>
+        <externalId>false</externalId>
+        <label>Total Cost</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Type</fullName>
+        <picklist>
+            <picklistValues>
+                <fullName>Advertisement</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Case Study</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Competitive Take-Out</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Direct Marketing</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Email</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Employee PG</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Event: AppDynamics-Hosted</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Event: AppJam</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Event: Conference</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Event: Networking</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Event: Partner Event</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Event: Presentation</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Event: Tradeshow</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Event: User Group</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Event: User Group - AppDynamics</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Event: Webinar</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Fremium</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Incentive</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Online: Banner Ads</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Online: PPC</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Online: SEO</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Partner Generated</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Partner Marketing</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>PR &amp; Analyst</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Prize Draw</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Referral Program</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Renewal</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sales Tool</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Telemarketing</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Training</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Webinar</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Webinar - Training</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Website</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>White Paper Offer</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Asset Downloads</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Wins__c</fullName>
+        <description>What &apos;Wins&apos; did we have from this marketing activity?</description>
+        <externalId>false</externalId>
+        <label>Wins</label>
+        <required>false</required>
+        <type>TextArea</type>
+    </fields>
+    <listViews>
+        <fullName>Alec_s_Mass_Drip_Campaign</fullName>
+        <columns>CAMPAIGN.NAME</columns>
+        <columns>CAMPAIGN.START_DATE</columns>
+        <columns>CAMPAIGN.END_DATE</columns>
+        <columns>CAMPAIGN.BUDGETED_COST</columns>
+        <columns>CAMPAIGN.ACTUAL_COST</columns>
+        <columns>CAMPAIGN.CAMPAIGN_TYPE</columns>
+        <columns>CAMPAIGN.STATUS</columns>
+        <filterScope>Everything</filterScope>
+        <label>Alec&apos;s Mass Drip Campaign</label>
+    </listViews>
+    <listViews>
+        <fullName>All_Campaigns</fullName>
+        <columns>CAMPAIGN.CREATED_DATE</columns>
+        <columns>CAMPAIGN.NAME</columns>
+        <columns>CAMPAIGN.CAMPAIGN_TYPE</columns>
+        <columns>CAMPAIGN.STATUS</columns>
+        <columns>CAMPAIGN.ACTIVE</columns>
+        <columns>CAMPAIGN.NUM_LEADS</columns>
+        <columns>CAMPAIGN.NUM_CONVERTED_LEADS</columns>
+        <columns>CAMPAIGN.NUM_CONTACTS</columns>
+        <columns>CAMPAIGN.START_DATE</columns>
+        <columns>CAMPAIGN.NUM_OPPORTUNITIES</columns>
+        <columns>CAMPAIGN.NUM_WON_OPPORTUNITIES</columns>
+        <columns>AMOUNT_WON</columns>
+        <columns>AMOUNT_ALL</columns>
+        <filterScope>Everything</filterScope>
+        <label>All Campaigns</label>
+        <language>en_US</language>
+        <sharedTo>
+            <allInternalUsers></allInternalUsers>
+            <group>AppDynamicsStaff</group>
+        </sharedTo>
+    </listViews>
+    <listViews>
+        <fullName>Appsphere_Conference_2014</fullName>
+        <columns>CAMPAIGN.NAME</columns>
+        <columns>CAMPAIGN.NUM_LEADS</columns>
+        <columns>CAMPAIGN.NUM_CONTACTS</columns>
+        <columns>CAMPAIGN.START_DATE</columns>
+        <columns>CAMPAIGN.END_DATE</columns>
+        <columns>CAMPAIGN.CAMPAIGN_TYPE</columns>
+        <columns>CAMPAIGN.STATUS</columns>
+        <columns>CAMPAIGN.NUM_SENT</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>CAMPAIGN.NAME</field>
+            <operation>equals</operation>
+            <value>Appsphere Conference 2014</value>
+        </filters>
+        <label>Appsphere Conference 2014</label>
+        <sharedTo>
+            <role>Marketing_User</role>
+        </sharedTo>
+    </listViews>
+    <listViews>
+        <fullName>Partner_Webinars</fullName>
+        <columns>CAMPAIGN.NAME</columns>
+        <columns>CAMPAIGN.START_DATE</columns>
+        <columns>CAMPAIGN.CAMPAIGN_TYPE</columns>
+        <columns>CAMPAIGN.NUM_LEADS</columns>
+        <columns>CAMPAIGN.NUM_CONTACTS</columns>
+        <columns>CAMPAIGN.NUM_RESPONSES</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>CAMPAIGN.CAMPAIGN_TYPE</field>
+            <operation>equals</operation>
+            <value>Webinar</value>
+        </filters>
+        <label>Partner Webinars</label>
+        <sharedTo>
+            <allInternalUsers></allInternalUsers>
+        </sharedTo>
+    </listViews>
+    <listViews>
+        <fullName>Prospecting_Lists</fullName>
+        <columns>CAMPAIGN.NAME</columns>
+        <columns>CAMPAIGN.START_DATE</columns>
+        <columns>CAMPAIGN.CAMPAIGN_TYPE</columns>
+        <columns>CAMPAIGN.NUM_LEADS</columns>
+        <columns>CAMPAIGN.NUM_CONVERTED_LEADS</columns>
+        <columns>CAMPAIGN.NUM_CONTACTS</columns>
+        <columns>CAMPAIGN.NUM_OPPORTUNITIES</columns>
+        <columns>CAMPAIGN.NUM_WON_OPPORTUNITIES</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>CAMPAIGN.NAME</field>
+            <operation>contains</operation>
+            <value>prospecting list</value>
+        </filters>
+        <label>Prospecting Lists</label>
+    </listViews>
+    <searchLayouts>
+        <customTabListAdditionalFields>CAMPAIGN.NAME</customTabListAdditionalFields>
+        <customTabListAdditionalFields>CAMPAIGN.STATUS</customTabListAdditionalFields>
+        <customTabListAdditionalFields>CAMPAIGN.START_DATE</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>CAMPAIGN.NAME</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>CAMPAIGN.NAME</lookupPhoneDialogsAdditionalFields>
+        <searchResultsAdditionalFields>CAMPAIGN.NAME</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>CORE.USERS.ALIAS</searchResultsAdditionalFields>
+    </searchLayouts>
+    <sharingModel>Private</sharingModel>
+    <webLinks>
+        <fullName>ViewAllCampaignMembers</fullName>
+        <availability>online</availability>
+        <displayType>link</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>true</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>500</height>
+        <isResizable>true</isResizable>
+        <linkType>url</linkType>
+        <masterLabel>View All Campaign Members</masterLabel>
+        <openType>newWindow</openType>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+        <url>/camp/rptcmpgncalldown.jsp?scope=1&amp;scopeid={!Campaign_Name}</url>
+        <width>500</width>
+    </webLinks>
+    <webLinks>
+        <fullName>ViewCampaignInfluenceReport</fullName>
+        <availability>online</availability>
+        <displayType>link</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>true</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>500</height>
+        <isResizable>true</isResizable>
+        <linkType>url</linkType>
+        <masterLabel>View Campaign Influence Report</masterLabel>
+        <openType>newWindow</openType>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+        <url>/00O?rt=117&amp;break0=CAN&amp;scope=1&amp;scopeid_lkid={!Campaign.Id}&amp;scopeid={!Campaign_Name}&amp;c=CAN&amp;c=MR&amp;c=PCS&amp;c=CFN&amp;c=RN&amp;c=ON&amp;c=OA&amp;c=OS&amp;c=OCD&amp;c=AN&amp;s=OA&amp;duel0=CAN%2CMR%2CCFN%2CRN%2CAN%2CON%2CPCS%2COS%2COCD%2COA&amp;details=yes&amp;format=t</url>
+        <width>500</width>
+    </webLinks>
+</CustomObject>

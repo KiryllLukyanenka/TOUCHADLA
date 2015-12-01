@@ -1,0 +1,1141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>AddQuoteLine</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>EditAllQuoteLine</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>Approval_Threshold_2__c</fullName>
+        <externalId>false</externalId>
+        <formula>Product2.Product_Specific_Discount_Threshold_2__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Approval Threshold 2</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Approval_Threshold_3__c</fullName>
+        <externalId>false</externalId>
+        <formula>Product2.Product_Specific_Discount_Threshold_3__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Approval Threshold 3</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Approval_Threshold_4__c</fullName>
+        <externalId>false</externalId>
+        <formula>Product2.Product_Specific_Discount_Threshold_4__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Approval Threshold 4</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>BMXB__Annual_Fee__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Monthly Fees times 12</description>
+        <externalId>false</externalId>
+        <formula>ROUND(BMXB__Monthly_Fees__c, 2) * 12</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Monthly Fees times 12</inlineHelpText>
+        <label>Annual Fee</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>BMXB__Approval_threshold__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Product2.BMXB__Product_Specific_Discount_Threshold__c</formula>
+        <label>Approval Threshold</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>BMXB__Calculated_Discount__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The discount applied by Configuration or the Pricing Engine</description>
+        <externalId>false</externalId>
+        <formula>IF(PricebookEntry.UnitPrice=0,0,1-( UnitPrice /  PricebookEntry.UnitPrice ))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Volume Discount Applied to the line item</inlineHelpText>
+        <label>Calculated Discount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>BMXB__Contract_Term_Months__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Quote.BMXB__Contract_Term_Months__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Contract Term (Months)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>BMXB__Monthly_Fees__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF( BMXB__Recurrence__c = &quot;Monthly&quot; ,    BMXB__Net_Price__c  *  Quantity , 0)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Monthly Fees</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>BMXB__Net_Discount__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Includes Calculated Discount and Line Item Discount</description>
+        <externalId>false</externalId>
+        <formula>(PricebookEntry.UnitPrice -  BMXB__Net_Price__c ) / PricebookEntry.UnitPrice</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Includes Calculated Discount and Line Item Discount</inlineHelpText>
+        <label>Net Discount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>BMXB__Net_Price__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Sales Price minus Discount</description>
+        <externalId>false</externalId>
+        <formula>UnitPrice * (1 -  Discount )</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Sales Price minus Discount</inlineHelpText>
+        <label>Net Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>BMXB__Product_Code__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Product2.ProductCode</formula>
+        <label>Product Code</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>BMXB__Product_Description__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Product2.Description</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Product Description</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>BMXB__Product_Family__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>TEXT( Product2.Family )</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Product Family</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>BMXB__Recurrence__c</fullName>
+        <deprecated>false</deprecated>
+        <description>One-time or Monthly</description>
+        <externalId>false</externalId>
+        <formula>TEXT( Product2.BMXB__Recurrence__c )</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>One-time or Monthly</inlineHelpText>
+        <label>Recurrence</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>BMXB__Requires_Approval__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Requires Approval?</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>BMXB__Total_Contract_Value_TCV__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Total Contract Value of the Product.  For One-time fees, this is the Total Price.  For Recurring fees, this is the Monthly Fees times the Contract Term.</description>
+        <externalId>false</externalId>
+        <formula>IF( BMXB__Recurrence__c = &quot;Monthly&quot;,  ( Quote.BMXB__End_Date2__c +1 -  Quote.BMXB__Start_Date__c ) * ( BMXB__Annual_Fee__c / 365) ,  BMXB__Net_Price__c   *   Quantity)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Total Contract Value of the Product.  For One-time fees, this is the Total Price.  For Recurring fees, this is the Monthly Fees times the Contract Term.</inlineHelpText>
+        <label>Total Contract Value (TCV)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>BMXP__Account_Specific_Price__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Account Specific Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>BMXP__Associated_Product_Price__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Associated Product Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>BMXP__Bundle_Number__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Used by Pricing to group the Associated Products on each quote</description>
+        <externalId>false</externalId>
+        <label>Bundle Number</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>BMXP__Price_Source__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Price Source</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>BMXP__Primary_Quote__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Primary Quote</label>
+        <referenceTo>Quote</referenceTo>
+        <relationshipLabel>Optional Quote Line Items</relationshipLabel>
+        <relationshipName>Optional_Quote_Line_Items</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>BMXP__Tiered_Price__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Tiered Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>BMXP__Volume_Price__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Volume Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>BM_Total_Before_Discounts__c</fullName>
+        <description>List Price * Quantity</description>
+        <externalId>false</externalId>
+        <formula>PricebookEntry.UnitPrice * Quantity</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Total Before Discounts</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>CoTerm__c</fullName>
+        <description>Is this a Co-term product?</description>
+        <externalId>false</externalId>
+        <formula>Product2.Co_Term__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>CoTerm</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Description</fullName>
+    </fields>
+    <fields>
+        <fullName>Discount</fullName>
+    </fields>
+    <fields>
+        <fullName>Discount__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(OR(Product2.Name=&apos;Partner Margin Discount&apos;,Product2.Name=&apos;One Time Discount&apos;,Product2.Name=&apos;Federal Distributor Margin Discount&apos;),0, 
+IF(1 - ( Final_Price__c / BM_Total_Before_Discounts__c ) &lt; 0, NULL , 1 - ( Final_Price__c / BM_Total_Before_Discounts__c )))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Line Item Discount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Federal_Distributor_Margin_Calc_Amount__c</fullName>
+        <description>Old Formula Value:
+
+IF(
+Total_Price_Calculation__c &lt;= 0, 0,
+
+IF(OR(Product_Family__c = &quot;Hosting&quot;, Product_Family__c = &quot;Other&quot;, Product_Family__c = &quot;Discount&quot;, Product_Family__c = &quot;User Conference&quot;),0,
+
+(( Total_Price_Calculation__c / Quote.Partner_Margin_Discount_Calc_Total_Price__c ) *   Quote.Federal_Distributor_Margin_Amount__c )))</description>
+        <externalId>false</externalId>
+        <formula>IF(
+Total_Price_Calculation__c &lt;= 0, 0,
+
+IF(Product_Family__c = &quot;Discount&quot;,0,
+
+((  Total_Price_Calculation__c  /  Quote.Gross_Total_Price__c  ) *   Quote.Federal_Distributor_Margin_Amount__c )))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Federal Distributor Margin Calc Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>7</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Field_Discount_Amount__c</fullName>
+        <externalId>false</externalId>
+        <label>Field Discount Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Field_Discount__c</fullName>
+        <externalId>false</externalId>
+        <label>One Time Disc %</label>
+        <precision>14</precision>
+        <required>false</required>
+        <scale>6</scale>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Final_Price__c</fullName>
+        <externalId>false</externalId>
+        <formula>( UnitPrice   * Quantity) * (1 - Discount)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Final Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Ignore_this_product_for_NS_sync__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF( Product2.Name  == &apos;Partner Margin Discount&apos;, true, IF(Product2.Name == &apos;One Time Discount&apos;, true, IF(Product2.Name == &apos;Federal Distributor Margin Discount&apos;, true, false)) )</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Ignore this product for NS sync</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Is_perp_Record_Type__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Is Perpetual Record Type?</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Line_Item_Discount_Approved__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(Quote.BMXB__Quote_Approved__c = TRUE,  IMAGE(&quot;/servlet/servlet.FileDownload?file=015S0000000TvAL&quot;, &quot;Check&quot;), &quot;&quot;)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Check mark is the line item discount is approved</inlineHelpText>
+        <label>Line Item Discount Approved</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Line_Item_Requires_Approval__c</fullName>
+        <description>Produces Red/Green Flag based on approval requried</description>
+        <externalId>false</externalId>
+        <formula>IF( Sum_of_all_Approvals__c = TRUE,  IMAGE(&quot;/servlet/servlet.FileDownload?file=015S0000000TvHQ&quot;,&quot;Yes&quot;), IMAGE(&quot;/servlet/servlet.FileDownload?file=015S0000000TvHI&quot;, &quot;No&quot;))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Red Flag: Requires Approval
+Green Flag: No Approval Required</inlineHelpText>
+        <label>Discount Requires Approval?</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>ListPrice</fullName>
+    </fields>
+    <fields>
+        <fullName>List_Price2_del__c</fullName>
+        <description>Shows the Perpetual Support Renewal Price for Perpetual Support Renewal Products, otherwise this filed shows the List Price.</description>
+        <externalId>false</externalId>
+        <formula>IF(ISPICKVAL(Product2.Perpetual_Support_Type__c, &quot;Renewal&quot;), Perpetual_Support_Renewal_Price__c   ,  
+IF(ISPICKVAL(Product2.Perpetual_Support_Type__c, &quot;New Order&quot;),   Quote.Perpetual_Licenses_Subtotal__c  *  Product2.Support_Pecent_per_Year__c / 12 *  Months__c  ,
+IF(ISPICKVAL( Product2.Family , &quot;Premium Subscriptions Support&quot;),   Quote.Subtotal_For_Premium_Subscript_Support__c  *  Product2.Support_Pecent_per_Year__c / 12 *  Months__c ,
+PricebookEntry.UnitPrice)))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>List Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Months__c</fullName>
+        <defaultValue>0</defaultValue>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter a value in this field only if the Product is Monthly.</inlineHelpText>
+        <label>Months</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Net_Each_Line_Item_del__c</fullName>
+        <externalId>false</externalId>
+        <formula>BMXB__Net_Price__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Net Each Line Item</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Net_List_Price__c</fullName>
+        <externalId>false</externalId>
+        <formula>Net_Total_Price__c / Quantity</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Net List Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Net_Total_Price__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(
+OR(Total_Price_Calculation__c &lt;= 0, Product_Family__c = &quot;Discount&quot;),0,
+(Total_Price_Calculation__c -  One_Time_Discount_Calc_Amount__c - Partner_Margin_Calc_Amount__c  - Federal_Distributor_Margin_Calc_Amount__c))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Net Total Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>New_or_Renewal__c</fullName>
+        <description>Is this line item new or renewal business?</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Is this line item new or renewal business?</inlineHelpText>
+        <label>New or Renewal</label>
+        <picklist>
+            <picklistValues>
+                <fullName>New Business</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Renewal Business</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Number_Of_Yrs__c</fullName>
+        <externalId>false</externalId>
+        <label>Number Of Yrs</label>
+        <precision>5</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>One_Time_Discount_Amount__c</fullName>
+        <externalId>false</externalId>
+        <label>One Time Discount Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>One_Time_Discount_Calc_Amount__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(
+OR(Total_Price_Calculation__c &lt;= 0, Product_Family__c = &quot;Discount&quot;), 0,
+((Total_Price_Calculation__c/Quote.Gross_Total_Price__c) * Quote.One_Time_Discount__c))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>One Time Discount Calc Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>10</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>One_Time_Discount__c</fullName>
+        <defaultValue>0</defaultValue>
+        <externalId>false</externalId>
+        <label>One Time Discount %</label>
+        <precision>11</precision>
+        <required>false</required>
+        <scale>8</scale>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Partner_Margin_Amount__c</fullName>
+        <externalId>false</externalId>
+        <label>Partner Margin Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Partner_Margin_Applied__c</fullName>
+        <externalId>false</externalId>
+        <label>Partner Margin Applied</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Yes</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>No</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Partner_Margin_Calc_Amount__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(Total_Price_Calculation__c &lt;= 0, 0,
+
+IF(OR(Product_Family__c = &quot;Hosting&quot;, Product_Family__c = &quot;Other&quot;, Product_Family__c = &quot;Discount&quot;, Product_Family__c = &quot;User Conference&quot;),0, 
+
+IF(
+AND(
+Product_Family__c &lt;&gt;&quot;Hosting&quot;, 
+Product_Family__c&lt;&gt;&quot;Other&quot;, 
+Product_Family__c&lt;&gt;&quot;User Conference&quot;,
+Product_Family__c&lt;&gt;&quot;Discount&quot;),(( Total_Price_Calculation__c / Quote.Partner_Margin_Discount_Calc_Total_Price__c ) * ( Quote.Partner_Margin_Amount__c )),
+
+0)))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Partner Margin Calc Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>14</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Partner_Margin_Discount_Copy__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(AND(ISPICKVAL( Product2.Partner_Margin_Applied__c , &quot;True&quot;), NOT(Quote.RecordTypeId = &quot;01280000000Lree&quot;)), Quote.Partner_Margin_Discount__c  , 0)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Partner Margin Discount Copy</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Partner_Margin__c</fullName>
+        <defaultValue>0</defaultValue>
+        <externalId>false</externalId>
+        <label>Partner Margin Discount %</label>
+        <precision>13</precision>
+        <required>false</required>
+        <scale>10</scale>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Perpetual_Support_Renewal_Price__c</fullName>
+        <defaultValue>0</defaultValue>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter a value in this field only if the Product is Support Renewal for Perpetual Licenses</inlineHelpText>
+        <label>Monthly Perpetual Support Renewal Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>10</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Perpetual_Total_After_Volume_Discount__c</fullName>
+        <externalId>false</externalId>
+        <formula>Quote.Perpetual_Total_Volume_Discount__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Perpetual Total After Volume Discount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Product2Id</fullName>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>ProductCode</fullName>
+    </fields>
+    <fields>
+        <fullName>Product_Drawloop__c</fullName>
+        <externalId>false</externalId>
+        <formula>Product2.Name</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Product</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Product_Family_Formula__c</fullName>
+        <externalId>false</externalId>
+        <formula>TEXT( Product2.Family )</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Product Family Formula</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Product_Family__c</fullName>
+        <externalId>false</externalId>
+        <label>Product Family</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Product_Name__c</fullName>
+        <externalId>false</externalId>
+        <formula>Product2.Name</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Product Name</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Product_Record_Type__c</fullName>
+        <externalId>false</externalId>
+        <formula>Product2.RecordType.Name  = &apos;Perpetual Licenses&apos;</formula>
+        <label>Product Record Type = Perpetual Licenses</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Product_Type__c</fullName>
+        <externalId>false</externalId>
+        <label>Product Type</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>QConfig__Model_Name__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF(QConfig__Model__c != null, QConfig__Model__r.QConfig__Display_Name__c, &apos;&apos;)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Configuration Definition</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>QConfig__Model__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Configuration</label>
+        <referenceTo>QConfig__Model__c</referenceTo>
+        <relationshipLabel>Quote Line Items</relationshipLabel>
+        <relationshipName>Quote_Line_Items</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>QConfig__Product_Key__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>This is used by configuration to link items.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>This is automatically populated.</inlineHelpText>
+        <label>Product Key</label>
+        <referenceTo>QConfig__Prescribed_Product__c</referenceTo>
+        <relationshipLabel>Quote Line Items</relationshipLabel>
+        <relationshipName>Quote_Line_Items</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>QConfig__Requirement_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Requirement Type</label>
+        <length>32</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Quantity</fullName>
+    </fields>
+    <fields>
+        <fullName>QuoteId</fullName>
+        <type>MasterDetail</type>
+    </fields>
+    <fields>
+        <fullName>Requires_Approval_2__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Requires Approval 2?</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Requires_Approval_3__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Requires Approval 3?</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Requires_Approval_4__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Requires Approval 4?</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Requires_VSOE_Approval__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Requires VSOE Approval</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>ServiceDate</fullName>
+    </fields>
+    <fields>
+        <fullName>Services_Record_Type__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Is Services Record Type?</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Standard_Non_VSOE__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Standard Non VSOE</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Subscription_Duration__c</fullName>
+        <externalId>false</externalId>
+        <formula>TEXT( Product2.Subscription_Duration__c )</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Subscription Duration</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Subtotal</fullName>
+    </fields>
+    <fields>
+        <fullName>Subtotal_For_Drawloop_del__c</fullName>
+        <externalId>false</externalId>
+        <formula>Subtotal_custom__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Subtotal For Drawloop</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Subtotal_custom__c</fullName>
+        <externalId>false</externalId>
+        <label>Subtotal</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Sum_of_all_Approvals__c</fullName>
+        <description>Evaluates true if any discount approval  is required and Quote is not approved</description>
+        <externalId>false</externalId>
+        <formula>BMXB__Requires_Approval__c = TRUE ||  Requires_Approval_2__c = TRUE ||  Requires_Approval_3__c = TRUE ||  Requires_Approval_4__c &amp;&amp;  Quote.BMXB__Quote_Approved__c  &lt;&gt; FALSE</formula>
+        <label>Sum of all Approvals</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Support_Percent__c</fullName>
+        <externalId>false</externalId>
+        <label>Support Percent</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>TotalPrice</fullName>
+        <inlineHelpText>This field calculates after the Line Item is created based on Sales Price * Quantity.</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Total_Before_Discounts__c</fullName>
+        <externalId>false</externalId>
+        <formula>Subtotal_custom__c  +  Volume_Discount_Amount__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Total Before Discounts</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Total_Price_Calculation__c</fullName>
+        <description>Calculation of the Total Price for a Line Item that can be referenced by other formula fields.</description>
+        <externalId>false</externalId>
+        <label>Total Price Calculation</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Total_Price_Net_Fed_Dist_Margin__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(
+OR(Total_Price_Calculation__c &lt;= 0, Product_Family__c = &quot;Discount&quot;),0,
+(Total_Price_Calculation__c -  One_Time_Discount_Calc_Amount__c - Partner_Margin_Calc_Amount__c  - Federal_Distributor_Margin_Calc_Amount__c))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Total Price Net Fed Dist Margin</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Total_Price_Net_One_Time_Discount__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(
+OR(Total_Price_Calculation__c &lt;= 0, Product_Family__c = &quot;Discount&quot;),0, 
+Total_Price_Calculation__c - One_Time_Discount_Calc_Amount__c)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Total Price Net One Time Discount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Total_Price_Net_Partner_Margin__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(
+OR(Total_Price_Calculation__c &lt;= 0, Product_Family__c = &quot;Discount&quot;),0,
+(Total_Price_Calculation__c -  One_Time_Discount_Calc_Amount__c - Partner_Margin_Calc_Amount__c))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Total Price Net Partner Margin</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Total_Price_Static__c</fullName>
+        <externalId>false</externalId>
+        <label>Total Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Total_del__c</fullName>
+        <externalId>false</externalId>
+        <formula>Quote.TotalPrice * (1- Quote.Final_Discount__c)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Total</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>UnitPrice</fullName>
+    </fields>
+    <fields>
+        <fullName>VSOE_Checked__c</fullName>
+        <externalId>false</externalId>
+        <formula>Product2.Needs_VSOE_Approval__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>VSOE Checked?</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>VSOE_Not_Checked__c</fullName>
+        <externalId>false</externalId>
+        <formula>Product2.No_VSOE_Approval__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>VSOE Not Checked</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Volume_Discount_Amount__c</fullName>
+        <externalId>false</externalId>
+        <label>Volume Discount Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Volume_Discount__c</fullName>
+        <defaultValue>0</defaultValue>
+        <description>manual entry of the volume discount</description>
+        <externalId>false</externalId>
+        <label>Volume Discount %</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>15</scale>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Volume_Discounted_Price__c</fullName>
+        <externalId>false</externalId>
+        <label>Volume Discounted Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <sharingModel>ControlledByParent</sharingModel>
+    <validationRules>
+        <fullName>Months_Required_For_Monthly_Products</fullName>
+        <active>false</active>
+        <description>If the product is monthly then the Months field must be greater than 0.</description>
+        <errorConditionFormula>Months__c  = 0 &amp;&amp;  Product2.Monthly__c = TRUE &amp;&amp;  Quote.Quote_Created__c = TRUE  || ISNULL(Months__c) &amp;&amp;  Product2.Monthly__c = TRUE &amp;&amp;  Quote.Quote_Created__c = TRUE</errorConditionFormula>
+        <errorDisplayField>Months__c</errorDisplayField>
+        <errorMessage>If the product is monthly then the Months field must be greater than 0.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>No_Discount_on_Microservices</fullName>
+        <active>false</active>
+        <description>Microservices are not to be discounted</description>
+        <errorConditionFormula>AND 
+ (Product2.No_Discount__c  = TRUE,Discount &gt; 0)</errorConditionFormula>
+        <errorMessage>Microservices cannot be discounted.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>No_Month_Update_for_RapidStart_Product</fullName>
+        <active>false</active>
+        <description>Stops User Profiles except for Legal Customer Success, and OrderOps from updating the Month value to anything other than 3 for RapidStart Adoption Offering products.</description>
+        <errorConditionFormula>AND(
+$Profile.Name &lt;&gt; &quot;AppD Customer Success&quot;,
+Product2.ProductCode = &quot;ENB-RSA-SERV-FY16&quot;,
+NOT(ISNEW()), Months__c &lt;&gt; 3)</errorConditionFormula>
+        <errorDisplayField>Months__c</errorDisplayField>
+        <errorMessage>Months value must equal 3</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>No_One_Time_Disc_if_product_is_not_Elig</fullName>
+        <active>false</active>
+        <description>No_Volume_Discount_if_product_is_not_Eligible</description>
+        <errorConditionFormula>ISPICKVAL( Product2.Partner_Margin_Applied__c , &quot;False&quot;) &amp;&amp;  One_Time_Discount__c   &gt; 0 &amp;&amp; Quote.Quote_Created__c = TRUE</errorConditionFormula>
+        <errorDisplayField>One_Time_Discount__c</errorDisplayField>
+        <errorMessage>This product is not eligible for a One Time Discount. Please enter 0.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>No_Volume_Discount_if_product_is_not_Eli</fullName>
+        <active>false</active>
+        <description>No_Volume_Discount_if_product_is_not_Eligible</description>
+        <errorConditionFormula>ISPICKVAL(Product2.Family, &quot;Perpetual Support&quot;) &amp;&amp; Volume_Discount__c  &gt; 0 &amp;&amp; Quote.Quote_Created__c = TRUE || ISPICKVAL(Product2.Family, &quot;Training&quot;) &amp;&amp; Volume_Discount__c  &gt; 0 &amp;&amp; Quote.Quote_Created__c = TRUE || ISPICKVAL(Product2.Family, &quot;Premium Subscriptions Support&quot;) &amp;&amp; Volume_Discount__c  &gt; 0</errorConditionFormula>
+        <errorDisplayField>Volume_Discount__c</errorDisplayField>
+        <errorMessage>This product is not eligible for a Volume Discount. Volume Discount must be set to 0.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Non_Monthly_Product</fullName>
+        <active>false</active>
+        <description>Months can not be entered if the Product is not Monthly.</description>
+        <errorConditionFormula>Months__c  &gt; 0 &amp;&amp; Product2.Monthly__c = FALSE &amp;&amp; Quote.Quote_Created__c = TRUE</errorConditionFormula>
+        <errorDisplayField>Months__c</errorDisplayField>
+        <errorMessage>Months cannot be entered if the Product is not Monthly</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>One_Time_Discount_NOT_NULL</fullName>
+        <active>false</active>
+        <description>A value must be entered for One Time Discount. 0 may be entered.</description>
+        <errorConditionFormula>ISNULL( One_Time_Discount__c ) &amp;&amp; Quote.Quote_Created__c = TRUE</errorConditionFormula>
+        <errorDisplayField>One_Time_Discount__c</errorDisplayField>
+        <errorMessage>A value must be entered for One Time Discount %. 0 may be entered.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Perpetual_Support_Renewal_Price_NOT_NULL</fullName>
+        <active>false</active>
+        <description>A value must be entered for Monthly Perpetual Support Renewal. 0 may be entered.</description>
+        <errorConditionFormula>ISNULL(Perpetual_Support_Renewal_Price__c) &amp;&amp; Quote.Quote_Created__c = TRUE</errorConditionFormula>
+        <errorDisplayField>Perpetual_Support_Renewal_Price__c</errorDisplayField>
+        <errorMessage>A value must be entered for Monthly Perpetual Support Renewal. 0 may be entered.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Perpetual_Support_Renewal_Price_Not_Appl</fullName>
+        <active>false</active>
+        <description>A value should only be entered in the Monthly Perpetual Support Renewal field if the Perpetual Support Type field on the Product equals Renewal.</description>
+        <errorConditionFormula>Perpetual_Support_Renewal_Price__c  &gt; 0 &amp;&amp;  NOT (ISPICKVAL( Product2.Perpetual_Support_Type__c, &quot;Renewal&quot;)) &amp;&amp; Quote.Quote_Created__c = TRUE</errorConditionFormula>
+        <errorDisplayField>Perpetual_Support_Renewal_Price__c</errorDisplayField>
+        <errorMessage>Monthly Perpetual Support Renewal Price must be 0 unless the product is Support Renewal for Perpetual Licenses.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Perpetual_Support_Renewal_Price_Required</fullName>
+        <active>false</active>
+        <description>A value must be entered in the Monthly Perpetual Support Renewal field if the Perpetual Support Type field on the Product equals Renewal.</description>
+        <errorConditionFormula>ISNULL( Perpetual_Support_Renewal_Price__c ) &amp;&amp;  (ISPICKVAL( Product2.Perpetual_Support_Type__c, &quot;Renewal&quot;)) &amp;&amp;  Quote.Quote_Created__c = TRUE || Perpetual_Support_Renewal_Price__c = 0 &amp;&amp;  (ISPICKVAL( Product2.Perpetual_Support_Type__c, &quot;Renewal&quot;)) &amp;&amp;  Quote.Quote_Created__c = TRUE</errorConditionFormula>
+        <errorDisplayField>Perpetual_Support_Renewal_Price__c</errorDisplayField>
+        <errorMessage>Monthly Perpetual Support Renewal Price must be greater than 0 if the product is Support Renewal for Perpetual Licenses.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Sales_Price_on_CoTerm</fullName>
+        <active>false</active>
+        <errorConditionFormula>AND(Product2.Co_Term__c=FALSE,Product2.Discount_SKU__c=FALSE,  ISCHANGED(UnitPrice))</errorConditionFormula>
+        <errorDisplayField>UnitPrice</errorDisplayField>
+        <errorMessage>Please delete the Line Item from the Quote, and add again at the correct quantity.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Sales_price_entry_for_Renewal_products</fullName>
+        <active>false</active>
+        <description>Sales Reps can only enter price for Renewal products</description>
+        <errorConditionFormula>AND(
+NOT(
+ISPICKVAL( Product2.Family ,&quot;Renewal&quot;)
+),
+ISCHANGED (UnitPrice)
+)</errorConditionFormula>
+        <errorMessage>Changes to the Sales price are not allowed</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Volume_Discount_Cannot_Equal_NULL</fullName>
+        <active>false</active>
+        <description>A value must be entered for Volume Discount. 0 can be entered. 
+This is needed for the Discount Amount fields on the Quote to calculate.</description>
+        <errorConditionFormula>ISNULL( Volume_Discount__c )</errorConditionFormula>
+        <errorDisplayField>Volume_Discount__c</errorDisplayField>
+        <errorMessage>A value must be entered for Volume Discount. 0 can be entered.</errorMessage>
+    </validationRules>
+    <webLinks>
+        <fullName>Add_Quote_Line_New</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <height>600</height>
+        <linkType>url</linkType>
+        <masterLabel>Add Quote Line New</masterLabel>
+        <openType>sidebar</openType>
+        <protected>false</protected>
+        <requireRowSelection>true</requireRowSelection>
+        <url>/apex/QuoteLineIntermediate?id={!Quote.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>BMXP__Manage_Line_Items</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Manage Line Items</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <requireRowSelection>false</requireRowSelection>
+        <url>if({!$Setup.BMXB__Pricing_Settings__c.BMXB__Optional_Line_Items_Enabled__c}){ 
+var url =&apos;{!$Site.Prefix}&apos;+&apos;/apex/&apos;; 
+if(&apos;{!$Setup.BMXB__Namespace__c.BMXB__pricing__c}&apos;.length &gt; 0){ 
+url +=&apos;{!$Setup.BMXB__Namespace__c.BMXB__pricing__c}&apos;+&apos;__&apos;; 
+} 
+url += &apos;OptionalItemManagement?primaryQuote=&apos;; 
+
+if(&apos;{!Quote.BMXP__Primary_QuoteId__c}&apos;.length &gt;0){ 
+url += &apos;{!Quote.BMXP__Primary_QuoteId__c}&apos;; 
+
+} 
+else{url += &apos;{!Quote.Id}&apos;;} 
+
+window.location.href = url; 
+} 
+
+else{ 
+alert(&apos;Optional Line Item Management is not enabled. Contact administrator or check Custom Settings.&apos;); 
+}</url>
+    </webLinks>
+</CustomObject>

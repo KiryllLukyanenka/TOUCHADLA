@@ -1,0 +1,1180 @@
+<apex:page id="page" title="Manage Account territory" sidebar="false" controller="ManageAccountTerritoryController">
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+
+    <!-- Bootstrap -->
+    <link href="{!URLFOR($Resource.AccountTerr, './assets/bs/css/bootstrap.min.css')}" rel="stylesheet"/>
+    <!-- Bootstrap theme -->
+    <link href="{!URLFOR($Resource.AccountTerr, './assets/bs/css/bootstrap-theme.min.css')}" rel="stylesheet"/>
+
+    <!-- Custom -->
+    <link href="{!URLFOR($Resource.AccountTerr, './assets/switch/css/bs-switch.css')}" rel="stylesheet"/>
+    <link href="{!URLFOR($Resource.AccountTerr, './assets/dtpicker/css/bs-datetimepicker.css')}" rel="stylesheet"/>
+    <link href="{!URLFOR($Resource.AccountTerr, './assets/css/custom.css')}" rel="stylesheet"/>
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="{!URLFOR($Resource.AccountTerr, './assets/js/ie10-viewport-bug-workaround.js')}"></script>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="{!URLFOR($Resource.AccountTerr, './assets/js/html5shiv.min.js')}"></script>
+      <script src="{!URLFOR($Resource.AccountTerr, './assets/js/respond.min.js')}"></script>
+    <![endif]-->
+    
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="{!URLFOR($Resource.AccountTerr, './assets/js/jquery.min.js')}"></script>
+    <script src="{!URLFOR($Resource.AccountTerr, './assets/js/jquery-ui.min.js')}"></script>
+    <script src="{!URLFOR($Resource.AccountTerr, './assets/bs/js/bootstrap.min.js')}"></script>
+    <script src="{!URLFOR($Resource.AccountTerr, './assets/js/moment.min.js')}"></script>
+    <script src="{!URLFOR($Resource.AccountTerr, './assets/switch/js/bs-switch.min.js')}"></script>
+    <script src="{!URLFOR($Resource.AccountTerr, './assets/dtpicker/js/bs-datetimepicker.min.js')}"></script>
+    <script src="{!URLFOR($Resource.AccountTerr, './assets/js/custom.js')}"></script>
+    
+    <style>
+      .col-md-3, .col-md-2, .col-md-1{
+        width: 25%;
+      }
+      th.headerRow{
+        padding:5px;
+      }
+      td.dataCell{
+        padding-left:5px;
+        padding-bottom:5px;
+      }
+      .dateFormat{
+        display:none;
+      }
+      .sourceSelectList{
+        width:120px;
+      }
+      .selectList{
+        display:none;
+      }
+      .glyphicon
+      {
+          cursor: pointer;
+      }
+      .btnNoOverride {
+            display: inline-block;
+            margin-bottom: 0px;
+            font-weight: 400;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            cursor: pointer;
+            -moz-user-select: none;
+            border: 1px solid transparent;
+            border-color:#CCC;
+      }
+      .btnNoOverrideLookup {
+          display: inline-block;
+          margin-bottom: 0px;
+          font-weight: 400;
+          text-align: center;
+          white-space: nowrap;
+          vertical-align: middle;
+          cursor: pointer;
+          -moz-user-select: none;
+          border: 1px solid transparent;
+          border-color:#CCC;
+          position: relative;
+          height: 30px;
+          padding: 5px 10px;
+          font-size: 12px;
+          line-height: 1.5;
+          border-radius: 3px;
+          border-top-left-radius: 0px;
+          margin-left: -1px;
+          border-bottom-left-radius: 0px;
+          margin-top:0px;
+      }
+      .btn-primaryNoOverride {
+          background-image: linear-gradient(to bottom, #428BCA 0px, #2D6CA2 100%);
+          background-repeat: repeat-x;
+          border-color: #2B669A;
+          text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.2);
+          box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.15) inset, 0px 1px 1px rgba(0, 0, 0, 0.075);
+          color:#FFF;
+      }
+      .btn-info{
+          border-color: #28a4c9;
+      }
+    </style>
+
+    <script>
+      var currentCollIndex;
+      
+      function showCollapse(){
+          $('#editBtn' + currentCollIndex).click();
+      }
+      /*This function takes one parameter and set it to variable "currentCollIndex" */
+      function setCurrentCollIndex(index){
+          currentCollIndex = index;
+      }
+      
+      function editFieldRow(editButton, fieldValue){
+        /*We initialize variable "currentRow" by row's ("$(editButton)") parents. You can see 2 methods "parent()", this
+              methods traverses to the immediate parent of this element, in our case we lifts to second parent of element in
+              DOM tree.
+              See more at https://api.jquery.com/parent/
+            */
+          var currentRow = $(editButton).parent().parent();
+          /*When we have a row, we can use ".css()" to hide this row. We use two parameters "display" - it's a property
+              which specifies how an element is displayed, and "none" - keyword to hide the row
+              See more at http://www.w3schools.com/css/css_display_visibility.asp
+              See more at http://api.jquery.com/css/
+            */
+          currentRow.css('display', 'none');
+          /*At this line we have accsess to the nex sibling of our element and specifies how he will be displayed
+              via "css('display', 'table-row')". 
+              See more at https://api.jquery.com/next/
+            */
+          currentRow.next().css('display', 'table-row');
+          displayField($(editButton).parents('tr:first').next().find('.sourceSelectList')[0], fieldValue);
+      }
+       /*It's the similar function with function "editFieldRow" but without second parameter and without
+          calling "displayField" function
+         */
+      function editRow(editButton){
+          var currentRow = $(editButton).parent().parent();
+          currentRow.css('display', 'none');
+          currentRow.next().css('display', 'table-row');
+      }
+      /*It's the similar function with function "editFieldRow" but has another row in parameter "cancel"
+          Use search by name of function, to see where she invoked
+         */
+      function cancelRow(cancelButton){
+          var currentRow = $(cancelButton).parent().parent();
+          currentRow.css('display', 'none');
+          currentRow.prev().css('display', 'table-row');
+      }
+      /*This function defines a text to set as the content of each matched element.          
+        */
+      function deleteRow(deletedId, deletedType){
+        /*At this 2 lines we assign new value to elmenet that was found with "document.getElementById"
+             and parameter 'page:form:deleteId' => our page : our form : element with "id" == "deleteId"  
+             See more at http://www.w3schools.com/jsref/prop_text_value.asp           
+            */
+          document.getElementById('page:form:deleteId').value = deletedId;
+          document.getElementById('page:form:deleteType').value = deletedType;
+          /*At this block of "if conditions" we specify the text to set as the content of each matched element(in our case it's element
+            with "id" == '#deleteText') with ".text()" function
+            See more at http://api.jquery.com/text/
+            */
+          if(deletedType == 'territory'){
+              $('#deleteText').text('Territory');
+          }
+          if(deletedType == 'geography'){
+              $('#deleteText').text('Geographic Criteria');
+          }
+          if(deletedType == 'leadField'){
+              $('#deleteText').text('Field Criteria');
+          }
+      }
+      /*This function used to save data with controller's method with the same name. Use search
+        by name of function to find "apex:actionFunction" with the name "createGeographicCriteria()"*/
+      function saveGeography(button, parentId, criteriaId){
+        /*Initialize and specify variable "allInputs". Value of variable is the set of all preceding siblings ("prevAll() function") 
+              of parent element for row "$(button).parent()."
+              See more at http://api.jquery.com/prevall/
+              */
+          var allInputs = $(button).parent().prevAll();
+          /*Initialize variable and set to her Strings, parameter "parentId" of our function and 
+            value ("firstChild.value") of "allInputs" element (accsess by number). You can see that
+            variable "jsonValue" it's a JSON
+            See more at http://www.w3schools.com/jsref/prop_node_firstchild.asp
+            */
+          var jsonValue = '{"Territory__c":"' + parentId 
+                        + '","Country__c":"' + allInputs[3].firstChild.value
+                        + '","State__c":"' + allInputs[2].firstChild.value
+                        + '","Zip_Start__c":"' + allInputs[1].firstChild.value 
+                        + '","Zip_End__c":"' + allInputs[0].firstChild.value;
+          if(criteriaId){
+              jsonValue += '","Id":"' + criteriaId + '"}';
+          }
+          else{
+              jsonValue += '"}';
+          }
+           /*Assign to element with "id" == "json" value of "jsonValue" variable */
+          document.getElementById('page:form:json').value = jsonValue;
+          /*Call of "createGeographicCriteria()" method*/
+          createGeographicCriteria();
+      }
+      
+      function saveLeadField(button, parentId, criteriaId){
+        /*Initialize and specify variable "allInputs". Value of variable is the set of all preceding siblings ("prevAll() function") 
+              of parent element for row "$(button).parent()."
+              See more at http://api.jquery.com/prevall/
+              */
+          var allInputs = $(button).parent().prevAll();
+          /*Set value of the second element of "allInputs" to variable*/
+          var fieldnameTD = $(allInputs[2]);
+          /*Set value of the  element "select" of "fieldnameTD" to variable. For this
+              we use "find()" method with parameter (in our case "select") and "val()"
+              to get value
+              See more at https://api.jquery.com/find/
+            */
+          var fieldname = fieldnameTD.find("select").val();
+          /*Set value of the first element of "allInputs" to variable*/
+          var fieldOperatorTD = $(allInputs[1]);
+          /*Similarly in the "fieldname" variable */
+          var fieldOperator = fieldOperatorTD.find("select").val();
+          /*Similarly in the "fieldname" variable */
+          var fieldValue = $(allInputs[0]).find(':visible').val();
+          
+          var jsonValue = '{"Territory__c":"' + parentId 
+                        + '","Field__c":"' + fieldname
+                        + '","Operator__c":"' + fieldOperator 
+                        + '","Value__c":"' + fieldValue;
+                        
+          if(criteriaId){
+              jsonValue += '","Id":"' + criteriaId + '"}';
+          }
+          else{
+              jsonValue += '"}';
+          }
+          document.getElementById('page:form:json').value = jsonValue;
+      }
+      /*Function for assigning values to elements with "Id" == userId and userName. 
+        */
+      function getUser(userId, userName){
+          var targetId = $('#userTarget').val();
+          if(targetId){
+              getUserWithTarget(targetId, userId, userName)
+          }
+          else{
+              document.getElementById('page:form:userId').value = userId;
+              document.getElementById('page:form:userName').value = userName;
+              $('#userName').val(userName);
+          }
+          target = null;
+      }
+       /*Function for assigning values to elements with "Id" == userId and userName(if "if condition" in
+          "getUser" function became "false")
+
+        */
+      function getUserWithTarget(targetId, userId, userName){
+          var inputs = $('#' + targetId).children('input');
+          inputs[0].value = userName;
+          inputs[1].value = userName;
+          inputs[2].value = userId;
+      }
+      /*In this function we takes parameter "targetId" and set it with method ".val(value)" to <input> with id "userTarget". Use search on the page
+        to find this "input" with "type=hidden"
+        See more at http://www.w3schools.com/jquery/html_val.asp*/
+      function setTarget(targetId){
+          $('#userTarget').val(targetId);
+      }
+      
+      function sendOrder(){
+          var orderValue = '';
+          $("[id$='_order']").each(function(){
+              orderValue += this.id;
+          });
+          document.getElementById('page:form:territoryOrder').value = orderValue.substring(0, orderValue.length - 6);
+          saveOrder();
+      }
+      
+      function setTerritoryID(territoryId)
+      {
+          var currentTerritoryId = document.getElementById('page:form:CurrentTerritoryId');
+          currentTerritoryId.value = territoryId;
+      }
+       /*In this function we have "if condition" with name of function "checkAssignmentCSV()". It's a function returns Boolean
+         value (false or true). If "checkAssignmentCSV()" returns "true", insertNewLeadTerritoryGeosByCSV() function will be invoked.
+         See more about statements at http://www.w3schools.com/js/js_if_else.asp
+          */              
+      function insertTerritoryByCSV()
+      {
+          if(checkAssignmentCSV())
+          {
+              insertNewTerritoryGeosByCSV();
+          }
+      }
+      /*This function has auxiliary role and returns boolean value */
+      function checkAssignmentCSV()
+      {   
+         /*In this row we initialize Boolean variable "isValid" and
+            sets to her "true"*/
+          var isValid = true;
+          /*Var "assignmentCsvValue" has value from  "apex:inputTextarea value="{!assignmentsCSV}" styleClass="form-control assignmentCsv"
+              We use "." before "assignmentCsv" to skip all words in "styleClass" parameter. For example, we can get value from some "input"
+              with styleClass="test-test assignmentCsv" in the same manner. You can see, that we use ".val(). In this case it used to get value 
+              from input for this reason brackets are empty"
+            */
+          var assignmentCsvValue = $(".assignmentCsv").val();
+          /*This "if condition" checks our "assignmentCsvValue variable" for null and(&&) for empty value*/
+          if(assignmentCsvValue != null && assignmentCsvValue != '')
+          {   
+              /*Creating variable with empty value*/
+              var assignmentCSV = '';
+               /*Initilizing array
+                  See more at http://www.w3schools.com/js/js_arrays.asp
+                */
+              var assignments = new Array();
+              /*Filling our "assignments array". Method "split()" is used to split a string into an array of substrings. In our case
+                 we split "assignmentCsvValue" by "\n" (new line symbol) and array of strings will be returned.
+                See more at http://www.w3schools.com/jsref/jsref_split.asp
+                   */
+              assignments = assignmentCsvValue.split('\n');
+              /*We have filled "assignments" array. In "if condition" we check number of elements
+                  in our array with method "length". This method retuns integer value and we compare
+                  this value with other value (in our case it's 400)
+                  See more at http://www.w3schools.com/jsref/jsref_length_array.asp
+                */
+              if(assignments.length > 400)
+              {   
+                  /*If the result of conditions is "true" user will see pop-up window with
+                    text which located in "alert" brackets and "isValid" changes value to "false"
+                    See more at http://www.w3schools.com/jsref/met_win_alert.asp
+                    */
+                  alert('Assignments can\'t be greater than 400.')
+                  isValid = false;
+              }
+              else
+              {   /*Initialize a regular expression object with constructor for matching text with a pattern
+                    See more about RegExp  at https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions
+                    You can try to write some regular expressions at this site https://regex101.com/
+                    */
+                  var reg = new RegExp('("[^"]*("{2})*[^"]*")*[^,]*,', 'g'); 
+                  /*We start to iterate over the "assignments" array with standart loop. "i < assignments.length" is a 
+                      condition for running the loop. "i++" (increment)  is executed each time after the loop has been executed.
+                      In this way when "i" will be equally to length of "assignments" array iterating will be finished
+                      See more at http://www.w3schools.com/js/js_loop_for.asp
+                     */                 
+                  for(var i = 0; i < assignments.length; i++)
+                  {   
+                    /*Initialize variable "count" and set it's to 0*/
+                      var count = 0;
+                      /*Access to each element of array going by index. In our case index it's "i". At the first loop iterate we
+                          have access to "0" element (as we know, indexing starts with "0"). At the second iteration, when "i"
+                          will be equal to "1" we have access to second element. Also we see "trim()" method which removes whitespace
+                          from both sides of a string(our "assignments" array it's array of strings and each element respectively
+                          is string)
+                          See more at http://www.w3schools.com/jsref/jsref_trim_string.asp
+                         */
+                      if(assignments[i].trim().length > 0)
+                      {   
+                          /*Set element of array and add to him ","*/
+                          var assignment = assignments[i] + ',';
+                          /*Initialize "arr" variable*/
+                          var arr;
+                          /*You can see another type of loop with word "while", this loop 
+                            iterated  while a specified condition is "true". In our case we assign to "arr" variable the result
+                            of "exec()" function which contains our "reg" variable with regular expression and "assignment" variable.
+                            "reg" variable provide pattern to matching and if string was found, which was matched with pattern
+                            (our "reg" variable), this string will be returned, otherwise it returns null.
+
+                            See more at http://www.w3schools.com/jsref/jsref_regexp_exec.asp 
+                            
+                            */
+                          while((arr=reg.exec(assignment)) != null)
+                          {   
+                            /*Increment*/
+                              count++;
+                          }
+                          /*Block of if...else conditions to specify "assignmentCSV" variable*/
+                          if(count == 1) 
+                          {
+                              assignmentCSV += assignments[i] + ',,,\n';
+                          }
+                          else if(count == 2)
+                          {
+                              assignmentCSV += assignments[i] + ',,\n';
+                          }
+                          else if(count == 3)
+                          {
+                              assignmentCSV += assignments[i] + ',\n';
+                          }
+                          else if(count == 4)
+                          {
+                              assignmentCSV += assignments[i] + '\n';
+                          }
+                          else 
+                          {
+                              alert('Not Valid');
+                              isValid = false;
+
+                              break;
+                          }
+                      }
+                      else
+                      {   
+                          alert('The assignments you entered have invalid data.');
+                          $('.assignmentCsv').focus();
+                          isValid = false;
+                           /*the "break" statement breaks the loop and continues executing the code after the loop. In our case if
+                              assignments[i].trim().length smaller or equally to zero
+                              See more at http://www.w3schools.com/js/js_break.asp
+                            */
+                          break;
+                      }    
+                  }
+                  /*"if" condition with Boolean variable "isValid"*/
+                  if(isValid)
+                  {   /*At this two rows at first we have extracted the characters from "assignmentCSV" variable by
+                          "substring" method. This method have two parameters, which specifies indexes among which characters will be
+                          extracted. Then via method "val(assignmentCSV)" we specifies value at "apex:inputTextarea value="{!assignmentsCSV}" styleClass="form-control assignmentCsv"
+                         */
+                      assignmentCSV = assignmentCSV.substring(0, assignmentCSV.length - 1);
+                      $('.assignmentCsv').val(assignmentCSV);
+                  }   
+              }                    
+          }
+          else
+          {
+              alert('You need to paste some assignments.');
+              isValid = false;
+          }
+          return isValid;            
+      }
+      
+      function displayValue(theBtn){
+          if($(theBtn).parent().parent().next().css('display') == 'none'){
+              $(theBtn).text('Cancel');
+          }
+          else{
+              $(theBtn).text('Edit');
+          }
+      }
+      
+      function setRowEditBtnText(editBtnIndex)
+        {
+            var theRowEditBtn = document.getElementById("editBtn" + editBtnIndex);
+            theRowEditBtn.innerHTML = "Edit";
+        }
+        
+        
+        function setRowEditBtnToCancelText()
+        {
+            var theRowEditBtn = document.getElementById("editBtn" + currentCollIndex);
+            theRowEditBtn.innerHTML = "Cancel";
+        }
+      /*Please, go to ManageAccountTerritoryController and find "setupStatus" method
+        and his explanation 
+      */
+      function setupStatus(value){
+        Visualforce.remoting.Manager.invokeAction(
+          '{!$RemoteAction.ManageAccountTerritoryController.setupStatus}',
+          value,
+          function(result, event) {
+            if (event.type === 'exception') {
+              alert('Failed: ' + event.message);
+            }
+          },
+          { escape: true }
+        );
+      }
+      /*Please, go to ManageAccountTerritoryController and find "displayField" method
+        and his explanation 
+      */
+      function displayField(target, fieldValue){
+        if(target.value){
+          Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.ManageAccountTerritoryController.getFieldCriteriaOption}',
+            target.value,
+            function(result, event){
+              if(event.status){
+                if(result){
+                  displaySelectOption(target, result, fieldValue);
+                }
+                else{
+                  displayInputText(target, fieldValue);
+                }
+              }
+            },
+            { escape: true }
+          );
+        }
+      }
+
+      function displaySelectOption(target, optionValue, fieldValue){
+        var targetCell = $(target).parent().next().next();
+        targetCell.children('.inputText').css('display','none');
+        var selectListNode = targetCell.children('.selectList');
+        selectListNode.css('display', 'block');
+        selectListNode.children(':gt(0)').remove();
+        var optionValues = optionValue.split('[;]');
+        $(optionValues).each(function(index){
+          if(index != optionValues.length - 1){
+            if(this == fieldValue){
+                selectListNode.append('<option selected="selected" value="' + this + '">' + this + '</option>');
+            }
+            else{
+              selectListNode.append('<option value="' + this + '">' + this + '</option>');
+            }
+          }
+        });
+      }
+      
+      function displayInputText(target, fieldValue){
+          var targetCell = $(target).parent().next().next();
+          var inputTextNode = targetCell.children('.inputText');
+          inputTextNode.css('display','block');
+          inputTextNode.val(fieldValue);
+          var selectListNode = targetCell.children('.selectList');
+          selectListNode.css('display', 'none');
+      }
+    </script>
+  </head>
+
+  <body> 
+  <!-- "<apex:form >" is the section of a Visualforce page that allows users to enter input and then submit it with an <apex:commandButton > or <apex:commandLink >. The body of the form determines the data that is displayed and the way it's processed. It's a best practice to use only one <apex:form > tag in a page or custom component. -->
+  <apex:form id="form">
+  <!-- Tag <apex:inputHidden>  an input element that is invisible to the user. In our case user doesn't see
+        this field and his value, but we have an "id" parameter by which JS methods on page can receive 
+        this values for their logic 
+        See more at https://developer.salesforce.com/docs/atlas.en-us.pages.meta/pages/pages_compref_inputHidden.htm
+  -->
+    <apex:inputHidden value="{!currentTerritoryId}" id="CurrentTerritoryId"/> 
+    <apex:inputHidden id="json" value="{!jsonCriteria}"/>
+    <apex:inputHidden id="territoryOrder" value="{!territoryOrder}"/>
+    <apex:inputHidden id="deleteId" value="{!removedId}"/>
+    <apex:inputHidden id="deleteType" value="{!removedType}"/>
+    <input type="hidden" id="userTarget"/>
+     <!-- Rows at bottom contain calls to controller's methods via <apex:actionFunction> tag. This tag defines a new JavaScript function which can then be called from within a block of JavaScript code.
+      *Expression {!methodName} in parameter "action" is used to define what method from page controller must be called. 
+      *Parameter "name" contains name of the JS function, when invoked elsewhere in the page markup, causes the method specified by the action attribute to execute.
+      *Parameter "reRender" contains ID of one or more components that are redrawn when the result of the action method returns to the client
+      *Parameter "oncomplete" define JS methods, which invoked when the result of an AJAX update request completes on the client
+      See more at https://developer.salesforce.com/docs/atlas.en-us.pages.meta/pages/pages_compref_actionFunction.htm
+      -->
+    <apex:actionFunction action="{!insertNewTerritoryGeos}" name="insertNewTerritoryGeos" reRender="rowList" oncomplete="showCollapse();"/>
+    <apex:actionFunction action="{!addMoreTerritoryGeos}" name="addMoreTerritoryGeos" reRender="singleAssignmentPanel" status="statusAssignment" />
+    <apex:actionFunction action="{!insertNewTerritoryGeosByCSV}" name="insertNewTerritoryGeosByCSV" reRender="rowList" oncomplete="showCollapse();"/>
+    <apex:actionFunction action="{!createGeographicCriteria}" name="createGeographicCriteria" reRender="rowList" oncomplete="showCollapse();"/>
+    <apex:actionFunction action="{!remove}" name="removeRow" reRender="rowList" oncomplete="showCollapse();"/>
+    <apex:actionFunction action="{!saveOrder}" name="saveOrder"/>
+    <apex:actionFunction action="{!createTerritory}" name="createTerritory"/>
+    <apex:actionFunction action="{!massupdateTerritoriesImmed}" name="doMassUpdateTerrsImm"/>  
+    <!-- Begin page content -->
+    <div class="container">
+      <div class="page-header">
+        <h1>Territory Management</h1>
+      </div>
+    </div>
+    
+    <div class="content-wrapper">
+      <div class="container">
+         <!-- This panel  used to show error messages. If list of error messages has records, panel is shown on page. Condition for showing placed in  "rendered" tag, where checking size of List error messages. If List is empty (size = 0), panel doesn't shows. Look for List<String> at the page controller ManageLeadTerritoryController
+      -->
+        <apex:outputPanel rendered="{!errorMessages.size != 0}">
+          <div class="message errorM3" role="alert" style="margin:5px 0; color:#c00;">
+            <img alt="FATAL" src="/s.gif" class="msgIcon" title="FATAL"/> Error:
+            <ul style="font-size:12px;">
+              <apex:repeat value="{!errorMessages}" var="message">
+                <li>{!message}</li>
+              </apex:repeat>
+            </ul>
+          </div>
+        </apex:outputPanel>
+
+        <div class="row">
+          <div class="col-sm-2" style="width:40%">
+            <button type="button" class="btnNoOverride btn-default btn-sm" data-toggle="collapse" data-target="#addnew">
+              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add New
+            </button>
+            <button type="button" class="btnNoOverride btn-default btn-sm" onclick="sendOrder();">
+              Save Order
+            </button>
+          </div>
+          <div class="space5"></div>
+          <div class="col-sm-10 col-tm-status">
+            <span id="tm-status">
+              TM Status 
+              <input type="checkbox" id="switch-input" name="switch-input" data-label-text="Turn On" data-on-color="success" 
+                data-off-color="danger" data-size="small" class="input-switch"/>
+            </span>
+            <span id="mass-update">
+              <button type="button" class="btnNoOverride btn-default btn-sm" data-toggle="modal" data-target="#massUpdateModal" data-backdrop="static">
+                Mass Update
+              </button>
+            </span>
+            <span id="next-update">Next Update: <span class="label label-default label-lg">
+                <apex:outputField value="{!setup.Next_Mass_Update_Date__c}"/></span></span>
+          </div>
+        </div>
+        
+        <div class="space15"></div>
+        
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="row heading">
+              <div class="col-xs-6 col-sm-4 col-md-3" style="width:20%">Account Territory Name</div>
+              <div class="col-xs-6 col-sm-4 col-md-3" style="width:15%">Geo</div>
+              <div class="col-xs-6 col-sm-4 col-md-3" style="width:15%">Region</div>
+              <div class="col-xs-3 col-sm-4 col-md-2" style="width:15%">Assign To</div>
+              <div class="col-xs-3 col-sm-4 col-md-1" style="width:15%">Effective Date</div>
+              <div class="col-xs-6 col-sm-4 col-md-3" style="width:20%">Action</div>
+            </div><!--/row-->
+          </div>
+        </div><!--/row-->
+        
+        <div class="space15"></div>
+      
+        <div class="add-lead collapse" id="addnew">
+          <div class="row">
+            <div class="col-xs-6 col-sm-4 col-md-3" style="width:20%">
+            <!-- Tag "apex:inputText" is used to get user input for controller method. For example, value, that user typed in 
+                <apex:inputText value="{!territory.Name}"/> will be correspond for field "Name" in a  object
+                See more at https://developer.salesforce.com/docs/atlas.en-us.pages.meta/pages/pages_compref_inputText.htm
+                 -->
+              <apex:inputText value="{!territory.Name}" styleClass="form-control input-sm" html-placeholder="Account Territory Name"/>
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-2" style="width:15%">
+            <!--Tag "apex:inputField" is used for a value that corresponds to a field on a Salesforce object. It is very useful, because
+                    we have, for example field "Geo__c in the  "Territory_AppD__c" object, this field type is a "Picklist" and for displaying a list of values of this picklist, you mustn't write any solutions, just use <apex:inputField> and you will see this picklist 
+                    on the page. Same for other types - inputField would create an appropriate input for every type (date, checkbox, etc.)
+                    Parameter "value" defines a field from object which will be display on the page 
+                    See more at https://developer.salesforce.com/docs/atlas.en-us.pages.meta/pages/pages_compref_inputField.htm
+                -->
+              <apex:inputField value="{!territory.Geo__c}" styleClass="form-control input-sm" />
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-2" style="width:15%">
+              <apex:inputField value="{!territory.Region__c}" styleClass="form-control input-sm"/>
+            </div>
+            <div class="col-xs-3 col-sm-4 col-md-2" style="width:15%">
+              <div class="input-group input-group-sm">
+                <input type="text" id="userName" class="form-control input-sm" readonly="true"/>
+                <apex:inputHidden id="userId" value="{!territory.Assigned_To_ID__c}"/>
+                <apex:inputHidden id="userName" value="{!territory.Assigned_To__c}"/>
+                <span class="input-group-btn" data-toggle="modal" data-target="#allAssignmentsModal">
+                  <button class="btnNoOverrideLookup btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
+                </span>
+              </div><!-- /input-group -->
+            </div>
+            <div class="col-xs-3 col-sm-4 col-md-1" style="width:15%">
+              <apex:inputField value="{!territory.Effective_Date__c}" styleClass="form-control input-sm" style="width:100%"/>
+            </div>
+            <div class="col-xs-6 col-sm-3 col-md-3" style="width:20%">
+              <button type="button" class="btnNoOverride btn-primary btn-primaryNoOverride btn-sm" onclick="createTerritory();">Save</button>
+              <button type="button" class="btnNoOverride btn-info btn-sm" data-toggle="collapse" data-target="#addnew">Cancel</button>
+            </div>
+          </div><!--/row-->
+        </div><!--/#addnew-->
+        
+        <apex:outputPanel id="rowList" layout="block" styleClass="row sortable">
+        <!-- "<apex:repeat>"" tag is iteration component that allows you to output the contents of a collection.
+            In this case we iterate over the List<String> territories. Content of "var" attribute used to show elements of collection on page, tag "value" is our List<String> territories in controller.
+            See more at https://developer.salesforce.com/docs/atlas.en-us.pages.meta/pages/pages_compref_repeat.htm
+        -->
+          <apex:repeat value="{!territories}" var="territory">
+          <div class="col-xs-12 tile" data-lead="10{!territory.Order__c}">
+            <div class="row">
+                <div class="col-xs-6 col-sm-4 col-md-3" style="width:20%">
+                  <span class="glyphicon glyphicon-move"></span> 
+                  <span id="{!territory.Id}_order">{!territory.Order__c}</span> 
+                  <span>{!territory.Name}</span>
+                </div>
+                <div class="col-xs-3 col-sm-4 col-md-2" style="width:15%"><apex:outputField value="{!territory.Geo__c}"/></div>
+                <div class="col-xs-3 col-sm-4 col-md-2" style="width:15%"><apex:outputField value="{!territory.Region__c}"/></div>
+                <div class="col-xs-3 col-sm-4 col-md-2" style="width:15%"><apex:outputField value="{!territory.Assigned_To__c}"/></div>
+                <div class="col-xs-3 col-sm-4 col-md-1" style="width:15%"><apex:outputField value="{!territory.Effective_Date__c}"/></div>
+                <div class="col-xs-6 col-sm-4 col-md-3" style="width:20%">
+                    <button type="button" class="btnNoOverride btn-default btn-sm" data-toggle="collapse" data-target="#edit-lead-{!territory.Order__c}"
+                      id="editBtn{!territory.Order__c}" onclick="displayValue(this)">Edit</button>
+                    <button type="button" class="btnNoOverride btn-default btn-sm" data-toggle="modal" data-target="#deleteModal"
+                       onclick="deleteRow('{!territory.Id}', 'territory');">Delete</button>
+                       <!-- Tag  "<apex:commandlink > executes an action defined by a controller, and then either refreshes the current page, or navigates to a different page based on the PageReference variable that is returned by the action". In our case we use this tag for invoking controller's method "toggleTerritoryActive" which specified in "action" parameter and sending value with name "id",which specified in child tag "<apex:param >" Also in "value" we have "IF STATEMENT",
+                       example "{!IF(condition, true,false)}""
+                        See more at https://developer.salesforce.com/docs/atlas.en-us.pages.meta/pages/pages_compref_commandLink.htm
+                                    https://developer.salesforce.com/docs/atlas.en-us.pages.meta/pages/pages_compref_param.htm
+                        -->
+                    <apex:commandLink action="{!toggleTerritoryActive}" value="{!IF(territory.Active__c, 'Deactivate', ' Activate ')}" 
+                        styleClass="btnNoOverride btn-default btn-sm">
+                        <apex:param name="tid" value="{!territory.Id}"/>
+                    </apex:commandLink>
+                </div>
+            </div><!--/row-->
+            <div id="edit-lead-{!territory.Order__c}" class="edit-lead collapse">
+              <div class="row">
+                <div class="col-xs-6 col-sm-4 col-md-3" style="width:20%">
+                  <!-- Tag "apex:inputText" is used to get user input for controller method. For example, value, that user typed in 
+                <apex:inputText value="{!territory.Name}"/> will be correspond for field "Name" in a "Territory_AppD__c" object
+                See more at https://developer.salesforce.com/docs/atlas.en-us.pages.meta/pages/pages_compref_inputText.htm
+                 -->
+                  <apex:inputText value="{!territory.Name}" styleClass="form-control input-sm" html-placeholder="Account Territory Name"/>
+                </div>
+                <div class="col-xs-3 col-sm-4 col-md-2" style="width:15%">
+                  <apex:inputField value="{!territory.Geo__c}" styleClass="form-control input-sm" />
+                </div>
+                <div class="col-xs-3 col-sm-4 col-md-2" style="width:15%">
+                  <apex:inputField value="{!territory.Region__c}" styleClass="form-control input-sm"/>
+                </div>
+                <div class="col-xs-3 col-sm-4 col-md-2" style="width:15%">
+                  <div class="input-group input-group-sm" id="{!territory.Id}">
+                    <input type="text" class="form-control input-sm" value="{!territory.Assigned_To__c}" readonly="true"/>
+                    <apex:inputHidden value="{!territory.Assigned_To__c}"/>  
+                    <apex:inputHidden value="{!territory.Assigned_To_ID__c}"/> 
+                    <span class="input-group-btn" data-toggle="modal" data-target="#allAssignmentsModal" onclick="setTarget('{!territory.Id}')">
+                      <button class="btnNoOverrideLookup btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
+                    </span>
+                  </div>
+                </div>
+                <div class="col-xs-3 col-sm-4 col-md-1" style="width:15%">
+                  <apex:inputField value="{!territory.Effective_Date__c}" styleClass="form-control input-sm" style="width:100%"/>
+                </div>
+                <div class="col-xs-6 col-sm-3 col-md-3" style="width:20%">
+                  <apex:commandLink action="{!editTerritory}" styleClass="btnNoOverride btn-primary btn-primaryNoOverride btn-sm" value="Save">
+                      <apex:param name="territoryId" value="{!territory.Id}"/>
+                  </apex:commandLink>
+                  <button type="button" class="btnNoOverride btn-info btn-sm" data-toggle="collapse" data-target="#edit-lead-{!territory.Order__c}"
+                    onclick="setRowEditBtnText('{!territory.Order__c}')"> Cancel
+                  </button>
+                </div>
+
+                <div class="col-xs-12">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="panel panel-default">
+                        <div class="panel-body">
+                    
+                          <p class="clearfix"><strong>Geographic Criteria</strong></p>        
+                                        
+                          <div class="table-responsive">
+                            <table class="table table-bordered table-condensed">
+                              <thead>
+                                <tr>
+                                  <th>Country</th>
+                                  <th>State/Province</th>
+                                  <th>Postal Start</th>
+                                  <th>Postal End</th>
+                                  <th>Action</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <apex:repeat value="{!territory.Territory_Geographies__r}" var="geography" rows="5" first="0">
+                                <tr>
+                                  <td>{!geography.Country__c}</td>
+                                  <td>{!geography.State__c}</td>
+                                  <td>{!geography.Zip_Start__c}</td>
+                                  <td>{!geography.Zip_End__c}</td>
+                                  <td>
+                                    <a href="javascript:void(0)" title="Edit" onclick="editRow(this)"><span class="glyphicon glyphicon-edit"></span></a> 
+                                    <a href="javascript:void(0)" title="Delete" data-toggle="modal" data-target="#deleteModal" 
+                                      onclick="setCurrentCollIndex('{!territory.Order__c}'); deleteRow('{!geography.Id}', 'geography');">
+                                      <span class="glyphicon glyphicon-trash"></span>
+                                    </a>
+                                  </td>
+                                </tr>
+                                <tr class="geographic-addrow" style="display:none;">
+                                  <td><input type="text" class="form-control" value="{!geography.Country__c}"/></td>
+                                  <td><input type="text" class="form-control" value="{!geography.State__c}"/></td>
+                                  <td><input type="text" class="form-control" value="{!geography.Zip_Start__c}"/></td>
+                                  <td><input type="text" class="form-control" value="{!geography.Zip_End__c}"/></td>
+                                  <td>
+                                    <a href="javascript:void(0)" title="Save" 
+                                        onclick="setCurrentCollIndex('{!territory.Order__c}');saveGeography(this, '{!territory.Id}', '{!geography.Id}');">
+                                        <span class="glyphicon glyphicon-saved"></span>
+                                    </a> 
+                                    <a href="javascript:void(0)" title="Cancel" onclick="cancelRow(this)">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </a>
+                                  </td>
+                                </tr>
+                                </apex:repeat>
+                                <tr class="geographic-addrow collapse">
+                                  <td><input type="text" class="form-control input-sm"/></td>
+                                  <td><input type="text" class="form-control input-sm"/></td>
+                                  <td><input type="text" class="form-control input-sm"/></td>
+                                  <td><input type="text" class="form-control input-sm"/></td>
+                                  <td>
+                                    <a href="javascript:void(0)" title="Save" 
+                                      onclick="setCurrentCollIndex('{!territory.Order__c}'); saveGeography(this, '{!territory.Id}');">
+                                      <span class="glyphicon glyphicon-saved"></span>
+                                    </a> 
+                                    <a href=".geographic-addrow" data-toggle="collapse" title="Cancel">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </a>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div><!-- /table-responsive -->
+                          
+                          <a href=".geographic-addrow" data-toggle="collapse">Add Row</a>
+                          <a href="#pasteAssignmentsModal" class="pull-right" data-toggle="modal" 
+                            onclick="setCurrentCollIndex('{!territory.Order__c}');setTerritoryID('{!territory.Id}')">
+                            Paste geographic assignments</a>
+                        </div>  
+                      </div><!--/panel-->
+                    </div>
+                    <apex:outputPanel id="fieldCriteria" layout="block" styleClass="col-md-6">
+                      <div class="panel panel-default">
+                        <div class="panel-body">
+                          
+                          <p class="clearfix"><strong>Field Criteria</strong></p>
+                    
+                          <div class="table-responsive">
+                            <table class="table table-bordered table-condensed">
+                              <thead>
+                                <tr>
+                                  <th>Field</th>
+                                  <th>Operator</th>
+                                  <th>Value</th>
+                                  <th>Action</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <apex:repeat value="{!territory.Territory_Field_Criteria__r}" var="leadField" rows="5" first="0">
+                                
+                                <tr>
+                                  <td>{!leadField.Field__c}</td>
+                                  <td>{!leadField.Operator__c}</td>
+                                  <td>{!leadField.Value__c}</td>
+                                  <td>
+                                    <a href="javascript:void(0)" title="Edit" onclick="editFieldRow(this, '{!leadField.Value__c}')">
+                                      <span class="glyphicon glyphicon-edit"></span>
+                                    </a> 
+                                    <a href="javascript:void(0)" title="Delete" data-toggle="modal" data-target="#deleteModal" 
+                                      onclick="setCurrentCollIndex('{!territory.Order__c}');deleteRow('{!leadField.Id}', 'leadField')">
+                                      <span class="glyphicon glyphicon-trash"></span>
+                                    </a>
+                                  </td>
+                                </tr>
+                                <tr class="leadfield-addrow collapse" style="display:none;">
+                                  <td>
+                                  <!-- Tag "<apex:selectList>" is the list of options that allows users to select only one value or multiple values at a time. Parameter "value"  merges field that references the controller class variable that is associated with this selectList. In our case we use "getLeadFields"(specified at "<apex:selectOptions> tag with parameter "value") method from controller to receive values and when user choose a value, this value will be stored at field "Field__c" of "Territory_Field_Criteria__c", this field specified in "value" parameter of "<apex:selectList>" tag.
+                                  Parameter "multiselect" defines, how many values user can choose. In our case this parameter is equal to false and user can choose only one value from list
+                                  Parameter "onchange" contains a call of JS method "displayField" with keyword "this" ("this" is a choosed value)  
+                                  See more at https://developer.salesforce.com/docs/atlas.en-us.pages.meta/pages/pages_compref_selectOptions.htm
+                                  https://developer.salesforce.com/docs/atlas.en-us.pages.meta/pages/pages_compref_selectList.htm
+
+                                  -->
+                                    <apex:selectList value="{!leadField.Field__c}" size="1" multiselect="false" 
+                                      styleClass="form-control input-sm sourceSelectList" onchange="displayField(this);">
+                                      <apex:selectOptions value="{!objectFields}"/>
+                                    </apex:selectList>
+                                  </td>
+                                  <td>
+                                  <!-- At previous example we have a list of values in "<apex:selectOptions>" from controller's method. Now we have tag "<apex:selectOption>". It's the same, but every "<apex:selectOption>" can contain only a single value. Parameter "itemLabel" is what user sees on the page, parameter "itemValue" it's a value which will be stored in field that specified in parameter "value" of "<apex:selectList>" tag.
+                                  See more at https://developer.salesforce.com/docs/atlas.en-us.pages.meta/pages/pages_compref_selectOption.htm-->
+                                    <apex:selectList value="{!leadField.Operator__c}" style="width:100px;" size="1" multiselect="false"
+                                      styleClass="form-control input-sm">
+                                      <apex:selectOption itemLabel="--None--" itemValue=""/>
+                                      <apex:selectOption itemLabel="equals" itemValue="equals"/>
+                                      <apex:selectOption itemLabel="not equal to" itemValue="not equal to"/>
+                                    </apex:selectList>
+                                  </td>
+                                  <td>
+                                    <input type="text" class="form-control input-sm inputText" value="{!leadField.Value__c}"/>
+                                    <select class="form-control input-sm selectList">
+                                      <option>--None--</option>
+                                    </select>
+                                  </td>
+                                  <td>
+                                    <apex:commandLink action="{!createLeadFieldCriteria}" reRender="rowList" oncomplete="showCollapse();"
+                                      onclick="setCurrentCollIndex('{!territory.Order__c}'); saveLeadField(this, '{!territory.Id}', '{!leadField.Id}');">
+                                      <span class="glyphicon glyphicon-saved"></span>
+                                    </apex:commandLink>
+                                    <a href="javascript:void(0)" title="Cancel" onclick="cancelRow(this)">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </a>
+                                  </td>
+                                </tr>
+                                </apex:repeat>
+                                <tr class="leadfield-addrow collapse">
+                                  <td>
+                                    <apex:selectList size="1" multiselect="false" style="width:120px;" styleClass="form-control input-sm sourceSelectList" 
+                                        onchange="displayField(this);">
+                                        <apex:selectOptions value="{!objectFields}"/>
+                                    </apex:selectList>
+                                  </td>
+                                  <td>
+                                    <select style="width:100px;" class="form-control input-sm">
+                                      <option value="">--None--</option>
+                                      <option value="equals">equals</option>
+                                      <option value="not equal to">not equal to</option>
+                                    </select>
+                                  </td>
+                                  <td>
+                                    <input type="text" class="form-control input-sm inputText"/>
+                                    <select class="form-control input-sm selectList">
+                                      <option>--None--</option>
+                                    </select>
+                                  </td>
+                                  <td>
+                                    <apex:commandLink action="{!createLeadFieldCriteria}" reRender="rowList" oncomplete="showCollapse();"
+                                      onclick="setCurrentCollIndex('{!territory.Order__c}'); saveLeadField(this, '{!territory.Id}');">
+                                      <span class="glyphicon glyphicon-saved"></span>
+                                    </apex:commandLink>
+                                    <a href=".leadfield-addrow" data-toggle="collapse" title="Cancel">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </a>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div><!-- /table-responsive -->
+
+                          <a href=".leadfield-addrow" data-toggle="collapse">Add Row</a>
+                            
+                        </div>   
+                      </div><!--/panel-->
+                    </apex:outputPanel>
+                  </div><!--/row-->
+                </div>
+              </div><!--/row-->   
+              
+              <p>
+                <span class="glyphicon glyphicon-zoom-in"></span> 
+                <a href="/apex/EditAccountTerritory?id={!Territory.Id}">
+                  View Full Page 
+                  <span style="display:{!IF(OR(territory.of_Geographic_Criteria__c > 5, territory.of_Field_Criteria__c > 5), '', 'none')}">
+                    ({!territory.of_Geographic_Criteria__c} Geographic Criteria, {!territory.of_Field_Criteria__c} Field Criteria)
+                  </span> 
+                  &rarr;
+                </a>
+              </p>
+              
+            </div><!--/collapse-->
+          </div><!--/title-->
+          </apex:repeat>
+        </apex:outputPanel><!--/row sortable-->
+      
+      </div>
+    </div><!--/content-wrapper-->
+
+    <!--<div class="footer">
+      <div class="container">
+        <p class="text-muted">&copy; Company</p>
+      </div>
+    </div>-->
+
+    <!-- allAssignmentsModal -->
+    <div class="modal fade" id="allAssignmentsModal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <apex:outputPanel id="searchModal" layout="block" styleClass="modal-content">
+          <div class="modal-header" style="padding-bottom: 35px;">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" style="float:left;">Lookup</h4>
+            <div style="width:480px; float:right">&nbsp;</div>
+            <!-- "apex:commandButton" defines a button on the page with next parameters:
+                Parameter "value" it's a text that will displayed on button
+                Parameter "styleClass" defines a style of this button
+                Parameter "action" defines method in controller(in our case it's "searchUser" method), that invoked by request to the server
+                See more at https://developer.salesforce.com/docs/atlas.en-us.pages.meta/pages/pages_compref_commandButton.htm
+             -->
+            <apex:commandButton action="{!searchUser}" value="Search" styleClass="btn btn-default btn-sm" 
+              style="float:right; margin-left:10px;" reRender="searchModal"/>
+            <apex:inputText value="{!userinfo}" styleClass="form-control" style="float:right; width:200px; height:30px;" 
+                onkeypress="if(event.keyCode==13) return false;"/>
+          </div>
+          <div class="modal-body">
+            <div style="font-size:12px;"><b>Search Results</b>: max 15 records.</div>
+            <div class="table-responsive top15" style="margin-top:2px;" id="searchResponse">
+              <apex:pageBlock rendered="{!users.size != 0}">
+                <apex:pageBlockTable value="{!users}" var="user" width="100%">
+                  <apex:column headerValue="Full Name">
+                    <a href="#" data-dismiss="modal" onclick="getUser('{!user.Id}', '{!user.Name}');">{!user.Name}</a>
+                  </apex:column>
+                  <apex:column headerValue="Phone" value="{!user.Phone}"/>
+                  <apex:column headerValue="Email" value="{!user.Email}"/>
+                  <apex:column headerValue="Role" value="{!user.UserRole.Name}"/>
+                </apex:pageBlockTable>
+              </apex:pageBlock>
+            </div><!-- /table-responsive -->
+          </div>
+        </apex:outputPanel>
+      </div>
+    </div> <!-- allAssignmentsModal -->
+    
+    <!--pasteAssignmentsModal-->
+    <div class="modal fade" id="pasteAssignmentsModal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Create Assignments</h4>
+          </div>
+          <div class="modal-body">
+          
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="active"><a href="#Type" role="tab" data-toggle="tab">Type Assignments</a></li>
+              <li><a href="#Paste" role="tab" data-toggle="tab">Paste Assignments</a></li>
+            </ul>
+            
+            <!-- Tab panes -->
+            <div class="tab-content">
+              <div class="tab-pane active" id="Type">
+              
+                <div class="table-responsive top15">
+                  <apex:outputPanel id="singleAssignmentPanel">
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Country</th>
+                          <th>State/Provice</th>
+                          <th>Postal Start</th>
+                          <th>Postal End</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <apex:repeat value="{!newterritoryGeos}" var="assignment">
+                        <tr>
+                          <td><apex:inputText value="{!assignment.Country__c}" styleClass="form-control"/></td>
+                          <td><apex:inputText value="{!assignment.State__c}" styleClass="form-control"/></td>
+                          <td><apex:inputText value="{!assignment.Zip_Start__c}" styleClass="form-control"/></td>
+                          <td><apex:inputText value="{!assignment.Zip_End__c}" styleClass="form-control"/></td>
+                        </tr>
+                        </apex:repeat>
+                      </tbody>
+                    </table>
+                   </apex:outputPanel>
+                </div>
+                
+                <button type="button" class="btnNoOverride btn-default btn-sm" onclick="addMoreTerritoryGeos();">Add More Row</button>
+                <!-- Tag "<apex:actionStatus >" is the component that displays the status of an AJAX update request. An AJAX request can either be in progress or complete. In our case we use it to handle loading process. "<apex:actionStatus >" is linked to it's process via id parameter.
+                See more at https://developer.salesforce.com/docs/atlas.en-us.pages.meta/pages/pages_compref_actionStatus.htm
+                 -->
+                <apex:actionStatus id="statusAssignment">
+                <!-- Tag "<apex:facet>" is the placeholder for content that is rendered in a specific part of the parent component, such as the header or footer of an <apex:dataTable>. An <apex:facet> component can only exist in the body of a parent component("<apex:actionStatus>" in our case) if the parent supports facets. The name of the facet component must match one of the pre-defined facet names on the parent component. This name determines where the content of the facet component is rendered. The order in which a facet component is defined within the body of a parent component doesn't affect the appearance of the parent component. Here "<apex:facet>" will draw a loading image when some process, associated with parent 
+                "<ape:actionStatus>" would start.
+                See more at https://developer.salesforce.com/docs/atlas.en-us.pages.meta/pages/pages_compref_facet.htm
+                -->
+                  <apex:facet name="start">
+                      <img style="margin-top:15px;" src="/img/loading.gif" alt="loading..." />
+                  </apex:facet>
+                </apex:actionStatus>
+                <hr/>
+                <button type="button" class="btnNoOverride btn-default btn-sm" data-dismiss="modal">Cancel</button>
+                <button type="button" data-dismiss="modal" class="btnNoOverride btn-primary btn-sm" onclick="insertNewTerritoryGeos();">Save changes</button>
+              </div>
+              <div class="tab-pane" id="Paste">
+                <p class="top15">Paste up to 400 assignments with the following format: Country, State, Postal Start, Postal End</p>
+                <!-- Tag "<apex:inputTextarea>" has the same functionality with "<apex:inputtext>", but "<apex:inputTextarea>" can hold an unlimited number of characters, and the text renders in a fixed-width font.The size of a text area can be specified by the cols and rows attributes, or even better; through CSS' height and width properties. -->
+                <apex:inputTextarea value="{!assignmentsCSV}" styleClass="form-control assignmentCsv"/>
+                <hr/>
+                <button type="button" class="btnNoOverride btn-default btn-sm" data-dismiss="modal">Cancel</button>
+                <button type="button" data-dismiss="modal" class="btnNoOverride btn-primary btn-sm" onclick="insertTerritoryByCSV();">Save changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!--/pasteAssignmentsModal-->
+    
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="myModalLabel">Are you sure?</h4>
+          </div>
+          <div class="modal-body">
+            The <span id="deleteText"></span> will be deleted, correct?
+          </div>
+          <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btnNoOverride btn-default btn-sm">No</button>
+            <button type="button" class="btnNoOverride btn-danger btn-sm" data-dismiss="modal"
+                style="background-image: linear-gradient(to bottom, #d9534f 0px, #c12e2a 100%); background-repeat: repeat-x;border-color: #b92c28;" 
+                onclick="removeRow();">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--/deleteModal-->
+    
+    <div class="modal fade" id="turnOffModal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Turning off Territory Management</h4>
+          </div>
+          <div class="modal-body">
+            <div class="alert alert-danger" role="alert">
+                <p>Turning off Territory Management will result in <strong>No automated Account and Contact assignments</strong> effective immediately.</p>
+                <div class="space15"></div>
+                <strong>Do you want to continue?</strong>
+            </div><!-- /alert -->
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btnNoOverride btn-success btn-switch" data-do="on">No, Keep On</button>
+            <button id="offBtn" type="button" class="btnNoOverride btn-danger btn-switch" data-do="off" onclick="setupStatus('Off')">Yes, Turn Off</button>
+          </div>
+        </div>
+      </div>
+    </div><!-- /turnOffModal -->
+    
+    <div class="modal fade" id="turnOnModal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Turning On Territory Management</h4>
+          </div>
+          <div class="modal-body">
+            <div class="alert alert-success" role="alert">
+                <p>Turning on Territory Management will result in All New Accounts being assigned based on existing territory 
+                assignments AS WELL AS All Existing Accounts being reviewed and assigned according to existing territory assignments.</p>
+                <div class="space15"></div>
+                <strong>Do you want to continue?</strong>
+            </div><!-- /alert -->
+          </div>
+          <div class="modal-footer">
+            <button id="onBtn" type="button" class="btnNoOverride btn-success btn-switch" data-do="on" onclick="setupStatus('On')">Yes, Turn On</button>
+            <button type="button" class="btnNoOverride btn-danger btn-switch" data-do="off">No, Keep Off</button>
+          </div>
+        </div>
+      </div>
+    </div><!-- /turnOnModal -->
+    
+    <div class="modal fade" id="massUpdateModal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content"> 
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Mass Update</h4>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label>Select the next day for the Mass Update of Territory Management to run.</label>
+              <div class='input-group date' id='datetimepicker1'>
+                  <apex:inputText styleClass="form-control input-sm" value="{!setup.Next_Mass_Update_Date__c}"/>
+                  <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                  </span>
+              </div>
+            </div>
+            
+            <div id="alert-schedule-mass-update" class="alert alert-info displaynone" role="alert">
+              <h4 id="oh-snap!-you-got-an-error!">Schedule Mass Update</h4>
+              <p>A mass update of all accounts and contacts will run on selected date at 1am PST. 
+              Ownership assignments will be driven based on the Territory Assignment definitions at that point in time.</p>
+              <p>
+                  <apex:commandButton value="Ok, Take this action" action="{!saveMassUpdatedDate}" styleClass="btnNoOverride btn-info"/>
+                  <!--
+                  <button type="button" class="btn btn-default btn-action" data-action="close" data-target="#alert-schedule-mass-update">Cancel</button>
+                  -->
+              </p>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btnNoOverride btn-default" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btnNoOverride btn-danger btn-sm" data-dismiss="modal"
+                style="background-image: linear-gradient(to bottom, #d9534f 0px, #c12e2a 100%); background-repeat: repeat-x;border-color: #b92c28;" 
+                onclick="doMassUpdateTerrsImm()">Effective Immediately</button>
+            <button type="button" class="btnNoOverride btn-primary btn-primaryNoOverride btn-action" 
+              data-action="open" data-target="#alert-schedule-mass-update">Schedule</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <script>
+        $(".input-switch").bootstrapSwitch();
+        if({!setup.Status__c == 'On'}){
+          $('.input-switch').bootstrapSwitch('toggleState');
+        }
+    </script>
+  </apex:form>  
+  </body>
+</html>
+</apex:page>

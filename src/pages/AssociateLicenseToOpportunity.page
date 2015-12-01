@@ -1,0 +1,38 @@
+<apex:page standardController="License_Opportunity__c" extensions="AssociateLicenseToOpportunityController">
+
+<apex:pageMessages />
+	<apex:form >
+		<apex:pageBlock title="{!pageTitle}" id="pageBlock">  
+			<apex:pageBlockButtons >
+				<apex:CommandButton value="Save" action="{!saveLicenseOpportunity}"/>
+				<apex:CommandButton value="Cancel" action="{!cancel}"/>
+        	</apex:pageBlockButtons>
+    		<apex:pageBlockSection title="Select Opportunity" columns="1" collapsible="false">
+				<apex:inputField value="{!licenseOpportunityObj.Opportunity__c}" onChange="callActionfunction();" />
+				<apex:actionFunction name="callActionfunction" action="{!selectedLicenseOpportunity}" rerender="section1" status="theStatus"/>
+			</apex:pageBlockSection>
+			<apex:pageBlockSection columns="1">
+				<apex:outputPanel id="section1" style="border:0;">
+					<apex:outputPanel rendered="{!containsOppCtRole}" style="border:0;">	
+						<apex:selectRadio layout="pageDirection" value="{!selectedContact}">
+							<apex:selectOption itemLabel="<b> {!myOpportunity.Name} </b> already has <b> {!selectedOppCt.Contact.Name} </b> as primary contact, do you want to retain this as well for the license ? <br/>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Doing this the existing primary contact of license will be moved as Additional contact." itemEscaped="false" itemValue="existingContact" ></apex:selectOption>
+							
+							<apex:selectOption itemLabel="Set License Contact ( <b> {!primaryContact.Name} </b> ) as primary contact to <b> {!myOpportunity.Name} </b> opportunity. "
+							itemEscaped="false" itemValue="azureContact" ></apex:selectOption>
+						</apex:selectRadio>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Please choose contact role for the license contact:&nbsp;&nbsp;<apex:inputField value="{!newOppCt.Role}"  />
+					</apex:outputPanel> 
+					<apex:outputPanel rendered="{!showPanel}" style="border:0;">
+						There is no Primary contact associated with <b> {!myOpportunity.Name} </b> opportunity.
+						Create License contact (<b> {!primaryContact.Name} </b>) as primary contact on this opportunity.<br/>
+						By doing this, you will be moving license contact under <b> {!accountObj.Name} </b> account. <br/>
+						Please choose contact role for the license contact:
+						&nbsp;&nbsp;&nbsp;<apex:inputField value="{!newOppCt.Role}"  />
+					</apex:outputPanel>
+				</apex:outputPanel>
+    		</apex:pageBlockSection>
+    	</apex:pageBlock>
+    	
+	</apex:form>
+</apex:page>

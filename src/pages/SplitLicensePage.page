@@ -1,0 +1,70 @@
+<apex:page standardController="LicenseDetail__c" 
+    extensions="SplitLicenseController" action="{!initAction}">
+    <apex:pageMessages />
+    <apex:form >
+        <apex:pageblock title="Split License">
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Split" action="{!saveObject}"/>
+                <apex:commandButton value="Cancel" action="{!cancel}"/>
+            </apex:pageBlockButtons>
+            
+            <apex:pageBlockSection columns="1">
+                <apex:pageBlockSection columns="2" title="Original License Details" collapsible="false">
+                    <apex:outputField value="{!licenseDetailObj.License_Expiry_Date__c}"/>
+                    <apex:outputField value="{!licenseDetailObj.Product_Type__c}"/>
+                    <apex:outputField value="{!licenseDetailObj.Custom_URL_Name__c}" rendered="{!splitLicenseCustomURLShow}"/>
+                    <apex:outputField value="{!licenseDetailObj.MAC_Address__c}" rendered="{!splitLicenseMacAddressShown}"/>
+                    <!-- <apex:pageBlockSectionItem >
+                    	<apex:outputLabel value="Java Agents"/>
+                    	<apex:outputLabel value="{!FLOOR(oldJavaAgents)}"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                    	<apex:outputLabel value=".Net Agents"/>
+                    	<apex:outputLabel value="{!FLOOR(oldNetAgents)}"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                    	<apex:outputLabel value="Additional Machine Agents"/>
+                    	<apex:outputLabel value="{!FLOOR(oldMachineAgents)}"/>
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>-->
+                <apex:repeat value="{!oldLicAgentInfo}" var="licUnit">
+						<apex:pageBlockSectionItem >
+							<apex:outputLabel value="{!licUnit.agentText} Agents"/>
+							<apex:outputLabel value="{!ROUND(licUnit.licAgent['Count__c'],0)}"/>
+						</apex:pageBlockSectionItem>
+					</apex:repeat>
+				</apex:pageBlockSection>
+                <apex:pageBlockSection columns="2">
+                    <apex:pageBlockSection title="1st License" columns="1" collapsible="false">
+                        <apex:InputField value="{!licenseDetailObj.MAC_Address__c}" rendered="{!splitLicenseMacAddressShown}"/>
+                        <apex:OutputField value="{!licenseDetailObj.Custom_URL_Name__c}" rendered="{!splitLicenseCustomURLShow}"/>
+                        <apex:repeat value="{!licAgentInfoList}" var="licUnit">
+							<apex:pageBlockSectionItem >
+								<apex:outputLabel value="{!licUnit.agentText} Agents">
+								</apex:outputLabel>
+								<apex:outputPanel >
+									<apex:inputField value="{!licUnit.licAgent['Count__c']}" rendered="{!licUnit.editable}"/>
+									<apex:outputField value="{!licUnit.licAgent['Count__c']}" rendered="{!licUnit.readonly}"/>
+								</apex:outputPanel>
+							</apex:pageBlockSectionItem>
+						</apex:repeat>
+                    </apex:pageBlockSection>
+                    <apex:pageBlockSection title="2nd License" columns="1" collapsible="false">
+                        <apex:InputField value="{!secondLicense.MAC_Address__c}"  rendered="{!splitLicenseMacAddressShown}"/>
+                        <apex:InputField value="{!secondLicense.Custom_URL_Name__c}"  rendered="{!splitLicenseCustomURLShow}"/>
+                        <apex:repeat value="{!secondLicAgentInfo}" var="secLicUnit">
+							<apex:pageBlockSectionItem >
+								<apex:outputLabel value="{!secLicUnit.agentText} Agents">
+								</apex:outputLabel>
+								<apex:outputPanel >
+									<apex:inputField value="{!secLicUnit.licAgent['Count__c']}" rendered="{!secLicUnit.editable}"/>
+									<apex:outputField value="{!secLicUnit.licAgent['Count__c']}" rendered="{!secLicUnit.readonly}"/>
+								</apex:outputPanel>
+							</apex:pageBlockSectionItem>
+						</apex:repeat>                
+                    </apex:pageBlockSection>
+                </apex:pageBlockSection>
+            </apex:pageBlockSection>
+        </apex:pageblock>    
+    </apex:form>
+</apex:page>

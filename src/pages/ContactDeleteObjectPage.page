@@ -1,0 +1,2 @@
+<apex:page standardController="Contact" extensions="DeleteObjectController" action="{!doDelete}">
+</apex:page>

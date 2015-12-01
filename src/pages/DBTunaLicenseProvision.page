@@ -1,0 +1,151 @@
+<apex:page standardController="DBTuna_License__c" extensions="DBTunaProvisionController" action="{!initAction}">
+	<apex:includeScript value="{!$Resource.Jquery_script}"/>
+    <apex:includeScript value="{!$Resource.License_Page_JavaScript}"/>
+	<apex:PageMessages escape="false"></apex:PageMessages>
+	<apex:form >
+		<apex:pageMessage summary="Legacy ONLY License Creation" severity="warning" strength="3" />
+		<apex:pageBlock title="Database License Details" id="theBlock" rendered="{!isAllowedToProvision}">
+			<apex:pageblockButtons >
+                <apex:commandButton value="{!saveButtonTitle}" disabled="{!provisionDisabled}" action="{!saveObject}"  onclick="disableAfterTimeout(this);"/>
+                <apex:commandButton value="Cancel" action="{!cancel}" />
+            </apex:pageblockButtons>
+            <apex:pageBlockSection columns="4" id="theSection">
+            	<apex:pageBlockSectionItem id="expiryDateSection" rendered="{!!isPartner}">
+            		<apex:outputLabel value="Expiry Date"></apex:outputLabel>
+                    <apex:inputField value="{!pageContextObj['ExpiryDate__c']}" id="expiryDateId" />
+            	</apex:pageBlockSectionItem>
+            	<apex:pageBlockSectionItem id="expiryDateSectionWithPartner" rendered="{!isPartner}">
+            		<apex:outputLabel value="Expiry Date"></apex:outputLabel>
+                	<apex:outputLabel value="{!expiryDateFormat}"/>
+            	</apex:pageBlockSectionItem>
+            	 <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem id="servername" rendered="{!!isPartner}">
+            		<apex:outputLabel value="Server Name"></apex:outputLabel>
+                    <apex:inputField value="{!pageContextObj['Server_Name__c']}" id="serverNameId" />
+            	</apex:pageBlockSectionItem>
+            	<apex:pageBlockSectionItem id="servernameWithPartner" rendered="{!isPartner}">
+            		<apex:outputLabel value="Server Name"></apex:outputLabel>
+                	<apex:outputLabel value="{!pageContextObj['Server_Name__c']}"/>
+            	</apex:pageBlockSectionItem>
+            	
+            	 <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+                
+            </apex:pageBlockSection>
+		
+		  <apex:pageBlockSection columns="1">
+                <apex:pageBlockSection id="contactsSection"
+                    title="Email Notifications" columns="1">
+                    <!-- <apex:pageBlockTable value="{!dblicenseContacts}" var="ct" id="ctTable">
+                        <apex:column headerValue="Contact">
+                            <apex:outputLink value="/{!ct.contactObj.Id}">{!ct.contactObj.Name}</apex:outputLink>
+                        </apex:column>
+                        <apex:column headerValue="Needs Email?">
+                            <apex:outputField value="{!ct.contactObj.Needs_Email__c}" rendered="{!ct.isPrimary}"/>
+                            <apex:inputField value="{!ct.contactObj.Needs_Email__c}" rendered="{!!ct.isPrimary}"/>
+                        </apex:column>
+                        <apex:column headerValue="Primary Contact?" >
+                            <apex:inputCheckBox value="{!ct.isPrimary}" disabled="true"/>
+                        </apex:column>
+                        <apex:column headerValue="Email">
+                            <apex:inputField value="{!ct.contactObj.Email}"/>
+                        </apex:column>
+                        <apex:column headerValue="Download Center">
+                            <apex:outputField value="{!ct.contactObj.Download__c}" rendered="{!ct.isPrimary}"/>
+                            <apex:inputField value="{!ct.contactObj.Download__c}" rendered="{!!ct.isPrimary}"/>
+                        </apex:column>
+                        <apex:column headerValue="Help Center">
+                            <apex:outputField value="{!ct.contactObj.ZenDesk__c}" rendered="{!ct.isPrimary}"/>
+                            <apex:inputField value="{!ct.contactObj.ZenDesk__c}" rendered="{!!ct.isPrimary}"/>
+                        </apex:column>
+                        <apex:column headerValue="Online Docs">
+                            <apex:outputField value="{!ct.contactObj.Docs__c}" rendered="{!ct.isPrimary}"/>
+                            <apex:inputField value="{!ct.contactObj.Docs__c}" rendered="{!!ct.isPrimary}"/>
+                        </apex:column>
+                        <apex:column headerValue="Training Center">
+                            <apex:outputField value="{!ct.contactObj.LMS__c}" rendered="{!ct.isPrimary}"/>
+                            <apex:inputField value="{!ct.contactObj.LMS__c}" rendered="{!!ct.isPrimary}"/>
+                        </apex:column>
+                    </apex:pageBlockTable> -->
+                    
+                    
+                    
+                    
+                    <apex:outputPanel >             
+                    <table class="list " cellpadding="0" cellspacing="0">
+                        <thead class="rich-table-thead">
+                            <tr class="headerRow ">
+                                <th class="headerRow  ">Contact</th>
+                                <th class="headerRow  ">Needs Email?</th>
+                                <th class="headerRow  ">Primary Contact?</th>
+                                <th class="headerRow  ">Email</th>
+                                <th class="headerRow  ">Download Server</th>
+                                <th class="headerRow  " >Online Docs</th>
+                                <th class="headerRow  ">Help</th>
+                                <th class="headerRow  ">Community Fan Club</th>
+                                <th class="headerRow  " >AppDynamics University</th>
+                                <th style='{!displayStyle}'>MindTickle</th>
+                            </tr>
+                        </thead>
+                        <apex:repeat value="{!aduaContactsHelper.contactWrapperList}" var="ctWrapper">
+                            <tr class="dataRow even  first">
+                                <td class="dataCell  ">
+                                    <apex:OutputLink value="/{!ctWrapper.contactObj.Id}" target="_top">{!ctWrapper.contactObj.firstName} {!ctWrapper.contactObj.lastName}</apex:outputLink>
+                                </td>
+                                
+                                <td class="dataCell  ">
+                                    <apex:inputCheckBox styleClass="systemsClass" value="{!ctWrapper.contactObj.Needs_Email__c}" disabled="{!ctWrapper.isPrimary}"></apex:inputCheckBox>
+                                </td>
+                                
+                                <td class="dataCell  ">
+                                    <apex:inputCheckBox styleClass="systemsClass" value="{!ctWrapper.isPrimary}" disabled="true"/>
+                                </td>
+                                <td class="dataCell  ">{!ctWrapper.contactObj.email}</td>
+                                <apex:repeat value="{!ctWrapper.aduaUIObj.systemEntries}" var="system">
+                                    <td class="dataCell  ">
+                                        <apex:inputCheckBox styleClass="systemsClass" value="{!system.selected}" rendered="{!system.isVisible}" disabled="{!IF(OR(system.isLMS,ctWrapper.isPrimary),True,False)}"></apex:inputCheckBox>
+                                    </td>                   
+                                </apex:repeat>
+                                
+                            </tr>
+                        </apex:repeat>
+                    </table>
+                </apex:outputPanel>
+                    
+                    
+                    
+                    </apex:pageBlockSection>
+                    </apex:pageBlockSection>
+		</apex:pageBlock>
+		
+		<apex:pageBlock title="Database License Details" id="message" rendered="{!!isAllowedToProvision}">
+			Partners cannot provision more than one trial license for an opportunity. Please contact your account manager for assistance.
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>

@@ -1,0 +1,73 @@
+<apex:page controller="PropertiesUI" action="{!initAction}">
+    
+    <style type="text/css">
+		.tableContainer
+		{
+			height:275px; 
+			width: 100%;
+			overflow: auto;
+		}       
+        .floatingStyle 
+		{ 
+            position:relative; 
+		}              
+    </style>
+    
+       
+        
+    <apex:form >
+    	<!--
+    		This page block is used to show the list of portal properties and its instance name(Production/QA) as the title.  
+    	-->
+	    <apex:pageBlock title="Instance: {!organization}" id="settingsData">
+			<!-- <script>
+				
+		    	$(document).ready(function() {
+		        	$('.floatingHeaderTable').vfFloatingHeaders();
+		    	});
+		    </script> -->
+	    	
+			<apex:pageBlockButtons >
+				<apex:commandButton action="{!saveList}" value="Save" rerender="settingsData"/>
+				<apex:commandButton action="{!cancel}" value="Cancel" rerender="settingsData" rendered="{!showCancel}"/>
+				<apex:commandButton action="{!addNewProperty}" value="Add New Property" rerender="settingsData"/>
+			</apex:pageBlockButtons>
+			
+			<apex:pageMessages ></apex:pageMessages>
+	        
+	        <b><apex:outputText value="{!sectionHeaderString}" /></b> <br/><br/>
+			<apex:outputPanel styleClass="tableContainer" layout="block" >
+				<!--
+	        		This page block table is used to display list of existing portal property records.
+	        		The table is shown when showPropertiesTable flag is set as true.
+				-->
+				<apex:pageBlockTable value="{!properties}" var="property" align="center" width="800px" styleclass="floatingHeaderTable" rendered="{!showPropertiesTable}">
+	                <apex:column >
+						<apex:facet name="header">Key</apex:facet>
+	                    <apex:inputField value="{!property.Key__c}" style="width: 50%;"/>
+	                </apex:column>
+	                <apex:column >
+						<apex:facet name="header">Value</apex:facet>
+	                    <apex:inputField value="{!property.Value__c}" style="width: 50%;"/>
+	                </apex:column>
+	        	</apex:pageBlockTable>
+	        	
+	        	<!--
+	        		This page block table is used to display list of new portal property records.
+	        		The table is shown when showNewPropertiesTable flag is set as true.  
+				-->
+				<apex:pageBlockTable value="{!newProperties}" var="property" align="center" width="800px" styleclass="floatingHeaderTable" rendered="{!showNewPropertiesTable}">
+	                <apex:column >
+						<apex:facet name="header">Key</apex:facet>
+	                    <apex:inputField value="{!property.Key__c}" style="width: 50%;"/>
+	                </apex:column>
+	                <apex:column >
+						<apex:facet name="header">Value</apex:facet>
+	                    <apex:inputField value="{!property.Value__c}" style="width: 50%;"/>
+	                </apex:column>
+	        	</apex:pageBlockTable>
+	        	     
+	    	</apex:outputPanel>
+	    </apex:pageBlock>
+	</apex:form>    
+</apex:page>

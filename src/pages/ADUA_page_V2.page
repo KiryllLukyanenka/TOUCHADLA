@@ -1,0 +1,198 @@
+<apex:page standardController="Contact" extensions="ADUAController_V2" action="{!initAction}">
+	<apex:pageMessages ></apex:pageMessages>
+	<apex:includeScript value="{!$Resource.Jquery_script}"/>
+	<apex:includeScript value="{!$Resource.License_Page_JavaScript}"/>
+	<script>
+	
+		function disableAllSystems(obj){
+			if($(obj).next().text().trim()=='Enable Access'){
+				if($(obj).is(":checked") == false){
+				console.log('enableAccess inside');
+					$('.systemsClass').each(function() {
+ 			  			
+ 			  			
+ 			  			if($(this).next().text().trim()=='Download Server'){
+							console.log('inside download servwe');
+							if($(this).is(":checked") == true){
+								console.log('Checked');
+								$('.zonesClass').each(function() {
+ 			  						$(this).attr("disabled", true);
+ 			  					});
+ 			  				}
+						}
+						
+						if($(this).next().text().trim()=='Online Docs'){
+							if({!isPartnerLoggedIn} == true){
+								if($(this).is(":checked") == true){
+									if({!isPartnerLoggedIn} == true){
+										$('.docsClass').attr("disabled", true);
+									}
+								}
+							}
+						}
+						
+						$(this).attr("disabled", true);
+ 			  			
+ 			  				
+					});
+					
+				} else{
+					$('.systemsClass').each(function() {
+ 			  			$(this).attr("disabled", false);
+ 			  			console.log('inside download servwe');
+ 			  			if($(this).next().text().trim()=='Download Server'){
+							console.log('inside download servwe');
+							//disbaleEnableDownloadZone(this);
+							console.log('inside download servwe');
+							if($(this).is(":checked") == true){
+								console.log('Checked');
+								$('.zonesClass').each(function() {
+ 			  						$(this).attr("disabled", false);
+ 			  					});
+ 			  				}
+						}
+						
+						
+						if($(this).next().text().trim()=='Online Docs'){
+							console.log('Online Docs {!isPartnerLoggedIn}');
+							//disbaleEnableDocs(this);
+							if($(this).is(":checked") == true){
+								if({!isPartnerLoggedIn} == true){
+									$('.docsClass').attr("disabled", false);
+								}
+							}
+						}
+					});
+				}
+			}
+		}
+	
+		function accessibleSystemsChange(obj){
+			var enableAccess = false;
+			$('.systemsClass').each(function() {
+ 			  console.log('Systems val===='+$(this).val());
+ 			  console.log('Systems val===='+$(this).is(":checked"));
+ 			  if($(this).is(":checked")){
+ 			  	enableAccess = true;
+ 			  }
+			});
+			
+			if(enableAccess){
+				console.log('enableAccess ===='+enableAccess);
+				$('.enableAccessClass').prop('checked', true);
+			} else{
+				$('.enableAccessClass').prop('checked', false);
+			}
+			if(obj!=null){
+				if($(obj).next().text().trim()=='Download Server'){
+					console.log('inside download servwe');
+					disbaleEnableDownloadZone(obj);
+				}
+				
+				if($(obj).next().text().trim()=='Online Docs'){
+					console.log('Online Docs {!isPartnerLoggedIn}');
+					disbaleEnableDocs(obj);
+				}
+			}
+		}
+		
+		function disbaleEnableDownloadZone(obj){
+			if($(obj).is(":checked") == true){
+				console.log('true');					
+				document.getElementById('downloadZonesDiv').style.display= 'block';
+			} else{
+				console.log('false');
+				document.getElementById('downloadZonesDiv').style.display= 'none';
+			}
+		}
+		
+		
+		function disbaleEnableDocs(obj){
+			if($(obj).is(":checked") == true){
+				console.log('true');
+					if({!isPartnerLoggedIn} == true){
+						document.getElementById('docsPermissionsDiv').style.display= 'block';
+					}else{
+						console.log('false');
+						document.getElementById('docsPermissionsDiv').style.display= 'none';
+					}
+			} else{
+				document.getElementById('docsPermissionsDiv').style.display= 'none';
+			}
+		}
+		
+		$( document ).ready(function() {
+   		 	console.log( "ready!" );
+   		 	accessibleSystemsChange(null);
+   		 	var enableAccess = $('.enableAccessClass');
+   		 	console.log( "enableAccess!"+enableAccess );
+   		 	if(enableAccess.is(":checked")){
+	   		 	$('.systemsClass').each(function() {
+	   		 		if($(this).next().text().trim()=='Download Server'){
+						console.log('inside download servwe');
+						disbaleEnableDownloadZone(this);
+					}
+					
+					if($(this).next().text().trim()=='Online Docs'){
+						console.log('Online Docs {!isPartnerLoggedIn}');
+						disbaleEnableDocs(this);
+					}
+	   		 	});
+   		 	}else{
+   		 		if('{!aduaUIObj.newUser}' == true){
+   		 			disableAllSystems(enableAccess);
+   		 		}
+   		 	
+   		 	}
+		});
+		
+	</script>
+    <apex:form >
+    	<apex:pageBlock title="{!pageTitle}" id="pageBlock">  
+    		<apex:pageBlockButtons >
+                <apex:CommandButton value="Save" action="{!saveObject}" onclick="disableAfterTimeout(this);" disabled="{!disableUIComponent}"/>
+                <apex:CommandButton value="Cancel" action="{!cancel}"/>
+            </apex:pageBlockButtons>
+            
+            &nbsp;&nbsp;&nbsp;
+            <apex:inputCheckBox id="enableAccessId" styleClass="enableAccessClass" value="{!aduaUIObj.active}" onChange="disableAllSystems(this);" />
+            <apex:outputLabel value="Enable Access"/><br/><br/>
+            <apex:pageBlockSection title="Accessable systems" columns="1" collapsible="false">
+            <apex:outputPanel >
+                <apex:repeat value="{!aduaUIObj.systemEntries}" var="system">
+                    <apex:inputCheckBox styleClass="systemsClass" value="{!system.selected}" rendered="{!system.isVisible}" onChange="accessibleSystemsChange(this);" disabled="{!system.isLMS}">
+                        <!-- <apex:actionSupport event="onchange" action="{!accessibleSystemsChange}" rerender="pageBlock"/> -->
+                    </apex:inputCheckBox>                   
+                    <apex:outputLabel value="{!system.systemName}" rendered="{!system.isVisible}" />
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </apex:repeat>
+                </apex:outputPanel>
+            </apex:pageBlockSection>  
+            <div id="downloadZonesDiv" style="display:none">
+            <!-- <apex:outputPanel id="downloadZonesPanel" style="display:none"> -->
+            	<apex:pageblocksection columns="2" id="pbsIs" title="Download Zone Paths" collapsible="false">
+            		<apex:repeat value="{!aduaUIObj.zoneList}" var="zone">
+            			<apex:pageBlockSectionItem >
+							<apex:outputLabel value="{!zone.zone.Name}"/>
+							<apex:inputCheckBox styleClass="zonesClass" value="{!zone.selected}"/>
+						</apex:pageBlockSectionItem>
+            		</apex:repeat>
+            	</apex:pageblocksection>
+            	<script>document.getElementById('downloadZonesDiv').style.display= '{!aduaUIObj.downloadsVisible}'; </script>
+            <!-- </apex:outputPanel> -->
+            </div>
+            <div id="docsPermissionsDiv">
+            <!-- <apex:outputPanel id="docsPermissionsPanel"> -->
+				<apex:pageblocksection columns="2"  title="Docs Permissions" collapsible="false">
+					<apex:pageBlockSectionItem >
+						<apex:outputLabel value="FEZ"/>
+						<apex:inputCheckBox styleClass="docsClass" value="{!aduaUIObj.fez}"/>
+                    </apex:pageBlockSectionItem>
+                    </apex:pageblocksection>
+                    <script>document.getElementById('docsPermissionsDiv').style.display= '{!aduaUIObj.docsVisible}'; </script>
+                <!-- </apex:outputPanel> -->
+                </div>
+    	</apex:pageBlock>
+    </apex:form>
+</apex:page>

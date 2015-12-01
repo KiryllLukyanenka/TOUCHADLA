@@ -1,0 +1,30 @@
+<apex:page id="loginPage" showHeader="false" title="{!$Label.site.site_login}" controller="SiteLoginController">
+<apex:composition template="{!$Site.Template}">
+	<apex:define name="title">Login</apex:define>
+	<apex:define name="body">
+	<center>
+						<apex:form id="loginForm" forceSSL="true">
+						<apex:pageMessages id="error"/>
+						<apex:outputPanel styleClass="form-signin" layout="block" style="text-align: left;">
+
+							<label class="form-signin-heading" style="text-align: left;">Please sign in</label>
+							<label>Email address:&nbsp;
+								<apex:inputText required="true" id="username" value="{!username}" styleclass="input-block-level"/>
+							</label>
+							<label>Password:&nbsp;
+								<apex:inputSecret required="true" id="password" value="{!password}" styleclass="input-block-level"/>
+							</label>
+							<apex:commandbutton styleClass="btn btn-primary" value="Sign in" action="{!login}"/>
+							<a class="link" href="{!$Site.CurrentSiteUrl}forgotpassword">Forgot password?</a>
+							<hr/>
+							<!-- <p class="ques">
+								Don't have an account?<a class="link" href="{!$Site.CurrentSiteUrl}SiteRegister">Sign up for free</a>
+							</p> -->
+						</apex:outputPanel>
+						</apex:form>
+
+	</center>
+	<br/>
+	</apex:define>
+</apex:composition>
+</apex:page>

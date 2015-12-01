@@ -1,0 +1,39 @@
+<apex:page controller="CreateSuperUserController">
+  <!-- Bootstrap -->
+ <!-- Placed at the end of the document so the pages load faster -->
+    <script src="{!URLFOR($Resource.License, 'assets/js/jquery.min.js')}"></script>
+    <style type="text/css">
+        h2{font-size:14px;}
+        h1,h2,h3,h4,h5,h6 {margin-top:0px;margin-bottom:0px;}
+    </style>
+  <apex:form rendered="{!IsPrmSuperUser}">
+      <apex:sectionHeader title="Create New User"/>
+      <apex:pageMessages >
+      </apex:pageMessages>
+      <apex:pageBlock mode="edit">
+          <apex:pageBlockButtons >
+              <apex:commandButton value="Save" action="{!createUser}"/>
+          </apex:pageBlockButtons>
+          <apex:pageblockSection columns="1" collapsible="false" title="User Information">
+              <apex:pageblockSectionItem >
+                  <apex:outputLabel >Firstname</apex:outputLabel>
+                  <apex:inputText value="{!firstname}"/>
+              </apex:pageblockSectionItem>
+               <apex:pageblockSectionItem >
+                  <apex:outputLabel >Lastname</apex:outputLabel>
+                  <apex:inputText value="{!lastname}"/>
+              </apex:pageblockSectionItem>
+               <apex:pageblockSectionItem >
+                  <apex:outputLabel >Email</apex:outputLabel>
+                  <apex:inputText value="{!email}"/>
+              </apex:pageblockSectionItem>
+               <apex:pageblockSectionItem >
+                  <apex:outputLabel >Username</apex:outputLabel>
+                  <apex:inputText value="{!Username}"/>
+              </apex:pageblockSectionItem>
+          </apex:pageblockSection>
+           
+      </apex:pageblock>
+  </apex:form>
+  <apex:outputText rendered="{!Not(IsPrmSuperUser)}">You have no permission to view this page.</apex:outputText>
+</apex:page>

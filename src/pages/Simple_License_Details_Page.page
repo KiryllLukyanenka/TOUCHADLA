@@ -1,0 +1,90 @@
+<apex:page standardController="LicenseDetail__c"
+	extensions="SimpleLicenseController">
+
+	<script>
+	 function changeFont(input, textid) {
+   	     alert('hi there!');
+      }
+ 		function  test(){
+ 			alert('called me, hurray!');
+ 		}
+        function changeLicenseType(input , saasPanelId , onPremisePanelId){
+            var saasPanel = document.getElementById(saasPanelId);
+            var onPremisePanel = document.getElementById(onPremisePanelId);
+            if(input.value == "Hosted (SaaS)" )
+            {
+                saasPanel.style.display = 'block';
+                onPremisePanel.style.display = 'none';
+            }
+            else if(input.value == "Hosted (SaaS Lite)"){
+               saasPanel.style.display = 'block';
+                onPremisePanel.style.display = 'none';
+            }
+            else
+            {
+            	saasPanel.style.display = 'none';
+                onPremisePanel.style.display = 'block';
+            }
+        }
+        
+        function togglePermanentSection(input , permPanelId){
+        	//alert('togglePermanentSection '  + permPanelId);
+        	var permPanel = document.getElementById(permPanelId);
+        	if(input.checked){
+        		permPanel.style.display  = 'block'
+        	}else{
+        		permPanel.style.display  = 'none'
+        	}
+        }
+        
+    </script>
+
+	<apex:form >
+		<apex:pageMessages />
+		<apex:pageBlock title="License Details">
+			<apex:pageBlockButtons >
+				<apex:commandButton action="{!save}" value="Save" />
+			</apex:pageBlockButtons>
+			<apex:outputPanel layout="block">
+				<apex:pageBlockSection title="Basic Details" id="basic" columns="2"
+					collapsible="False">
+
+					<apex:inputField value="{!LicenseDetail__c.Product_Type__c}"
+						onchange="changeLicenseType(this,'{!$Component.saasPanel}','{!$Component.onPremisePanel}');" />
+					<apex:inputField value="{!LicenseDetail__c.Server_Agents__c}" />
+					<apex:inputField value="{!LicenseDetail__c.Net_Agents__c}" />
+					<apex:inputField value="{!LicenseDetail__c.Machine_Agents__c}" />
+					<apex:inputField value="{!LicenseDetail__c.License_Expiry_Date__c}" />
+				</apex:pageBlockSection>
+			</apex:outputPanel>
+
+			<apex:outputPanel layout="block" id="onPremisePanel"
+				style="display:{!IF (onPremiseVisible , 'block' , 'none')}">
+				<apex:pageBlockSection title="On-premise Details"
+					collapsible="False" columns="2">
+					<apex:inputField value="{!LicenseDetail__c.Is_Permanent__c}"
+						onchange="togglePermanentSection(this, '{!$Component.permPanel}');" />
+					<apex:inputField value="{!LicenseDetail__c.Is_EUM__c}" />
+				</apex:pageBlockSection>
+			</apex:outputPanel>
+
+			<apex:outputPanel layout="block" id="permPanel"
+				style="display:{!IF ( LicenseDetail__c.Is_Permanent__c , ' block' , 'none')}">
+				<apex:pageBlockSection showHeader="false" columns="2">
+					<apex:inputField value="{!LicenseDetail__c.MAC_Address__c}" />
+					<apex:inputField value="{!LicenseDetail__c.Is_Perpetual__c}" />
+				</apex:pageBlockSection>
+			</apex:outputPanel>
+
+			<apex:outputPanel layout="block" id="saasPanel"
+				style="display:{!IF(onPremiseVisible , 'none' , 'block')}">
+				<apex:pageBlockSection title="SaaS Details" collapsible="False">
+					<apex:inputField value="{!LicenseDetail__c.Custom_URL_Name__c}" />
+					<apex:pageBlockSectionItem >
+				.saas.appdynamics.com
+			</apex:pageBlockSectionItem>
+				</apex:pageBlockSection>
+			</apex:outputPanel>
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>

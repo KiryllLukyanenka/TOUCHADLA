@@ -1,0 +1,113 @@
+<apex:component controller="PortalGenericDataGridController">
+	<apex:includeScript value="{!$Resource.Jquery_script}" />
+	<script>
+		function searchTable(){
+			var keyword=jQuery(".search_keyword").val();
+			jQuery(".table_cell").parent().parent().show();
+			console.log("Searching:"+keyword);
+			if(keyword!=null && keyword!=""){
+				var listOfRowsToShow = [];
+				jQuery(".table_cell").parent().parent().hide();
+				jQuery(".table_cell").each(function(index){
+					//console.log(jQuery(this));
+   					cellValue = jQuery(this).text();
+   					//console.log("Cell Value:"+cellValue+" Keyword:"+keyword);
+   					//console.log(cellValue!=null && cellValue.indexOf(keyword));
+   					if(cellValue!=null && cellValue.indexOf(keyword)>0){
+   						console.log("Showing:"+cellValue);
+   						//console.log(jQuery(this).parent().parent().html());
+   						jQuery(this).parent().parent().show();
+   						if(!jQuery.inArray(jQuery(this).parent().parent(),listOfRowsToShow)){
+   							listOfRowsToShow.push(jQuery(this).parent().parent());
+   						}
+   					}
+   				});
+   				//console.log('Search Results:'+listOfRowsToShow);
+   				//listOfRowsToShow.show();
+   			}
+		}
+		
+		function callFilterSelection(){
+			console.log('Calling Filter Selection');
+			filterSelection();
+			console.log('Called Filter Selection');
+		}
+	</script>
+	<apex:attribute name="title" description="Grid Title" type="String"
+		required="required" assignTo="{!gridTitle}" />
+
+	<apex:attribute name="dataset"
+		description="Generic Map data set to be used to display in the graph"
+		type="PortalGenericMapList" required="required"
+		assignTo="{!dataRowList}" />
+
+	<apex:attribute name="filter_by_attrib"
+		description="Filtering Column Names separated by comma" type="String"
+		required="required" assignTo="{!filteringColumnNamesCSV}" />
+
+	<apex:pageBlock id="pageBlock">
+		<apex:form >
+			<apex:actionFunction action="{!applySelection}"
+				name="filterSelection" reRender="portalTable">
+				<!--         <apex:param name="key" value=""/> -->
+			</apex:actionFunction>
+			
+			<apex:pageBlockSection title="{!title}" columns="1">
+				<apex:facet name="header">
+
+					<apex:outputPanel >
+						<apex:outputLabel value="{!title}" />
+						<apex:outputPanel style="position: absolute;right: 50px;">
+							<apex:outputLabel value="Search:" />
+							<apex:inputText value="{!searchKeyword}"
+								styleClass="search_keyword" onchange="searchTable()"
+								style="height:100%">
+
+								<!-- apex:actionSupport event="onkeydown" action="{!searchRows}" rerender="portalTable"/> -->
+							</apex:inputText>
+						</apex:outputPanel>
+
+					</apex:outputPanel>
+				</apex:facet>
+				<apex:outputPanel title="Filter Data Selection">
+					<apex:variable var="rowIndex" value="{!0}" />
+					<apex:repeat var="fileringData"
+						value="{!displayData.filteringDataList}">
+						<apex:outPutLabel value="{!fileringData.filteringColumnName}" />
+						<select id="someList"
+							onchange="jQuery('.selectedHidden_{!rowIndex}').val(jQuery(this).val());callFilterSelection();">
+							<option value="--None--">--None--</option>
+							<apex:repeat value="{!fileringData.filteringSelectionValues}"
+								var="optionVal">
+								<option value="{!optionVal}">{!optionVal}</option>
+							</apex:repeat>
+						</select>
+						<!-- apex:selectList value="{!fileringData.filteringSelectedValue}"
+								multiselect="false" size="1" onchange="callFilterSelection();">
+								<apex:selectOptions value="{!fileringData.filteringSelectOptions}">
+								</apex:selectOptions>
+						</apex:selectList>-->
+
+						<apex:inputText value="{!fileringData.filteringSelectedValue}"
+							id="selectedItemHidden" styleClass="selectedHidden_{!rowIndex}"
+							style="display:none" />
+						<apex:variable var="rowIndex" value="{!rowIndex+1}" />
+					</apex:repeat>
+					<!-- apex:commandButton value="Apply selections"
+						action="{!applySelection}" reRender="portalTable">
+					</apex:commandButton> -->
+				</apex:outputPanel>
+				<apex:outputPanel id="portalTable">
+					<apex:pageBlockTable value="{!rowList}" var="row">
+						<apex:repeat value="{!columnNames}" var="colAccVarName">
+							<apex:column headerValue="{!colAccVarName}">
+								<apex:outputLabel styleClass="table_cell"
+									value="{!row.internalMap[colAccVarName].val}" />
+							</apex:column>
+						</apex:repeat>
+					</apex:pageBlockTable>
+				</apex:outputPanel>
+			</apex:pageBlockSection>
+		</apex:form>
+	</apex:pageBlock>
+</apex:component>

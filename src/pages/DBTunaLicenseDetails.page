@@ -1,0 +1,57 @@
+<apex:page standardController="DBTuna_License__c" extensions="DBTunaLicenseDetailsController">
+<apex:form >
+	<apex:pageblock id="theBlock" title="License Details">
+		<apex:pageblockSection id="theSection" columns="1">
+                <apex:pageblockSection columns="1">
+        	        <apex:outputField value="{!DBTuna_License__c.ExpiryDate__c}" />
+                </apex:pageblockSection>
+                <apex:pageblockSection columns="1">
+        	        <apex:outputField value="{!DBTuna_License__c.Server_Name__c}" />
+                </apex:pageblockSection>
+                <apex:pageblockSection columns="1">
+        	        <apex:outputField value="{!DBTuna_License__c.LicenseKey__c}" />
+                </apex:pageblockSection>  
+                <apex:pageblockSection columns="1">
+        	        <apex:outputField value="{!DBTuna_License__c.Opportunity__c}" />
+                </apex:pageblockSection>
+                <apex:pageblockSection columns="1">
+        	        <apex:outputField value="{!DBTuna_License__c.Opportunity__r.Accountid}" />
+                </apex:pageblockSection>
+                <apex:pageblockSection columns="1">
+        	        <apex:outputField value="{!DBTuna_License__c.CreatedById}" />
+                </apex:pageblockSection>
+    	</apex:pageblockSection>
+    	<apex:pageBlockSection columns="1" title="DBLicense-Contacts">
+                	<apex:pageBlockTable width="100%" value="{!dblicenseContacts}" var="ct">
+                		<apex:column headerValue="Contact">
+                            <apex:outputLink value="/{!ct.contactObj.Id}">{!ct.contactObj.Name}</apex:outputLink>
+                        </apex:column>
+                        <apex:column headerValue="Needs Email?">
+                            <apex:outputField value="{!ct.contactObj.Needs_Email__c}"/>
+                        </apex:column>
+                        <apex:column headerValue="Primary Contact?" >
+                            <apex:inputCheckBox value="{!ct.isPrimary}" disabled="true"/>
+                        </apex:column>
+                        <apex:column headerValue="Email">
+                            <apex:outputField value="{!ct.contactObj.Email}"/>
+                        </apex:column>
+                        <apex:column headerValue="Download Center">
+                            <apex:outputField value="{!ct.contactObj.Contact_Portal_User__r[0].Download__c}"/>
+                        </apex:column>
+                        <apex:column headerValue="Help Center">
+                            <apex:outputField value="{!ct.contactObj.Contact_Portal_User__r[0].ZenDesk__c}"/>
+                        </apex:column>
+                        <apex:column headerValue="Online Docs">
+                            <apex:outputField value="{!ct.contactObj.Contact_Portal_User__r[0].Docs__c}"/>
+                        </apex:column>
+                        <apex:column headerValue="AppDynamics University">
+                            <apex:outputField value="{!ct.contactObj.Contact_Portal_User__r[0].LMS__c}"/>
+                        </apex:column>
+                	</apex:pageBlockTable>
+                </apex:pageBlockSection>   
+	</apex:pageblock>
+</apex:form>
+<!-- <c:LicenseHistoryComponent licenseId="{!DBTuna_License__c.Id}">
+</c:LicenseHistoryComponent> -->
+<c:GenericHistoryComponent recordLimit="50" myObject="{!DBTuna_License__c}"/>
+</apex:page>

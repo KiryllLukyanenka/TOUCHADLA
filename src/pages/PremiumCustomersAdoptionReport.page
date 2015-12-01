@@ -1,0 +1,70 @@
+<apex:page title="Premium Customers Adoption Report" controller="PremiumCustomersAdoptionReportController" action="{!applyDateChange}">
+    <apex:form >
+    <style type="text/css">
+    .pbTitle {
+        white-space: nowrap
+    }
+</style>
+    <apex:pageBlock id="thePageBlock" title="Premium Customers Adoption Tracking Report">
+        <apex:outputPanel >
+            <h1>Please Select Time Period for the Report&nbsp;&nbsp;&nbsp;</h1>
+            <apex:outputLabel value="Select Year"/>
+            <apex:selectList value="{!selectedYear}" multiselect="false" size="1">
+                <!--apex:actionSupport event="onchange" action="{!applyDateChange}" rerender="thePageBlock"/-->
+                <apex:selectOptions value="{!yearSelectOptionsList}"></apex:selectOptions>
+            </apex:selectList>
+            <apex:outputLabel value="Select Quarter"/>
+            <apex:selectList value="{!selectedQuarter}" multiselect="false" size="1">
+                <!--apex:actionSupport event="onchange" action="{!applyDateChange}" rerender="thePageBlock"/-->
+                <apex:selectOptions value="{!quarterSelectOptionsList}"></apex:selectOptions>
+            </apex:selectList>
+            <apex:commandButton value="Refresh Data" action="{!applyDateChange}">
+            </apex:commandButton>
+        </apex:outputPanel>
+            <apex:tabPanel switchType="server" selectedTab="opportunities2"
+                id="theTabPanel">
+                <apex:tab label="Premium Accounts" name="adoptionSummary" id="tabSummaryOne">
+                    <apex:pageBlockSection columns="1">
+                        <c:PremiumAdoptionSummary currentYearAttr="false" 
+                            durationAttr="all" reload="{!reloadSummary}"
+                             />
+                        <c:PremiumAdoptionSummary currentYearAttr="false" 
+                            durationAttr="last3" reload="{!reloadSummary}"
+                             />
+                        <c:PremiumAdoptionSummary currentYearAttr="false" 
+                            durationAttr="last6" reload="{!reloadSummary}"
+                             />
+                    </apex:pageBlockSection>
+                </apex:tab>
+                
+                <apex:tab label="Premium Accounts - DataSheet" name="dataSheet" id="tabOne">
+                    <apex:pageBlockSection columns="1">
+                        <c:DataView reportTitle="Data Sheet"
+                            query="SELECT Date_TAM_Assigned_to_Account__c,Support_Level__c,Adoption_Score__c,Name,Technical_Account_Manager__r.Name from Account  WHERE Adoption_Score__c!=null and Adoption_Score__c!=0 and Support_Level__c!=null and USD_SUM_Amount__c>=250000.00 and Technical_Account_Manager__c!=null and Adoption_Score__c!=null" timeFilterField=""
+                            timeFilterRange="" startTime="" endTime="" reload="true" />
+                    </apex:pageBlockSection>
+                </apex:tab>
+                <apex:tab label="Premium Accounts {!selectedQuarter}-{!selectedYear}" name="adoptionSummaryFY" id="tabSummaryTwo">
+                    <apex:pageBlockSection columns="1">
+                        <c:PremiumAdoptionSummary currentYearAttr="true" 
+                            durationAttr="all" reload="{!reloadSummary}"
+                             endDateAttr="{!endDateStr}"/>
+                        <c:PremiumAdoptionSummary currentYearAttr="true" 
+                            durationAttr="last3" reload="{!reloadSummary}"
+                            startDateAttr="{!startDateStr}" endDateAttr="{!endDateStr}"/>
+                        <c:PremiumAdoptionSummary currentYearAttr="true" 
+                            durationAttr="last6" reload="{!reloadSummary}"
+                            startDateAttr="{!startDateStr}"/>
+                    </apex:pageBlockSection>
+                </apex:tab>
+                <apex:tab label="Premium Accounts {!selectedQuarter}-{!selectedYear} - DataSheet" name="dataSheetCurrentFY" id="tabTwo">
+                    <apex:pageBlockSection columns="1">
+                        <c:DataView reportTitle="Data Sheet FY {!selectedYear}"
+                            query="SELECT Date_TAM_Assigned_to_Account__c,Support_Level__c,Adoption_Score__c,Name,Technical_Account_Manager__r.Name from Account WHERE  Adoption_Score__c!=null and Adoption_Score__c!=0 and Support_Level__c!=null and Date_TAM_Assigned_to_Account__c=THIS_FISCAL_YEAR and Technical_Account_Manager__c!=null and Adoption_Score__c!=null" timeFilterField=""
+                            timeFilterRange="" startTime="" endTime="" reload="true" />
+                    </apex:pageBlockSection>
+                </apex:tab>
+            </apex:tabPanel>
+    </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,86 @@
+<apex:page controller="NewEditPartnerCampaignController" tabStyle="Partner_Campaigns__tab" id="page">
+    <link rel="stylesheet" href="{!URLFOR($Resource.jqui, 'jquery-ui.css')}"></link>
+    <script src="{!URLFOR($Resource.AccountTerr, './assets/js/jquery.min.js')}"></script>
+    <script src="{!URLFOR($Resource.AccountTerr, './assets/js/jquery-ui.min.js')}"></script>
+    <apex:sectionHeader title="Partner Campaigns"/>
+    <div style="font-weight:bold;font-size:14px; line-height:24px;margin-top:20px;margin-botom:15px;width:570px;">
+        Select the partner Region (macthes the Account.PartnerRegion) and the campaign to which all partner contacts will be automatically added.
+    </div>
+    <apex:form id="form">
+        <apex:inputHidden value="{!PartnerCampaign.Campaign__c}" id="partnerCampaign"/>
+        <apex:pageMessages escape="false" id="message"></apex:pageMessages>
+        <apex:pageBlock >
+            <apex:pageblockButtons location="bottom">
+                <apex:commandButton value="Cancel" action="{!cancel}"/>
+                <apex:commandButton value="Save" action="{!savePartnerCampaign}"/>
+            </apex:pageblockButtons>
+            <apex:pageblockSection collapsible="false" columns="1" title="Partner Campaign">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Partner Account Region</apex:outputLabel>
+                    <apex:selectList size="1" value="{!PartnerCampaign.Partner_Region__c}">
+                        <apex:selectOptions value="{!PartnerRegions}"></apex:selectOptions>
+                    </apex:selectList>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Campaign</apex:outputLabel>
+                    <input type="text" id="campaign" placeholder="Enter Campaign Name"/>
+                    <!--<apex:inputField value="{!PartnerCampaign.Campaign__c}"/>-->
+                    <!--<apex:selectList size="1" value="{!PartnerCampaign.Campaign__c}">
+                        <apex:selectOptions value="{!AllActiveCampaigns}"></apex:selectOptions>
+                    </apex:selectList>-->
+                </apex:pageBlockSectionItem>
+            </apex:pageblockSection>
+        </apex:pageBlock>
+        <script>
+                //To remove conflictions of jquery
+            var j$ = jQuery.noConflict();            
+            j$(document).ready(function() {
+                //Auto complete textbox component
+                var autoCompleteTextBoxId = "input[id$='campaign']";
+                var queryTerm;
+                //auto complete method
+                j$("#campaign").autocomplete({
+                    minLength: 1,
+                    source: function(request, response) {
+                                queryTerm = request.term;
+                                var sObjects;
+                                var searchText = j$("#campaign").val();
+                                NewEditPartnerCampaignController.searchCampaigns(searchText,function(result, event){
+                                    if(event.type == 'exception') {
+                                          alert(event.message);
+                                    } else {
+                                         sObjects = result;
+                                         response(sObjects);
+                                    }
+                                });
+                           },
+                           response: function(event, ui) {
+                            if (ui.content.length === 0) {                                
+                            }
+                        },
+                    focus: function( event, ui ) {
+                            j$(autoCompleteTextBoxId).val( ui.item.Name );
+                            var partnerCampaign = document.getElementById("page:form:partnerCampaign");
+                            partnerCampaign.value = ui.item.Id;
+                            return false;
+                            },
+                    select: function( event, ui ) {
+                        j$(autoCompleteTextBoxId).val( ui.item.Name );
+                        var partnerCampaign = document.getElementById("page:form:partnerCampaign");
+                            partnerCampaign.value = ui.item.Id;
+                            return false;                       
+                    },
+                 })
+                 .data( "uiAutocomplete" )._renderItem = function( ul, item ) {
+                    var entry = "<b>" + item.Name + "</b>";
+                    entry = entry + "</a>";
+                    entry = entry.replace(queryTerm, "<b>" + queryTerm + "</b>");
+                    return j$( "<li></li>" )
+                        .data( "item.autocomplete", item )
+                        .append( entry )
+                        .appendTo( ul );
+                };
+            });                 
+        </script>
+    </apex:form>  
+</apex:page>

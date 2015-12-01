@@ -1,0 +1,33 @@
+<apex:page StandardController="Quote"  extensions="QuoteLinePageExt" action="{!CheckPB}" showheader="false" tabstyle="Quote">
+<!-- <apex:form >
+
+ <apex:inputhidden value="{!Quote.Pricebook2Id }"/>
+ <div class="ptBody secondaryPalette">
+ <div class="content"><img src="/s.gif" alt="Quote" class="pageTitleIcon" title="Quote"/>
+ <h3 class="pageType noSecondHeader">Choose Price Book for {!Quote.Name}</h3></div>
+ <div class="blank">&nbsp;</div>
+ 
+  </div>
+ <div class="ptBreadcrumb"></div>
+ <apex:outputpanel id="Pricebook" rendered="{!displayPB}">
+  <div class="bDescription">&nbsp;&nbsp;Select a price book for this quote. You can add products only from a single price book. <br/><br/>&nbsp;&nbsp;Choose a price book that contains products with the same currency as the quote. If no products are available for the chosen currency, ask your administrator to create them.</div>
+<apex:pageblock mode="edit"  >
+<apex:pageblockbuttons location="bottom">
+<apex:commandbutton value="Save" action="{!SavePB}"/>
+<apex:commandbutton value="Cancel" action="{!cancel}"/>
+</apex:pageblockbuttons>
+<apex:pageblocksection title="Choose Price Book for {!Quote.Name}">
+ <apex:pageblockSectionitem >
+ <apex:outputlabel >
+ Pricebook 
+ &nbsp;
+ </apex:outputlabel>
+ <apex:selectList value="{!PBids}" size="1">
+ <apex:selectoptions value="{!PBList}"/>
+ </apex:selectList>
+ </apex:pageblockSectionitem>
+</apex:pageblocksection>
+</apex:pageblock>
+</apex:outputpanel>
+</apex:form> -->
+</apex:page>

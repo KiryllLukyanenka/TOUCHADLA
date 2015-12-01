@@ -1,0 +1,646 @@
+<apex:page id="thePage" standardController="License_Opportunity__c"
+    extensions="LicenseProvision_PaidController" action="{!initAction}">
+    <apex:includeScript value="{!$Resource.Jquery_script}"/>
+    <apex:includeScript value="{!$Resource.License_Page_JavaScript}"/>
+    <style type="text/css">
+    	.data-retention-APM {
+    		display: none;
+    	}
+    	.data-retention-EUM {
+    		display: none;
+    	}
+    	div.hideCurrDate span.dateInput span.dateFormat{
+			display:none;
+		}
+    </style>
+    <script>
+        	function blankFunction() {
+    		eumOrderOps();
+            licenseModulesPageLoad('paid');
+    		licenseAgentCountChange();
+    	}
+
+    
+    function callUIRefresh(){
+    	uiRefereshActionFunction();
+    }
+    
+    function callApplyGlobalExpDate(){
+    	expiryDateSelection();
+    }
+    
+	$(document).ready(function(){
+			$(".selectcheckbox").click(function(){
+			    var $table = $(this).closest("table");
+			    var index = $(this).closest("tr").children().index($(this).closest("th")) + 1;
+			    $table.find("td:nth-child("+index+") input:checkbox:not(:disabled)").prop("checked",$(this).is(":checked"));
+	        });
+	        licenseModulesPageLoad('paid');
+	        /*
+				Validating EUM Web.
+			*/
+            if(jQuery('[id$=eumWeb]')[0].value != ''){
+            	//removing none option from picklist if value is not null.
+				//jQuery('[id$=eumWeb]')[0].options[0].remove();
+				jQuery('[id$=eumWeb]')[0].remove(0);
+				
+				if(jQuery('[id$=eumWeb]')[0].value == 'PRO'){
+					showEUMWebElements();
+				}else{
+					hideEUMWebElements();
+				}
+				eumOrderOps();
+            }else{
+            	hideEUMWebElements();
+            }
+            
+            /*
+				Validating EUM Mobile.
+			*/
+            if(jQuery('[id$=eumMobile]')[0].value != ''){
+            	//removing none option from picklist if value is not null.
+				//jQuery('[id$=eumMobile]')[0].options[0].remove();
+				jQuery('[id$=eumMobile]')[0].remove(0);
+				
+				if(jQuery('[id$=eumMobile]')[0].value == 'PRO'){
+					showEUMMobileElements();
+				}else{
+					hideEUMMobileElements();
+				}
+				eumOrderOps();
+            }else{
+            	hideEUMMobileElements();
+            }
+		});
+		
+		/*
+			Checking if the logged in user is orderOps and
+			showing/hiding the EUM Account Name section.
+		*/
+        function eumOrderOps(){
+            if({!fldsRender.isOppsUser}){
+            	jQuery('[id$=eumOrderOps]').show();
+            } else {
+            	jQuery('[id$=eumOrderOps]').hide();
+            }
+        }
+		
+		/*
+     		This method is used to do UI validations for EUM web and mobile picklists.
+     	*/
+     	function eumPickList(picklist){
+
+     		if(picklist.id.indexOf('eumWeb') != -1){
+     		
+     			if(picklist.value != ''){
+     				eumOrderOps();
+     				if(picklist.value == 'PRO'){
+     				
+     					showEUMWebElements();
+     							
+     				} else {
+     				
+     					hideEUMWebElements();
+     					
+     					//Resting Web units and overages
+     					resetUnitsAndOverages(jQuery('[id$=eumWebUnitsField]') , jQuery('[id$=eumWebOveragesField]'));
+     					
+     				}
+     				
+     				if(jQuery('[id$=eumMobile]')[0].value==''){
+     					jQuery('[id$=eumMobile]')[0].value = 'LITE';
+     					//jQuery('[id$=eumMobile]')[0].options[0].remove();
+     					jQuery('[id$=eumMobile]')[0].remove(0);	
+     					resetUnitsAndOverages(jQuery('[id$=eumMobileUnitsField]') , jQuery('[id$=eumMobileOveragesField]'));
+     				}
+     				
+     			} else {
+     				hideEUMWebElements();
+     				hideEUMMobileElements();
+     				jQuery('[id$=eumOrderOps]').hide();
+     				jQuery('[id$=eumAccountRadio]').val('');
+     			
+     				jQuery('[id$=eumMobile]')[0].options.length = 0;
+     				jQuery('[id$=eumMobile]')[0].options.add( new Option('--None--','') );
+     				jQuery('[id$=eumMobile]')[0].options.add( new Option('LITE','LITE') );
+     				jQuery('[id$=eumMobile]')[0].options.add( new Option('PRO','PRO') );
+					
+					//Resting Web units and overages
+					resetUnitsAndOverages(jQuery('[id$=eumWebUnitsField]') , jQuery('[id$=eumWebOveragesField]'));
+					//Resting Mobile units and overages
+					resetUnitsAndOverages(jQuery('[id$=eumMobileUnitsField]') , jQuery('[id$=eumMobileOveragesField]'));
+     			}
+     			
+     		}
+     		
+     		if(picklist.id.indexOf('eumMobile') != -1){
+     		
+     			if(picklist.value != ''){
+     				eumOrderOps();
+     				//console.log('inside picklist');
+     				
+     				if(picklist.value == 'PRO'){
+     				
+     					showEUMMobileElements();
+     							
+     				} else {
+     				
+     					hideEUMMobileElements();
+     					
+						//Resting Mobile units and overages
+     					resetUnitsAndOverages(jQuery('[id$=eumMobileUnitsField]') , jQuery('[id$=eumMobileOveragesField]'));
+     					
+     				}
+     				
+     				if(jQuery('[id$=eumWeb]')[0].value==''){
+     					jQuery('[id$=eumWeb]')[0].value = 'LITE';
+     					//jQuery('[id$=eumMobile]')[0].options[0].remove();
+     					jQuery('[id$=eumMobile]')[0].remove(0);
+     					resetUnitsAndOverages(jQuery('[id$=eumWebUnitsField]') , jQuery('[id$=eumWebOveragesField]'));
+     				}
+     				
+     			} else {
+     			
+     				if(jQuery('[id$=eumWeb]')[0].value!=''){
+     					picklist.value = 'LITE';
+     				}else {
+     				 	jQuery('[id$=eumOrderOps]').hide();
+     				}
+     				
+     			}
+     		}
+     	}
+     	
+     	/*
+     		Here we are resting the units and overages to default values.
+     	*/
+     	function resetUnitsAndOverages(units,overages){
+     		units.val('1');
+			overages.prop('checked', false);
+     	}
+     	
+     	/*
+     		This method is used to show EUM Web units and overages components 
+     		if the properties are hidden in UI.
+     	*/
+     	function showEUMWebElements(){
+     		jQuery('[id$=eumWebUnitsLabel]').show();
+			jQuery('[id$=eumWebUnitsField]').show();
+     					
+			jQuery('[id$=eumWebOveragesLabel]').show();
+			jQuery('[id$=eumWebOveragesField]').show();
+     	}
+     	
+     	/*
+     		This method is used to show EUM Mobile units and overages components 
+     		if the properties are hidden in UI.
+     	*/
+     	function showEUMMobileElements(){
+     		jQuery('[id$=eumMobileUnitsLabel]').show();
+			jQuery('[id$=eumMobileUnitsField]').show();
+     					
+			jQuery('[id$=eumMobileOveragesLabel]').show();
+			jQuery('[id$=eumMobileOveragesField]').show();
+     	}
+     	
+     	/*
+     		This method is used to hide EUM Web units and overages components 
+     	*/
+     	function hideEUMWebElements(){
+     		jQuery('[id$=eumWebUnitsLabel]').hide();
+			jQuery('[id$=eumWebUnitsField]').hide();
+     					
+			jQuery('[id$=eumWebOveragesLabel]').hide();
+			jQuery('[id$=eumWebOveragesField]').hide();
+     	}
+     	
+     	/*
+     		This method is used to hide EUM Mobile units and overages components 
+     	*/
+     	function hideEUMMobileElements(){
+     		jQuery('[id$=eumMobileUnitsLabel]').hide();
+			jQuery('[id$=eumMobileUnitsField]').hide();
+     					
+			jQuery('[id$=eumMobileOveragesLabel]').hide();
+			jQuery('[id$=eumMobileOveragesField]').hide();
+     	}
+     	
+     	function eumAccountSelection(radio){
+     		//console.log(jQuery('[id$=eumAccountNameField]'));
+     		if(radio.value == 'oldEUMAccount'){
+     			jQuery('[id$=eumAccountNameField]').attr("disabled",false);
+     		} else {
+     			jQuery('[id$=eumAccountNameField]').val('');
+     			jQuery('[id$=eumAccountNameField]').attr("disabled",true);
+     		}
+     	}
+     	
+		
+	</script>
+     <style>
+        .help-bubble {
+            background-image: url('/img/help/helpOrbs.gif');
+            display: inline-block;
+            height: 15px;
+            width: 15px;  
+        }
+        
+        .help-bubble:hover {
+            background-position: -21px 0;
+        }
+    </style>
+    <apex:PageMessages escape="false"></apex:PageMessages>
+    <apex:include pageName="PermissionCheck_Page"/>
+    <apex:form >
+        <apex:sectionHeader title="{!pageTitle}" />
+        <apex:pageBlock title="License Details" id="theBlock">
+        <apex:actionfunction name="uiRefereshActionFunction" action="{!uiValidation}" rerender="theSection,eumSection,licAgentsSection" oncomplete="licenseModulesPageLoad('paid');licenseAgentCountChange()" />
+        
+            <apex:pageblockButtons >
+                <apex:commandButton value="{!saveButtonTitle}" disabled="{!provisionDisabled}" action="{!saveObject}"  onclick="disableAfterTimeout(this);"/>
+                <apex:commandButton value="Cancel" action="{!cancel}" />
+                <apex:commandButton value="Define Primary Contact" action="{!showPrimaryContactPage}" rendered="{!renderPrimaryContact}"/>
+            </apex:pageblockButtons>
+            <script>
+                        function setFoucsOnLoad(){}
+            </script>
+            
+            <apex:pageBlockSection columns="4" id="theSection">
+                <apex:pageBlockSectionItem id="productTypeSection">
+                    <apex:outputLabel value="Deployment Option"></apex:outputLabel>
+                    <apex:selectList value="{!licenseDetailObj.Product_Type__c}" id="productType"
+                    	styleClass="product_type"
+                        multiselect="false" size="1" onchange="productTypeSelectionChange('paid')">
+                        <!-- onchange="changeLicenseType(this,'{!$Component.theBlock.theSection.theSectionItem2.customURLLbl}','{!$Component.theBlock.theSection.theSectionItem2.customURL}','{!$Component.theBlock.theSection.theSectionItem3.customURLLbl2}','{!$Component.theBlock.theSection.eumSection.eumLbl}','{!$Component.theBlock.theSection.eumSection.eumVal}','{!$Component.theBlock.theSection.macSection.macLblId}','{!$Component.theBlock.theSection.macSection.macValId}','{!$Component.theBlock.theSection.permLicSection.permLicLbl}','{!$Component.theBlock.theSection.permLicSection.permancentLicVal}','{!$Component.theBlock.theSection.perpetualLicSection.perpetualLicLbl}','{!$Component.theBlock.theSection.perpetualLicSection.perpetualLicVal}','{!$Component.theBlock.theSection.coRadiantSection.coRadiantLbl}','{!$Component.theBlock.theSection.coRadiantSection.coRadiantVal}','{!licenseOpCode}','{!oldProductType}','{!$Component.theBlock.theSection.expiryDateSection.expiryDate}','{!isPermanent}');"-->
+                        
+                        <apex:selectOptions value="{!productTypeSelectOptions}"></apex:selectOptions>
+                    </apex:selectList>
+                    <!--apex:inputField value="{!licenseDetailObj.Product_Type__c}" id="productType" required="true"
+                         onchange="changeLicenseType(this,'{!$Component.theBlock.theSection.theSectionItem2.customURLLbl}','{!$Component.theBlock.theSection.theSectionItem2.customURL}','{!$Component.theBlock.theSection.theSectionItem3.customURLLbl2}','{!$Component.theBlock.theSection.eumSection.eumLbl}','{!$Component.theBlock.theSection.eumSection.eumVal}','{!$Component.theBlock.theSection.macSection.macLblId}','{!$Component.theBlock.theSection.macSection.macValId}','{!$Component.theBlock.theSection.permLicSection.permLicLbl}','{!$Component.theBlock.theSection.permLicSection.permancentLicVal}','{!$Component.theBlock.theSection.perpetualLicSection.perpetualLicLbl}','{!$Component.theBlock.theSection.perpetualLicSection.perpetualLicVal}','{!$Component.theBlock.theSection.coRadiantSection.coRadiantLbl}','{!$Component.theBlock.theSection.coRadiantSection.coRadiantVal}','{!licenseOpCode}','{!oldProductType}');">
+                    </apex:inputField-->
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+
+                <apex:pageBlockSectionItem id="permLicSection"
+                    rendered="{!fldsRender.permLicense}">
+                    <apex:outputLabel id="permLicLbl" value="Permanent License?" />
+                    <apex:inputField id="permancentLicVal"
+                        value="{!licenseDetailObj.Is_Permanent__c}">
+                        <!-- onclick="togglePerpetualLicense('{!$Component.theBlock.theSection.permLicSection.permancentLicVal}','{!$Component.theBlock.theSection.productTypeSection.productType}','{!$Component.theBlock.theSection.perpetualLicSection.perpetualLicLbl}','{!$Component.theBlock.theSection.perpetualLicSection.perpetualLicVal}','{!$Component.theBlock.theSection.macSection.macLblId}','{!$Component.theBlock.theSection.macSection.macValId}','{!$Component.theBlock.theSection.expiryDateSection.expiryDate}');" >-->
+                        <apex:actionSupport event="onclick" action="{!uiValidation}" rerender="theSection"/>
+                    </apex:inputField>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem rendered="{!fldsRender.permLicense}">
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem rendered="{!fldsRender.permLicense}">
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem rendered="{!fldsRender.permLicense}">
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+                
+                <apex:PageBlockSectionItem rendered="{!fldsRender.macAddress}"
+                    id="macSection">
+                    <apex:outputLabel value="MAC Address" id="macLblId"></apex:outputLabel>
+                    <apex:inputField value="{!licenseDetailObj.MAC_Address__c}"
+                        id="macValId" />
+                </apex:PageBlockSectionItem>
+                <apex:pageBlockSectionItem rendered="{!fldsRender.macAddress}">
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem rendered="{!fldsRender.macAddress}">
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem rendered="{!fldsRender.macAddress}">
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem id="perpetualLicSection"
+                    rendered="{!fldsRender.perpLicense}">
+                    <apex:outputLabel value="Perpetual License?" id="perpetualLicLbl" />
+                    <apex:inputField value="{!licenseDetailObj.Is_Perpetual__c}"
+                        id="perpetualLicVal"
+                        onclick="handlePerpetualLicenseClick('{!$Component.theBlock.theSection.perpetualLicSection.perpetualLicVal}', '{!$Component.theBlock.theSection.expiryDateSection.expiryDate}');" >
+                    </apex:inputField>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem rendered="{!fldsRender.perpLicense}">
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem rendered="{!fldsRender.perpLicense}">
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem rendered="{!fldsRender.perpLicense}">
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+                <apex:PageBlockSectionItem id="expiryDateSection">
+                    <apex:outputLabel value="License Expiration Date"></apex:outputLabel>
+                    <apex:inputField id="expiryDate" styleClass="accountExpiryDate"
+                        value="{!licenseDetailObj.License_Expiry_Date__c}"  onchange="callApplyGlobalExpDate()">
+					</apex:inputField>
+                </apex:PageBlockSectionItem>
+
+                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem id="supportSectionItem" rendered="{!fldsRender.supportProvisioning}">
+                    <apex:OutputLabel value="Dedicated Controller License Provisioning?"/>
+                    <apex:inputcheckbox value="{!licenseDetailObj.Support__c}" >
+                        <apex:actionSupport event="onclick" action="{!uiValidation}" rerender="theSection"/>
+                    </apex:inputcheckbox>
+                </apex:pageBlockSectionItem>
+                
+                
+                <apex:pageBlockSectionItem rendered="{!fldsRender.supportProvisioning}">
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem rendered="{!fldsRender.supportProvisioning}">
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem rendered="{!fldsRender.supportProvisioning}">
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+                
+               <apex:PageBlockSectionItem id="theSectionItem2" rendered="{!fldsRender.customURL}">
+                
+                    <apex:outputLabel value="Customer SaaS URL" id="customURLLbl" />
+                    <apex:outputpanel >
+                    <apex:inputField id="customURL"
+                        value="{!licenseDetailObj.Custom_URL_Name__c}" style="width:450" />
+                        <apex:outputLabel id="customURLLbl2" value=".saas.appdynamics.com" />
+                        </apex:outputpanel>
+                </apex:PageBlockSectionItem>
+                <apex:PageBlockSectionItem rendered="{!fldsRender.customURL}">
+                    <apex:outputLabel value="" />
+                </apex:PageBlockSectionItem>
+
+                <apex:pageBlockSectionItem rendered="{!fldsRender.customURL}">
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem rendered="{!fldsRender.customURL}">
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem rendered="{!fldsRender.controller}">
+                    <apex:outputLabel value="Select Controller"/>
+                    <apex:selectList value="{!licenseDetailObj.Controller_ID__c}" multiselect="false" size="1">
+                        <apex:selectOptions value="{!controllersList}"/>
+                    </apex:selectList>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem rendered="{!fldsRender.controller}">
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem rendered="{!fldsRender.controller}">
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem rendered="{!fldsRender.controller}">
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem id="manualSaaSSection" rendered="{!fldsRender.saasManual}">
+                    <apex:outputLabel id="saasManualLbl" value="Manual SaaS Fields?"/>
+                    <apex:inputField id="manualSaaS" value="{!licenseDetailObj.Manual_SaaS_Fields__c}"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem id="saasUserName" rendered="{!fldsRender.saasManual}">
+                    <apex:outputLabel id="saasUsrLbl" value="SAAS User Name"/>
+                    <apex:inputField id="saasUsr" value="{!licenseDetailObj.SAAS_UserName__c}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem id="saasAcc" rendered="{!fldsRender.saasManual}">
+                <apex:outputLabel id="saasAccLbl" value="SaaS Account"/>
+                <apex:inputField id="saasAcc" value="{!licenseDetailObj.SaaS_Account__c}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem rendered="{!fldsRender.saasManual}">
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+			</apex:pageBlockSection>
+			
+			<c:PortalLicenseAgentVC id="licAgentsSection" licenseControllerParam="{!thisController}"/>
+                
+			
+				
+				<!-- NEW EUM CODE -->
+                <apex:pageBlockSection id="eumSection" title="EUM Agents" columns="1" collapsible="false" >
+                	<apex:pageBlockSectionItem >
+                		<apex:outputPanel >
+                            <apex:outputLabel value="EUM Web Agents"></apex:outputLabel>
+                        </apex:outputPanel>
+                        <apex:OutputLabel value="">
+                        	<apex:inputField id="eumWeb" value="{!eumInput.eumWeb.Type__c}" style="width: 100px;">
+                        	<apex:actionSupport event="onchange" action="{!setEUMLite}" rerender="eumSection,eumWebPanel,eumMobilePanel,prodEdition,countInput,maxCountLbl" oncomplete="blankFunction();" />
+                            </apex:inputField>
+                        	&nbsp;&nbsp;&nbsp;&nbsp;
+                            <apex:outputPanel id="eumWebPanel">
+                        	<apex:outputLabel id="eumWebUnitsLabel" styleClass="labelCol first last" value="Units" rendered="{!eumInput.eumWeb.Type__c == 'PRO'}"></apex:outputLabel>
+                        	<apex:inputField id="eumWebUnitsField" value="{!eumInput.eumWeb.Units__c}" rendered="{!eumInput.eumWeb.Type__c == 'PRO'}"></apex:inputField>
+                        	&nbsp;&nbsp;&nbsp;&nbsp;
+                        	<apex:outputLabel id="eumWebOveragesLabel" styleClass="labelCol first last" value="Allow Overages" rendered="{!eumInput.eumWeb.Type__c == 'PRO'}"></apex:outputLabel>
+                        	<apex:inputField id="eumWebOveragesField" value="{!eumInput.eumWeb.Allow_overages__c}" rendered="{!eumInput.eumWeb.Type__c == 'PRO'}"></apex:inputField> 
+                        	</apex:outputPanel>
+                        </apex:OutputLabel>
+                	</apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+                
+                <apex:pageBlockSection columns="1">
+                	<apex:pageBlockSectionItem >
+                		<apex:outputPanel >
+                            <apex:outputLabel value="EUM Mobile Agents"></apex:outputLabel>
+                        </apex:outputPanel>
+                        <apex:OutputLabel value="">
+                        	<apex:inputField id="eumMobile" value="{!eumInput.eumMobile.Type__c}" style="width: 100px;">
+                            <apex:actionSupport event="onchange" action="{!setEUMLite}" rerender="eumSection,eumWebPanel,eumMobilePanel,prodEdition,countInput,maxCountLbl" oncomplete="blankFunction();" />
+                            </apex:inputField>
+                        	&nbsp;&nbsp;&nbsp;&nbsp;
+                            <apex:outputPanel id="eumMobilePanel">
+                        	<apex:outputLabel id="eumMobileUnitsLabel" styleClass="labelCol first last" value="Units" rendered="{!eumInput.eumMobile.Type__c == 'PRO'}"></apex:outputLabel>
+                        	<apex:inputField id="eumMobileUnitsField" value="{!eumInput.eumMobile.Units__c}" rendered="{!eumInput.eumMobile.Type__c == 'PRO'}"></apex:inputField>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                        	<apex:outputLabel id="eumMobileOveragesLabel" styleClass="labelCol first last" value="Allow Overages" rendered="{!eumInput.eumMobile.Type__c == 'PRO'}"></apex:outputLabel>
+                        	<apex:inputField id="eumMobileOveragesField" value="{!eumInput.eumMobile.Allow_overages__c}" rendered="{!eumInput.eumMobile.Type__c == 'PRO'}"></apex:inputField><br/><br/>
+                            </apex:outputPanel>                            
+                        	<apex:outputPanel id="eumOrderOps" style="display:none;" styleClass="checkboxAlignment">
+                                <apex:selectRadio id="eumAccountRadio" layout="pageDirection" value="{!selectedEUMAccountType}">
+                                    <apex:actionSupport event="onchange" action="{!uiValidation}" rerender="eumAccountRadio, eumAccountNameField" /> 
+                                    <apex:selectOption itemLabel="{!eumAccountOption1}" itemEscaped="false" itemValue="newEUMAccount" ></apex:selectOption>
+                                    <apex:selectOption itemLabel="{!eumAccountOption2}" itemEscaped="false" itemValue="oldEUMAccount" ></apex:selectOption>
+                                </apex:selectRadio>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <b><apex:outputLabel value="Link existing EUM Account Name"></apex:outputLabel></b>&nbsp;&nbsp;
+                                <apex:inputText id="eumAccountNameField" value="{!eumInput.eumDetails.AccountName__c}" styleClass="myClass" disabled="{!fldsRender.disableEUMAccountNameField}"/>     
+                            </apex:outputPanel>
+                        </apex:OutputLabel>
+                	</apex:pageBlockSectionItem>
+                	<apex:pageBlockSectionItem >
+                		<apex:OutputLabel value=""></apex:OutputLabel>
+                    	<apex:OutputLabel value=""></apex:OutputLabel>
+                	</apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+				 
+				
+				<apex:pageBlockSection columns="4" >
+				
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Notes"></apex:outputLabel>
+                    <apex:inputField value="{!licenseDetailObj.Reason__c}" />
+                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+			
+			<apex:pageblockSection id="rumSection" columns="1">
+                <apex:pageBlockSectionItem >
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                    <apex:OutputLabel value=""></apex:OutputLabel>
+                </apex:pageBlockSectionItem>
+						
+				</apex:pageblockSection>
+							
+            <apex:pageBlockSection columns="1">
+                <apex:pageBlockSection id="contactsSection"
+                    title="Email Notifications" columns="1">
+                    
+                    <apex:commandButton action="{!showAllContacts}" value="{!IF((togglebutton), 'Show Opportunity Contacts', 'Show All Contacts')}" rendered="{!!showAssociateOpportunity }"/>
+                    <apex:outputPanel >            	
+            		<table class="list " cellpadding="0" cellspacing="0">
+            			<thead class="rich-table-thead">
+            				<tr class="headerRow ">
+            					<th class="headerRow  ">Contact</th>
+            					<th class="headerRow  ">
+            						<span class="helpButtonOn" id="operationsemail-_Help" style="margin-right:30px">
+            						<input type="checkbox" style="vertical-align: top;" class="selectcheckbox"/>
+            						Need License Operations Email? <img class="helpOrb" alt="" src="/s.gif" ></img>
+	            					<script type="text/javascript">sfdcPage.setHelp('operationsemail', 'The users enabled with this option will be copied on license emails during Provision/Extend/Upgrade.');</script>
+	            					</span>
+	            				</th>
+            					<th class="headerRow  ">
+            						<span class="helpButtonOn" id="serviceNotif-_Help" style="margin-right:30px">
+            						<input type="checkbox" style="vertical-align: top;" class="selectcheckbox"/>
+            						Need Service Notifications? <img class="helpOrb" alt="" src="/s.gif" ></img>
+	            					<script type="text/javascript">sfdcPage.setHelp('serviceNotif', 'The users enabled with this option will be copied on Maintenance Downtime Notifications.');</script>
+	            					</span>
+            					</th>
+            					<th class="headerRow  ">Primary Contact?</th>
+            					<th class="headerRow  ">Email</th>
+            					<th class="headerRow  ">Download Server</th>
+            					<th class="headerRow  " >Online Docs</th>
+            					<th class="headerRow  ">Help Center</th>
+            					<th class="headerRow  " >AppDynamics University</th>
+            				</tr>
+            			</thead>
+            			<apex:repeat value="{!aduaContactsHelper.contactWrapperList}" var="ctWrapper">
+                            <tr class="dataRow even  first">
+                                <td class="dataCell  ">
+                                    <apex:OutputLink value="/{!ctWrapper.contactObj.Id}" target="_top">{!ctWrapper.contactObj.firstName} {!ctWrapper.contactObj.lastName}</apex:outputLink>
+                                </td>
+                                
+                                <td class="dataCell  ">
+                                    <apex:inputCheckBox styleClass="systemsClass" value="{!ctWrapper.licContact.Need_Operations_Email__c}" disabled="{!ctWrapper.isPrimary}"></apex:inputCheckBox>
+                                </td>
+                                <td class="dataCell  ">
+                                    <apex:inputCheckBox styleClass="systemsClass" value="{!ctWrapper.licContact.Need_Service_Email__c}" disabled="{!ctWrapper.isPrimary}"></apex:inputCheckBox>
+                                </td>
+                                <td class="dataCell  ">
+                                    <apex:inputCheckBox styleClass="systemsClass" value="{!ctWrapper.isPrimary}" disabled="true"/>
+                                </td>
+                                <td class="dataCell  ">{!ctWrapper.contactObj.email}</td>
+                                <apex:repeat value="{!ctWrapper.aduaUIObj.systemEntries}" var="system">
+                                    <apex:outputPanel rendered="{! IF(OR(system.systemName == 'Community Fan Club',system.systemName == 'Mindtickle SSO'), False, True)}">
+                                        <td class="dataCell  ">
+                                            <apex:inputCheckBox styleClass="systemsClass" value="{!system.selected}" disabled="{!IF(OR(system.isLMS,ctWrapper.isPrimary),True,False)}"></apex:inputCheckBox>
+                                        </td>
+                                    </apex:outputPanel>
+                                </apex:repeat>
+                                <!-- <td class="dataCell  ">
+                                    <apex:inputCheckBox value="{!ad.userDetails.contactObj.No_longer_at_Company__c}"></apex:inputCheckBox>
+                                </td> -->
+                            </tr>
+                        </apex:repeat>
+            		</table>
+				</apex:outputPanel>
+                    
+                    
+                    
+                    <apex:InputField value="{!licenseDetailObj.Ad_hoc_Email_Ids__c}" style="align: left; width: 90%;"/>
+                    <apex:pageBlockSection columns="3">
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Account Manager"/>
+                            <apex:outputLabel value="{!accountManager}"/>
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Technical Owner"/>
+                            <apex:outputLabel value="{!technicalOwner}"/>
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Sales Rep"/>
+                            <apex:outputLabel value="{!salesRep}"/>
+                        </apex:pageBlockSectionItem>
+                    </apex:pageBlockSection>
+                </apex:pageBlockSection>
+                <script>
+                    disableComponents('{!licenseOpCode}','{!$Component.theBlock.theSection.theSectionItem2.customURLLbl}','{!$Component.theBlock.theSection.theSectionItem2.customURL}','{!$Component.theBlock.theSection.theSectionItem2.customURLLbl2}','{!$Component.theBlock.theSection.macSection.macLblId}','{!$Component.theBlock.theSection.macSection.macValId}','{!$Component.theBlock.theSection.eumSection.eumLbl}','{!$Component.theBlock.theSection.eumSection.eumVal}','{!$Component.theBlock.theSection.coRadiantSection.coRadiantLbl}','{!$Component.theBlock.theSection.coRadiantSection.coRadiantVal}','{!$Component.theBlock.theSection.productTypeSection.productType}','{!$Component.theBlock.theSection.permLicSection.permLicLbl}','{!$Component.theBlock.theSection.permLicSection.permancentLicVal}','{!$Component.theBlock.theSection.perpetualLicSection.perpetualLicLbl}','{!$Component.theBlock.theSection.perpetualLicSection.perpetualLicVal}','{!$Component.theBlock.theSection.expiryDateSection.expiryDate}','{!isPermanent}');
+                </script>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

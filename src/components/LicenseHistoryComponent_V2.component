@@ -1,0 +1,26 @@
+<apex:component controller="LicenseHistoryController_V2" >
+	<apex:attribute name="licenseId"  
+        description="This is the license ID for which History has to be displayed." 
+        type="String" required="required"
+        assignTo="{!licenseIdCtrller}"/>
+	<apex:pageBlock >
+    	<apex:pageBlockSection >
+        	<apex:pageBlockSectionItem >
+            	<apex:outputLabel value="{!licenseIdCtrller}"></apex:outputLabel>
+        	</apex:pageBlockSectionItem>
+    	</apex:pageBlockSection>
+    	<apex:pageBlockTable value="{!licenseHistories}" var="licHistory" id="theTable" width="100%" style="width:100%;">
+        	<apex:column width="250" headerValue="Created Date" value="{!licHistory.actualHistory.DateTime__c}" >
+            </apex:column>
+            <apex:column width="250" value="{!licHistory.actualHistory.User__c}">
+            </apex:column>
+            <apex:column width="600" headerValue="Action">
+	            <apex:outputText id="textActionFormat"
+	                            value="{!licHistory.ActionString}"
+	                            escape="false">
+				</apex:outputText>
+			</apex:column>
+    	</apex:pageBlockTable>
+    </apex:pageBlock>
+    
+</apex:component>

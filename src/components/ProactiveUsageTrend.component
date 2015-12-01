@@ -1,0 +1,33 @@
+<apex:component controller="ProactiveStatsController">
+	<apex:attribute name="accountId_param"
+		type="String"
+		description="Account ID for which metric will be displayd"
+		assignTo="{!accountId}"
+	/>
+	<apex:attribute name="metric_param"
+		type="String"
+		description="Proactive Metric. Should always to be SUMAMRY"
+		assignTo="{!metric}"
+		required="required"
+	/>
+	<apex:attribute name="reload_param"
+		type="Boolean"
+		description="Relaod flag"
+		required="required"
+		assignTo="{!reload}"
+	/>
+	<apex:chart data="{!statsDataList}"
+			height="600" width="100%">
+		<apex:axis type="Category" position="bottom" fields="feature" 
+           	title="Feature">
+           	<apex:chartLabel />
+           </apex:axis>
+           <apex:axis type="Numeric" position="left" fields="score" maximum="100" steps="10"
+           	title="Score"/>
+		<apex:barSeries orientation="vertical" axis="bottom" 
+           	xField="feature" 
+           	yField="score"
+           	showInLegend="true"/>
+		<!-- apex:legend position="right" />-->
+	</apex:chart>
+</apex:component>

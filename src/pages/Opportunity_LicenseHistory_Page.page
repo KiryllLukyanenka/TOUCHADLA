@@ -1,0 +1,25 @@
+<apex:page standardController="Opportunity"><!--  extensions="Opportunity_LicenseHistoryController" wizard="true">
+    <apex:pageBlock title="Total Number of Active Licenses: {!activeLicenseCount}">
+        
+            <c:OpportunityLicenseComponent opportunityId="{!opportunityObj.Id}">
+            </c:OpportunityLicenseComponent>            
+            <!--<apex:pageBlockTable value="{!licHistoryMap[license]}" var="licHistory" id="theTable" width="100%" style="width:100%;">
+                <apex:column width="250" value="{!licHistory.ActualHistory.CreatedDate}" >
+                </apex:column>
+                <apex:column width="250" value="{!licHistory.ActualHistory.CreatedById}">
+                </apex:column>
+                <apex:column width="600" headerValue="Action">
+                        <apex:outputText id="textActionFormat"
+                            value="{!licHistory.ActionString}"
+                            escape="false">
+ 
+                            <apex:param value="{!licHistory.ActualHistory.Field}" />
+                            <apex:param value="{!licHistory.ActualHistory.Field}" />
+                            <apex:param value="{!licHistory.ActualHistory.OldValue}" />
+                            <apex:param value="{!licHistory.ActualHistory.NewValue}" />
+                        </apex:outputText>
+                    </apex:column>
+            </apex:pageBlockTable> -->
+        <!-- 
+    </apex:pageBlock> -->
+</apex:page>

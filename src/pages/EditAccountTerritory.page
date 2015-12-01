@@ -1,0 +1,715 @@
+<apex:page id="page" sidebar="false" title="Edit Account Territory" controller="EditAccountTerritoryController">
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+
+    <!-- Bootstrap -->
+    <link href="{!URLFOR($Resource.AccountTerr, './assets/bs/css/bootstrap.min.css')}" rel="stylesheet"/>
+    <!-- Bootstrap theme -->
+    <link href="{!URLFOR($Resource.AccountTerr, './assets/bs/css/bootstrap-theme.min.css')}" rel="stylesheet"/>
+
+    <!-- Custom -->
+    <link href="{!URLFOR($Resource.AccountTerr, './assets/css/custom.css')}" rel="stylesheet"/>
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="{!URLFOR($Resource.AccountTerr, './assets/js/ie10-viewport-bug-workaround.js')}"></script>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="{!URLFOR($Resource.AccountTerr, './assets/js/html5shiv.min.js')}"></script>
+      <script src="{!URLFOR($Resource.AccountTerr, './assets/js/respond.min.js')}"></script>
+    <![endif]-->
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="{!URLFOR($Resource.AccountTerr, './assets/js/jquery.min.js')}"></script>
+    <script src="{!URLFOR($Resource.AccountTerr, './assets/js/jquery-ui.min.js')}"></script>
+    <script src="{!URLFOR($Resource.AccountTerr, './assets/bs/js/bootstrap.min.js')}"></script>
+    <script src="{!URLFOR($Resource.AccountTerr, './assets/js/moment.min.js')}"></script>
+    <script src="{!URLFOR($Resource.AccountTerr, './assets/switch/js/bs-switch.min.js')}"></script>
+    <script src="{!URLFOR($Resource.AccountTerr, './assets/dtpicker/js/bs-datetimepicker.min.js')}"></script>
+    <script src="{!URLFOR($Resource.AccountTerr, './assets/js/custom.js')}"></script>
+
+    <style>
+      .dateFormat{
+        display: none;
+      }
+      .selectList{
+        display:none;
+      }
+      .glyphicon
+      {
+          cursor: pointer;
+      }
+      .btnNoOverride {
+            display: inline-block;
+            margin-bottom: 0px;
+            font-weight: 400;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            cursor: pointer;
+            -moz-user-select: none;
+            border: 1px solid transparent;
+            border-color:#CCC;
+        }
+        .btnNoOverrideLookup {
+            display: inline-block;
+            margin-bottom: 0px;
+            font-weight: 400;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            cursor: pointer;
+            -moz-user-select: none;
+            border: 1px solid transparent;
+            border-color:#CCC;
+            position: relative;
+            height: 30px;
+            padding: 5px 10px;
+            font-size: 12px;
+            line-height: 1.5;
+            border-radius: 3px;
+            border-top-left-radius: 0px;
+            margin-left: -1px;
+            border-bottom-left-radius: 0px;
+            margin-top:0px;
+        }
+        .btn-primaryNoOverride {
+            background-image: linear-gradient(to bottom, #428BCA 0px, #2D6CA2 100%);
+            background-repeat: repeat-x;
+            border-color: #2B669A;
+            text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.2);
+            box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.15) inset, 0px 1px 1px rgba(0, 0, 0, 0.075);
+            color:#FFF;
+        }
+    </style>
+    
+    <script>
+      function displayField(target){
+        if(target.value){
+          Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.EditAccountTerritoryController.getFieldCriteriaOption}',
+            target.value,
+            function(result, event){
+              if(event.status){
+                if (result){
+                  displaySelectOption(target, result);
+                }
+              }
+            },
+            { escape: true }
+          );
+        }
+      }
+
+      function displaySelectOption(target, optionValue){
+        var targetCell = $(target).parent().next().next();
+        targetCell.children('.inputText').css('display','none');
+        var selectListNode = targetCell.children('.selectList');
+        selectListNode.css('display', 'block');
+        selectListNode.children(':gt(0)').remove();
+        var optionValues = optionValue.split('[;]');
+        $(optionValues).each(function(index){
+          if(index != optionValues.length - 1){
+            selectListNode.append('<option value="' + this + '">' + this + '</option>');
+          }
+        });
+      }
+    </script>
+    
+    <script>
+      function editRow(editButton, theLeadValue){
+          var currentRow = $(editButton).parent().parent();
+          currentRow.css('display', 'none');
+          currentRow.next().css('display', 'table-row');
+          displayField($(editButton).parents('tr:first').next().find('.sourceSelectList')[0]);
+      }
+      
+      function cancelRow(cancelButton){
+          var currentRow = $(cancelButton).parent().parent();
+          currentRow.css('display', 'none');
+          currentRow.prev().css('display', 'table-row');
+      }
+      
+      function deleteRow(deletedId, deletedType){
+          document.getElementById('page:form:deleteId').value = deletedId;
+          document.getElementById('page:form:deleteType').value = deletedType;
+          if(deletedType == 'territory'){
+            $('#deleteText').text('Territory');
+          }
+          if(deletedType == 'geography'){
+            $('#deleteText').text('Geographic Criteria');
+          }
+          if(deletedType == 'leadField'){
+            $('#deleteText').text('Field Criteria');
+          }
+      }
+      
+      function saveGeography(button, parentId, criteriaId){
+          var allInputs = $(button).parent().prevAll();
+          var jsonValue = '{"Territory__c":"' + parentId 
+                        + '","Country__c":"' + allInputs[3].firstChild.value
+                        + '","State__c":"' + allInputs[2].firstChild.value
+                        + '","Zip_Start__c":"' + allInputs[1].firstChild.value 
+                        + '","Zip_End__c":"' + allInputs[0].firstChild.value;
+          if(criteriaId){
+              jsonValue += '","Id":"' + criteriaId + '"}';
+          }
+          else{
+              jsonValue += '"}';
+          }
+          document.getElementById('page:form:json').value = jsonValue;
+          createGeographicCriteria();
+      }
+      
+      function saveLeadField(button, parentId, criteriaId){
+          var allInputs = $(button).parent().prevAll();
+          var fieldnameTD = $(allInputs[2]);
+          var fieldname = fieldnameTD.find("select").val();
+          var fieldOperatorTD = $(allInputs[1]);
+          var fieldOperator = fieldOperatorTD.find("select").val();
+          var fieldValue = $(allInputs[0]).find(':visible').val();
+          var jsonValue = '{"Territory__c":"' + parentId 
+                        + '","Field__c":"' + fieldname
+                        + '","Operator__c":"' + fieldOperator 
+                        + '","Value__c":"' + fieldValue;
+          if(criteriaId){
+              jsonValue += '","Id":"' + criteriaId + '"}';
+          }
+          else{
+              jsonValue += '"}';
+          }
+          document.getElementById('page:form:json').value = jsonValue;
+          createLeadFieldCriteria();
+      }
+      
+      function insertLeadTerritoryByCSV()
+      {
+          if(checkAssignmentCSV())
+          {
+              insertNewLeadTerritoryGeosByCSV();
+          }
+      }
+      
+      function checkAssignmentCSV()
+      {
+          var isValid = true;
+          var assignmentCsvValue = $(".assignmentCsv").val();
+          if(assignmentCsvValue != null && assignmentCsvValue != '')
+          {
+              var assignmentCSV = '';
+              var assignments = new Array();
+              assignments = assignmentCsvValue.split('\n');
+              if(assignments.length > 400)
+              {
+                  alert('Assignments can\'t be greater than 400.')
+                  isValid = false;
+              }
+              else
+              {
+                  var reg = new RegExp('("[^"]*("{2})*[^"]*")*[^,]*,', 'g');                
+                  for(var i = 0; i < assignments.length; i++)
+                  {
+                      var count = 0;
+                      if(assignments[i].trim().length > 0)
+                      {
+                          var assignment = assignments[i] + ',';
+                          var arr;
+                          while((arr=reg.exec(assignment)) != null)
+                          {
+                              count++;
+                          }
+                          if(count == 1) 
+                          {
+                              assignmentCSV += assignments[i] + ',,,\n';
+                          }
+                          else if(count == 2)
+                          {
+                              assignmentCSV += assignments[i] + ',,\n';
+                          }
+                          else if(count == 3)
+                          {
+                              assignmentCSV += assignments[i] + ',\n';
+                          }
+                          else if(count == 4)
+                          {
+                              assignmentCSV += assignments[i] + '\n';
+                          }
+                          else 
+                          {
+                              alert('Not Valid');
+                              isValid = false;
+                              break;
+                          }
+                      }
+                      else
+                      {
+                          alert('The assignments you entered have invalid data.');
+                          $('.assignmentCsv').focus();
+                          isValid = false;
+                          break;
+                      }    
+                  }
+                  if(isValid)
+                  {
+                      assignmentCSV = assignmentCSV.substring(0, assignmentCSV.length - 1);
+                      $('.assignmentCsv').val(assignmentCSV);
+                  }   
+              }                    
+          }
+          else
+          {
+              alert('You need to paste some assignments.');
+              isValid = false;
+          }
+          return isValid;            
+      }
+      
+       function setTarget(targetId){
+          $('#userTarget').val(targetId);
+          $('#searchResponse').hide();
+      }
+      
+      function getUser(userId, userName){
+          var targetId = $('#userTarget').val();
+          if(targetId){
+              getUserWithTarget(targetId, userId, userName)
+          }
+          else{
+              document.getElementById('page:form:userId').value = userName;
+              $('#userName').val(userName);
+          }
+          target = null;
+      }
+      
+      function getUserWithTarget(targetId, userId, userName){
+          var inputs = $('#' + targetId).children('input');
+          inputs[0].value = userName;
+          inputs[1].value = userName;
+          inputs[2].value = userId;
+      }
+    </script>
+  </head>
+
+  <body>
+  <apex:form id="form">
+    <apex:actionFunction name="first" action="{!first}"/>
+    <apex:actionFunction name="previous" action="{!previous}"/>
+    <apex:actionFunction name="next" action="{!next}"/>
+    <apex:actionFunction name="last" action="{!last}"/>
+    <apex:actionFunction action="{!saveLeadTerritory}" name="saveLeadTerritory"/>
+    <apex:actionFunction action="{!createGeographicCriteria}" name="createGeographicCriteria"/>
+    <apex:actionFunction action="{!createLeadFieldCriteria}" name="createLeadFieldCriteria"/>
+    <apex:actionFunction action="{!insertNewLeadTerritoryGeos}" name="insertNewLeadTerritoryGeos"/>
+    <apex:actionFunction action="{!addMoreLeadTerritoryGeos}" name="addMoreLeadTerritoryGeos" rerender="singleAssignmentPanel" status="statusAssignment" />
+    <apex:actionFunction action="{!insertNewLeadTerritoryGeosByCSV}" name="insertNewLeadTerritoryGeosByCSV" />
+    <apex:inputHidden id="json" value="{!jsonCriteria}"/>
+    <apex:inputHidden id="deleteId" value="{!removedId}"/>
+    <apex:inputHidden id="deleteType" value="{!removedType}"/>
+    <apex:inputField value="{!leadObject.DatetimeField__c}" style="display:none;"/>
+    <input type="hidden" id="userTarget"/>
+
+    <!-- Begin page content -->
+    <div class="container">
+      <div class="page-header">
+        <h1>Edit Territory <small>{!leadTerritory.Name}</small></h1>
+      </div>
+    </div>
+    
+    <div class="content-wrapper">
+      <div class="container">
+      
+        <ol class="breadcrumb">
+          <li><a href="{!$Page.ManageAccountTerritory}">Home</a></li>
+          <li><a href="{!$Page.ManageAccountTerritory}">Territory</a></li>
+          <li class="active">Edit Territory</li>
+        </ol><!--/breadcrumb-->
+        
+        <apex:outputPanel rendered="{!errorMessages.size != 0}">
+          <div class="message errorM3" role="alert" style="margin:5px 0; color:#c00;">
+              <img alt="FATAL" src="/s.gif" class="msgIcon" title="FATAL"/> Error:
+              <ul style="font-size:12px;">
+              <apex:repeat value="{!errorMessages}" var="message">
+                  <li>{!message}</li>
+              </apex:repeat>
+              </ul>
+          </div>
+        </apex:outputPanel>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="row heading">
+                    <div class="col-xs-12 col-sm-4 col-md-3" style="width:25%">Territory Name</div>
+                    <div class="col-xs-12 col-sm-4 col-md-1" style="width:15%">Geo</div>
+                    <div class="col-xs-12 col-sm-4 col-md-1" style="width:15%">Region</div>
+                    <div class="col-xs-12 col-sm-4 col-md-1" style="width:5%">Active</div>
+                    <div class="col-xs-12 col-sm-4 col-md-2" style="width:20%">Assign To</div>
+                    <div class="col-xs-12 col-sm-4 col-md-1" style="width:20%">Effective Date</div>
+                </div><!--/row-->
+            </div>
+        </div><!--/row-->
+        
+        <div class="space15"></div>
+        
+        <div class="row row-input">
+            <div class="col-xs-12 col-sm-4 col-md-3" style="width:25%">
+              <apex:inputField value="{!leadTerritory.Name}" styleClass="form-control input-sm"/>
+            </div>
+            <div class="col-xs-12 col-sm-4 col-md-3" style="width:15%">
+              <apex:inputField value="{!leadTerritory.Geo__c}" styleClass="form-control input-sm"/>
+            </div>
+            <div class="col-xs-12 col-sm-4 col-md-3" style="width:15%">
+              <apex:inputField value="{!leadTerritory.Region__c}" styleClass="form-control input-sm"/>
+            </div>
+            <div class="col-xs-12 col-sm-4 col-md-1" style="width:5%">
+              <apex:inputField value="{!leadTerritory.Active__c}"/>
+            </div>
+            <div class="col-xs-12 col-sm-4 col-md-2" style="width:20%">
+              <div id="{!leadTerritory.Id}" class="input-group input-group-sm">
+                <input type="text" class="form-control input-sm" value="{!leadTerritory.Assigned_To__c}" readonly="true"/>
+                <apex:inputHidden value="{!leadTerritory.Assigned_To__c}"/>
+                <apex:inputHidden value="{!leadTerritory.Assigned_To_ID__c}"/>
+                <span class="input-group-btn">
+                  <a href="#searchUserModal" data-toggle="modal" onclick="setTarget('{!leadTerritory.Id}')">
+                    <button type="button" class="btnNoOverrideLookup btn-default">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                  </a>
+                </span>
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-4 col-md-1" style="width:20%">
+              <apex:inputField value="{!leadTerritory.Effective_Date__c}" styleClass="form-control input-sm" style="width:100%"/>
+            </div>
+        </div>
+        
+        <div class="space15"></div>
+        
+        <div class="row">
+          <div class="col-xs-12">
+            <button type="button" class="btnNoOverride btn-primary btn-sm" onclick="saveLeadTerritory();">Save</button> 
+            <a href="{!$Page.ManageAccountTerritory}" class="btnNoOverride btn-info btn-sm">Return to Terr Mgmt</a>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xs-12">
+            <hr/>    
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="panel panel-default">
+                  <div class="panel-body">
+                    <p class="clearfix">
+                      <strong>Field Criteria</strong>
+                      <a href=".leadfield-addrow" data-toggle="collapse" class="pull-right">Add Row</a>
+                    </p>  
+                    <div class="table-responsive">
+                      <table class="table table-bordered table-condensed">
+                        <thead>
+                          <tr>
+                            <th>Field</th>
+                            <th>Operator</th>
+                            <th>Value</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <apex:repeat value="{!leadTerritory.Territory_Field_Criteria__r}" var="leadField">
+                          <tr>
+                            <td>{!leadField.Field__c}</td>
+                            <td>{!leadField.Operator__c}</td>
+                            <td>{!leadField.Value__c}</td>
+                            <td>
+                              <a href="" title="Edit" onclick="editRow(this, '{!leadField.Value__c}')">
+                                <span class="glyphicon glyphicon-edit"></span>
+                              </a> 
+                              <a href="" title="Delete" data-toggle="modal" data-target="#deleteModal" onclick="deleteRow('{!leadField.Id}', 'leadField')">
+                                <span class="glyphicon glyphicon-trash"></span>
+                              </a>
+                            </td>
+                          </tr>
+                          <tr class="leadfield-addrow collapse" style="display:none;">
+                            <td>
+                              <apex:selectList value="{!leadField.Field__c}" styleClass="form-control input-sm sourceSelectList" size="1" multiselect="false"
+                                onchange="displayField(this);">
+                                <apex:selectOptions value="{!leadFields}"/>
+                              </apex:selectList>
+                            </td>
+                            <td>
+                              <apex:selectList value="{!leadField.Operator__c}" styleClass="form-control input-sm" size="1" multiselect="false">
+                                <apex:selectOption itemLabel="--None--" itemValue=""/>
+                                <apex:selectOption itemLabel="equals" itemValue="equals"/>
+                                <apex:selectOption itemLabel="not equal to" itemValue="not equal to"/>
+                              </apex:selectList>
+                            </td>
+                            <td>
+                              <input type="text" class="form-control input-sm inputText"/>
+                              <select class="form-control input-sm selectList">
+                                <option>--None--</option>
+                              </select>
+                            </td>
+                            <td>
+                              <a href="javascript:void(0)" title="Save" onclick="saveLeadField(this, '{!leadTerritory.Id}', '{!leadField.Id}');">
+                                  <span class="glyphicon glyphicon-saved"></span>
+                              </a>
+                              <a href="javascript:void(0)" title="Cancel" onclick="cancelRow(this)">
+                                  <span class="glyphicon glyphicon-remove"></span>
+                              </a>
+                            </td>
+                          </tr>
+                          </apex:repeat>
+                          <tr class="leadfield-addrow collapse">
+                            <td>
+                              <apex:selectList styleClass="form-control input-sm sourceSelectList" size="1" onchange="displayField(this);">
+                                <apex:selectOptions value="{!leadFields}"/>
+                              </apex:selectList>
+                            </td>
+                            <td>
+                              <apex:selectList styleClass="form-control input-sm" size="1" multiselect="false">
+                                <apex:selectOption itemLabel="--None--" itemValue=""/>
+                                <apex:selectOption itemLabel="equals" itemValue="equals"/>
+                                <apex:selectOption itemLabel="not equal to" itemValue="not equal to"/>
+                              </apex:selectList>
+                            </td>
+                            <td>
+                              <input type="text" class="form-control input-sm inputText"/>
+                              <select class="form-control input-sm selectList">
+                                <option>--None--</option>
+                              </select>
+                            </td>
+                            <td>
+                              <a href="" title="Save" onclick="saveLeadField(this, '{!leadTerritory.Id}');">
+                                <span class="glyphicon glyphicon-saved"></span>
+                              </a> 
+                              <a href=".leadfield-addrow" data-toggle="collapse" title="Cancel">
+                                <span class="glyphicon glyphicon-remove"></span>
+                              </a>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div><!-- /table-responsive -->
+                  </div>   
+                </div><!--/panel-->
+              </div>
+
+              <div class="col-xs-12">
+                <div class="panel panel-default">
+                  <div class="panel-body">
+                    <p class="clearfix">
+                      <strong>Geographic Criteria</strong>
+                      <a href="#pasteAssignmentsModal" class="pull-right" data-toggle="modal">Paste geographic assignments</a>
+                    </p>
+                    <div class="table-responsive">
+                      <table class="table table-bordered table-condensed">
+                        <thead>
+                          <tr>
+                            <th>Country</th>
+                            <th>State/Province</th>
+                            <th>Postal Start</th>
+                            <th>Postal End</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <apex:repeat value="{!currentGeos}" var="geography">
+                          <tr>
+                            <td>{!geography.Country__c}</td>
+                            <td>{!geography.State__c}</td>
+                            <td>{!geography.Zip_Start__c}</td>
+                            <td>{!geography.Zip_End__c}</td>
+                            <td>
+                              <a href="" title="Edit" onclick="editRow(this);">
+                                <span class="glyphicon glyphicon-edit"></span>
+                              </a> 
+                              <a href="" title="Delete" data-toggle="modal" data-target="#deleteModal" onclick="deleteRow('{!geography.Id}', 'geography');">
+                                <span class="glyphicon glyphicon-trash"></span>
+                              </a>
+                            </td>
+                          </tr>
+                          <tr class="geographic-addrow" style="display:none;">
+                            <td><input type="text" class="form-control input-sm" value="{!geography.Country__c}"/></td>
+                            <td><input type="text" class="form-control input-sm" value="{!geography.State__c}"/></td>
+                            <td><input type="text" class="form-control input-sm" value="{!geography.Zip_Start__c}"/></td>
+                            <td><input type="text" class="form-control input-sm" value="{!geography.Zip_End__c}"/></td>
+                            <td>
+                              <a href="javascript:void(0)" title="Save" onclick="saveGeography(this, '{!leadTerritory.Id}', '{!geography.Id}');">
+                                  <span class="glyphicon glyphicon-saved"></span>
+                              </a> 
+                              <a href="javascript:void(0)" title="Cancel" onclick="cancelRow(this)">
+                                  <span class="glyphicon glyphicon-remove"></span>
+                              </a>
+                            </td>
+                          </tr>
+                          </apex:repeat>
+                          <tr class="geographic-addrow collapse">
+                            <td><input type="text" class="form-control"/></td>
+                            <td><input type="text" class="form-control"/></td>
+                            <td><input type="text" class="form-control"/></td>
+                            <td><input type="text" class="form-control"/></td>
+                            <td>
+                              <a href="javascript:void(0)" title="Save" onclick="saveGeography(this, '{!leadTerritory.Id}');">
+                                  <span class="glyphicon glyphicon-saved"></span>
+                              </a> 
+                              <a href=".geographic-addrow" data-toggle="collapse" title="Cancel">
+                                  <span class="glyphicon glyphicon-remove"></span>
+                              </a>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <div class="col-xs-12" style="text-align:right;font-weight:bold;">
+                        Total Records: {!TotalRecordNumber} &nbsp;&nbsp; Total Pages: {!TotalPageNumber} &nbsp;&nbsp;Current Page:{!CurrentPageNumber}
+                        <button class="btnNoOverride btn-primary" type="button" onclick="first();" style="display:{!IF(hasFirst, '', 'none')}">First</button>
+                        <button class="btnNoOverride btn-primary" type="button" onclick="previous();" style="display:{!IF(hasPrevious, '', 'none')}">Previous</button>
+                        <button class="btnNoOverride btn-primary" type="button" onclick="next();" style="display:{!IF(hasNext, '', 'none')}">Next</button>
+                        <button class="btnNoOverride btn-primary" type="button" onclick="last();" style="display:{!IF(hasLast, '', 'none')}">Last</button>
+                    </div>
+                    </div><!-- /table-responsive -->
+                  </div>  
+                </div><!--/panel-->
+              </div>
+            </div><!--/row-->
+          </div> 
+        </div><!--/row-->
+      </div>
+    </div><!--/content-wrapper-->
+
+    <!-- Modal -->
+    <div class="modal fade" id="pasteAssignmentsModal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Create Assignments</h4>
+          </div>
+          <div class="modal-body">
+          
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="active"><a href="#Type" role="tab" data-toggle="tab">Type Assignments</a></li>
+              <li><a href="#Paste" role="tab" data-toggle="tab">Paste Assignments</a></li>
+            </ul>
+            
+            <!-- Tab panes -->
+            <div class="tab-content">
+              <div class="tab-pane active" id="Type">
+              
+                <div class="table-responsive top15">
+                    <apex:outputPanel id="singleAssignmentPanel">
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Country</th>
+                          <th>State/Provice</th>
+                          <th>Postal Start</th>
+                          <th>Postal End</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <apex:repeat value="{!newLeadTerritoryGeos}" var="assignment">
+                            <tr>
+                              <td><apex:inputText value="{!assignment.Country__c}" styleClass="form-control"/></td>
+                              <td><apex:inputText value="{!assignment.State__c}" styleClass="form-control"/></td>
+                              <td><apex:inputText value="{!assignment.Zip_Start__c}" styleClass="form-control"/></td>
+                              <td><apex:inputText value="{!assignment.Zip_End__c}" styleClass="form-control"/></td>
+                            </tr>
+                        </apex:repeat>
+                      </tbody>
+                    </table>
+                    
+                     </apex:outputPanel>
+                </div><!-- /table-responsive -->
+                
+                <a href="javascript:addMoreLeadTerritoryGeos();" class="btnNoOverride btn-default">Add More Row</a>
+                <apex:actionStatus id="statusAssignment">
+                    <apex:facet name="start">
+                        <img style="margin-top:15px;" src="/img/loading.gif" alt="loading..." />
+                    </apex:facet>
+                </apex:actionStatus>
+                
+                <hr/>
+                <button type="button" class="btnNoOverride btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btnNoOverride btn-primary" onclick="insertNewLeadTerritoryGeos();">Save changes</button>
+                
+              </div>
+              <div class="tab-pane" id="Paste">
+              
+                <p class="top15">Paste up to 400 assignments with the following format: Country, State, Postal Start, Postal End</p>
+                <apex:inputTextarea value="{!assignmentsCSV}" styleClass="form-control assignmentCsv"/>
+                
+                <hr/>
+                <button type="button" class="btnNoOverride btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btnNoOverride btn-primary" onclick="insertLeadTerritoryByCSV();">Save changes</button>
+              
+              </div>
+            </div>
+          
+          </div>
+          
+        </div>
+      </div>
+    </div>
+    <!--/pasteAssignmentsModal-->
+   
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="myModalLabel">Are you sure?</h4>
+          </div>
+          <div class="modal-body">
+            The <span id="deleteText"></span> will be deleted, correct?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btnNoOverride btn-default" data-dismiss="modal">No</button>
+            <apex:commandButton value="Yes" styleClass="btnNoOverride btn-danger" action="{!remove}" 
+                style="background-image: linear-gradient(to bottom, #d9534f 0px, #c12e2a 100%); background-repeat: repeat-x;border-color: #b92c28;"/>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--/deleteModal-->
+
+    <div class="modal fade" id="searchUserModal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <apex:outputPanel layout="block" id="searchUserResult" styleClass="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Lookup</h4>
+            <div style="width:480px; float:right">&nbsp;</div>
+            <apex:commandButton action="{!searchUser}" value="Search" style="float:right; margin-left:10px;" reRender="searchUserResult"/>
+            <apex:inputText value="{!userinfo}" styleClass="form-control" style="float:right; width:200px; height:30px;" 
+                onkeypress="if(event.keyCode==13) return false;"/>
+          </div>
+          <div class="modal-body">
+            <div style="font-size:12px;"><b>Search Results</b>: max 15 records.</div>
+            <div class="table-responsive top15" style="margin-top:2px;" id="searchResponse">
+                <apex:pageBlock rendered="{!users.size > 0}">
+                    <apex:pageBlockTable value="{!users}" var="user">
+                        <apex:column headerValue="Full Name">
+                            <a href="javascript:void(0)" data-dismiss="modal" onclick="getUser('{!user.Id}', '{!user.Name}');">{!user.Name}</a>
+                        </apex:column>
+                        <apex:column headerValue="Phone" value="{!user.Phone}"/>
+                        <apex:column headerValue="Email" value="{!user.Email}"/>
+                        <apex:column headerValue="Role" value="{!user.UserRole.Name}"/>
+                    </apex:pageBlockTable>
+                </apex:pageBlock>
+            </div>
+          </div>
+        </apex:outputPanel>
+      </div>
+    </div>
+    
+  </apex:form>
+  </body>
+</html>
+</apex:page>

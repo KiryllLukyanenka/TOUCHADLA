@@ -1,0 +1,492 @@
+<apex:page standardController="Opportunity" extensions="DealRegExtension" docType="html-5.0">    
+    <apex:stylesheet value="{!URLFOR($Resource.AppDynamicsPack, 'css/jquery-ui-1.10.4.custom.min.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.AppDynamicsPack, 'css/deal-reg.css')}" />
+    
+    <apex:includeScript value="{!URLFOR($Resource.AppDynamicsPack, 'js/jquery-1.11.1.min.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.AppDynamicsPack, 'js/jquery-ui-1.10.4.custom.min.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.AppDynamicsPack, 'js/jquery.ui.autocomplete.html.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.AppDynamicsPack, 'js/jquery.validate.min.js')}" />    
+    <apex:includeScript value="{!URLFOR($Resource.AppDynamicsPack, 'js/jquery.blockUI.js')}" />    
+    
+    <script type="text/javascript">
+        (function($) {            
+            function dialogConfirm(checkboxEle) {
+                $("#dialog-confirm").dialog({
+                    dialogClass: "no-close",
+                    buttons: [
+                        {
+                            text: "I Verify it Doesn't Exist",
+                            click: function() {                            
+                                $(this).dialog("close");
+                                $(".dependent-field-left").val("").prop("disabled", true).parent("td").removeClass("requiredCol");
+                                $("[id$=dnb-company-name]").next().remove();
+                                $(".dependent-field-right").prop("disabled", false).parent("td").addClass("requiredCol");
+                                $("[id$=dnb-number-hidden]").val("");
+                                $("[id$=primary-contact-hidden]").val("");
+                            }
+                        },
+                        {
+                            text: "Try Again",
+                            click: function() {                            
+                                $(this).dialog("close");
+                                checkboxEle.checked = false;
+                            }
+                        }
+                    ],
+                    modal: true,
+                    width: 400
+                });
+            }
+            $(function() {
+                $(".dependent-field-right").prop("disabled", true);
+                $("[id$=company-not-found]").click(function() {        
+                    if(this.checked) {
+                        dialogConfirm(this);
+                    }
+                    else {                        
+                        $("[id$=dnb-company-name]").prop("disabled", false).parent("td").addClass("requiredCol");
+                        $(".dependent-field-right").val("").prop("disabled", true).parent("td").removeClass("requiredCol");
+                    }      
+                });            
+            });
+        })(jQuery);
+    </script>
+
+    <script type="text/javascript">
+        (function($) { 
+
+            function generateCompanyResults(data) {
+                var companyResults = new Array();
+
+                if(!data || !data.FindCompanyResponse
+                || !data.FindCompanyResponse.TransactionResult
+                || data.FindCompanyResponse.TransactionResult.ResultText != 'Success') {
+
+                    return companyResults;
+                }
+                var candidates = data.FindCompanyResponse.FindCompanyResponseDetail.FindCandidate;              
+                $.each(candidates, function(index, candidate) {
+                    var company = {};
+                    if(candidate.DUNSNumber) {                        
+                        company.duns = candidate.DUNSNumber;                    
+                    }
+                    
+                    if(candidate.OrganizationPrimaryName && candidate.OrganizationPrimaryName.OrganizationName && candidate.OrganizationPrimaryName.OrganizationName.$) {
+
+                        company.companyName = candidate.OrganizationPrimaryName.OrganizationName.$
+                    }                        
+                    
+                    if(candidate.PrimaryAddress) {
+                        var primaryAddress = candidate.PrimaryAddress;
+                        if(primaryAddress.StreetAddressLine) {
+                            var addressLines = new Array();
+                            $.each(primaryAddress.StreetAddressLine, function(index, address) {
+                                 addressLines.push(address.LineText);
+                            });
+                            company.address = addressLines.join('\r\n');
+                        }
+
+                        if(primaryAddress.PrimaryTownName) {
+                            company.city = primaryAddress.PrimaryTownName;        
+                        }
+
+                        if(primaryAddress.TerritoryOfficialName) {
+                            company.stateOrProvince = primaryAddress.TerritoryOfficialName;  
+                        }
+
+                        if(primaryAddress.PostalCode) {
+                            company.postalCode = primaryAddress.PostalCode;        
+                        }
+
+                        if(primaryAddress.CountryISOAlpha2Code) {
+                            company.country = primaryAddress.CountryISOAlpha2Code;        
+                        }                        
+                    }
+                    company.label = '<div class="ui-company-name">' + company.companyName + '</div>' + '<div class="ui-company-detail">' + company.city + ', ' + company.stateOrProvince + '</div>';
+                    company.value = company.companyName;                                                      
+                    companyResults.push(company);
+                });
+                
+                return companyResults;
+            }   
+
+            $(function() {
+                var companyNameInput = $("[id$=dnb-company-name]");
+                companyNameInput.autocomplete({
+                    source: function(request, response) {
+                        $.ajax({
+                            url: "{!$Page.DnBSearchResult}",
+                            data: {"term": request.term},
+                            dataType: "json",
+                            success: function(data) {
+                                var companyResults = generateCompanyResults(data);
+                                response(companyResults);                  
+                            }             
+                        });
+                    },
+                    delay: 500,
+                    html: true,
+                    minLength: 2,
+                    select: function(event, ui) {
+                        $("#dnb-company-number").val(ui.item.duns);                        
+                        $("#dnb-street").val(ui.item.address);                        
+                        $("#dnb-city").val(ui.item.city);
+                        $("#dnb-state").val(ui.item.stateOrProvince);
+                        $("#dnb-zip").val(ui.item.postalCode);
+                        $("#dnb-country").val(ui.item.country);                        
+
+                        // Hidden fields are used to save these fields value to database, as the
+                        // the standard input fields are always disabled.
+                        $("[id$=dnb-number-hidden]").val(ui.item.duns);
+                        $("[id$=dnb-street-hidden]").val(ui.item.address);
+                        $("[id$=dnb-city-hidden]").val(ui.item.city);
+                        $("[id$=dnb-state-hidden]").val(ui.item.stateOrProvince);
+                        $("[id$=dnb-zip-hidden]").val(ui.item.postalCode);
+                        $("[id$=dnb-country-hidden]").val(ui.item.country);
+                        
+                        var contactEmailInput = $("[id$=contact-email]");
+                        if(contactEmailInput.val() != "") {
+                            contactEmailInput.change();
+                        }
+                    }
+                });
+                
+                if(companyNameInput.val() != "")
+                {
+                    companyNameInput.autocomplete("search");
+                }
+            });    
+        })(jQuery);
+    </script>
+
+    <script type="text/javascript">
+        (function($) {
+            function searchContact(input, contactEmail, contactNumber) {
+                input.addClass("ui-autocomplete-loading");
+                Visualforce.remoting.Manager.invokeAction(
+                    "{!$RemoteAction.DealRegExtension.getPrimaryContact}",
+                    contactEmail,
+                    contactNumber,
+                    function(result, event) {                                        
+                        if(result != null) {
+                            $("[id$=contact-phone]").val(result.Phone);
+                            $("[id$=contact-firstname]").val(result.FirstName);
+                            $("[id$=contact-lastname]").val(result.LastName);
+                            $("[id$=contact-title]").val(result.Title);
+                            $("[id$=primary-contact-hidden]").val(result.Id);
+                        }
+                        else {
+                            $("[id$=primary-contact-hidden]").val("");
+                        }
+                        input.removeClass('ui-autocomplete-loading');
+                    },
+                    {escape: true}
+                );
+                }
+            $(function() {                
+                $("[id$=contact-email]").change(function() {                    
+                    var companyNotFound = $("[id$=company-not-found]").prop("checked");
+                    if(!companyNotFound) {
+                        var input = $(this);
+                        var contactEmail = input.val();
+                        var companyNumber = $("#dnb-company-number").val();
+                        if(contactEmail != "" && companyNumber != "") {
+                            searchContact(input, contactEmail, companyNumber);
+                        }
+                    }                    
+                });
+            });            
+        })(jQuery);
+    </script>
+
+    <script type="text/javascript">
+        (function() {
+            $(function() {
+                $("#opp-detail select").each(function() {
+                    $(this).children("option").first().text($(this).attr("placeholder"));
+                });
+            });
+        })(jQuery);
+    </script>
+
+    <script type="text/javascript">
+        
+        // Enable the "Employee Name" input when the select above it is selected "Yes",
+        // otherwise, disable the "Employee Name" input.        
+        (function() {
+            function toggleEmployeeName(employeeEngaged) {
+                var employeeName = $("[id$=ad-employee-name]");
+                if(employeeEngaged.val() == 'Yes') {
+                    employeeName.prop("disabled", false).parent("td").addClass("requiredCol");
+                }
+                else {
+                    employeeName.val("").prop("disabled", true).parent("td").removeClass("requiredCol");
+                    employeeName.next("label").remove();
+                }
+            }
+            $(function() {
+                // Disable/Enable the Employee Name input when the page loads.
+                var employeeEngagedSelect = $("[id$=ad-employee-engaged]");
+                toggleEmployeeName(employeeEngagedSelect);
+                // Disable/Enable the Employee Name input when the select above it changes.
+                employeeEngagedSelect.change(function() {
+                    toggleEmployeeName($(this));
+                });
+            });
+        })(jQuery);
+    </script>
+
+    <script type="text/javascript">
+        (function($) {
+            $(function() {
+                var dealForm = $("[id$=deal-reg]");
+                dealForm.validate();
+                $("[id$=submit]").click(function() {
+                    
+                    if(dealForm.valid()) {
+                        $.blockUI();
+                    }
+
+                    var appStackOptions = new Array();
+                    $("[name=ad-application-stack]:checked").each(function() {
+                        appStackOptions.push($(this).val());
+                    });
+                    $("[id$=application-stack-hidden]").val(appStackOptions.join(";"));
+
+                    var productPursingOptions = new Array();
+                    $("[name=ad-product-pursing]:checked").each(function() {
+                        productPursingOptions.push($(this).val());
+                    });
+                    $("[id$=product-pursing-hidden]").val(productPursingOptions.join(";"));
+                });                
+            });
+        })(jQuery);
+    </script>
+
+    <apex:sectionHeader title="Deal Registration" />
+    <apex:form id="deal-reg" styleClass="ad-form">
+        <apex:pageMessages />
+        <!-- When the input fields are disabled, the value can't be passed to background, -->
+        <!-- so, we need to add some hidden fields to save these fields to database. -->
+        <apex:inputHidden value="{!DnBAccount.DunsNumber}" id="dnb-number-hidden" />
+        <apex:inputHidden value="{!DnBAccount.BillingStreet}" id="dnb-street-hidden" />
+        <apex:inputHidden value="{!DnBAccount.BillingCity}" id="dnb-city-hidden" />
+        <apex:inputHidden value="{!DnBAccount.BillingState}" id="dnb-state-hidden" />
+        <apex:inputHidden value="{!DnBAccount.BillingPostalCode}" id="dnb-zip-hidden" />
+        <apex:inputHidden value="{!DnBAccount.BillingCountry}" id="dnb-country-hidden" />
+
+        <apex:inputHidden value="{!DealReg.Application_Stack__c}" id="application-stack-hidden" />
+        <apex:inputHidden value="{!DealReg.DR_Products_Pursing__c}" id="product-pursing-hidden" />
+
+        <div class="bPageBlock" style="border-top: 3px solid #38B4E7; background-color: #FFFFFF">
+            <!-- Company Info -->
+            <div class="ad-section" id="companyinfo">            
+                <div class="ad-section-header">Company Info</div>
+                <div class="ad-section-content">
+                    <!-- DnB Account -->
+                    <table width="48%" cellspacing="10" style="float: left;">
+                        <tr>
+                            <td class="requiredCol"><apex:inputText value="{!DnBAccount.Name}" html-placeholder="Company Name" styleClass="ad-input dependent-field-left required" id="dnb-company-name" disabled="{!DealReg.DR_Company_Not_Found__c}" /></td>
+                        </tr>
+                        <tr>
+                            <td><input id="dnb-company-number" class="ad-input dependent-field-left" disabled="true" placeholder="D&B Number" /></td>
+                        </tr>
+                        <tr>
+                            <td><textarea id="dnb-street" class="ad-input dependent-field-left" disabled="disabled" placeholder="Billing Address"></textarea></td>
+                        </tr>
+                        <tr>
+                            <td><input id="dnb-city" type="text" class="ad-input dependent-field-left" disabled="disabled" placeholder="Billing City" /></td>
+                        </tr>
+                        <tr>
+                            <td><input id="dnb-state" type="text" class="ad-input dependent-field-left" disabled="disabled" placeholder="Billing State" /></td>
+                        </tr>
+                        <tr>
+                            <td><input id="dnb-zip" type="text" class="ad-input dependent-field-left" disabled="disabled" placeholder="Billing Zip" /></td>
+                        </tr>
+                        <tr>
+                            <td><input id="dnb-country" type="text" class="ad-input dependent-field-left" disabled="disabled" placeholder="Billing Country" /></td>
+                        </tr>                   
+                    </table>                    
+                    <!-- DR Company Info when the DnB Account is not found -->
+                    <table width="48%" cellspacing="10">
+                        <tr>                        
+                            <td class="ad-checkbox-td">
+                                <apex:inputCheckbox value="{!DealReg.DR_Company_Not_Found__c}" styleClass="ad-checkbox-input" id="company-not-found" /><span class="ad-checkbox-label">Company Not Found</span>
+                            </td>
+                        </tr>
+                        <tr>                        
+                            <td><apex:inputText value="{!DRAccount.Name}" html-placeholder="Company Name" styleClass="ad-input dependent-field-right required" id="dr-company-name" /></td>
+                        </tr>
+                        <tr>                        
+                            <td><apex:inputTextarea value="{!DRAccount.BillingStreet}" html-placeholder="Address" styleClass="ad-input dependent-field-right required" id="dr-address" /></td>
+                        </tr>
+                        <tr>                        
+                            <td><apex:inputText value="{!DRAccount.BillingCity}" html-placeholder="City" styleClass="ad-input dependent-field-right required" id="dr-city" /></td>
+                        </tr>
+                        <tr>                        
+                            <td><apex:inputText value="{!DRAccount.BillingState}" html-placeholder="State/Province" styleClass="ad-input dependent-field-right required" id="dr-state" /></td>
+                        </tr>
+                        <tr>                        
+                            <td><apex:inputText value="{!DRAccount.BillingPostalCode}" html-placeholder="Zip" styleClass="ad-input dependent-field-right required" id="dr-zip" /></td>
+                        </tr>
+                        <tr>                        
+                            <td><apex:inputText value="{!DRAccount.BillingCountry}" html-placeholder="Country" styleClass="ad-input dependent-field-right required" id="dr-country" /></td>
+                        </tr>
+                    </table>
+                    <div style="clear: both;"></div>
+                </div>                                
+            </div>
+
+            <!-- Primary Contact -->
+            <div class="ad-section" id="primary-contact">
+                <div class="ad-section-header">Primary Contact</div>   
+                <div class="ad-section-content">
+                    <table width="48%" cellspacing="10" style="float: left;">
+                        <tr>
+                            <td class="requiredCol"><apex:inputText value="{!PrimaryContact.Email}" html-placeholder="Email Address" styleClass="ad-input required" id="contact-email" /></td>                            
+                        </tr>
+                        <tr>
+                            <td class="requiredCol"><apex:inputText value="{!PrimaryContact.Phone}" html-placeholder="Contact Phone" styleClass="ad-input required" id="contact-phone" /></td>                            
+                        </tr>
+                        <!-- Sets Primary Contact for DealReg if the company name is found from DnB and the Contact is found
+                        in Salesfore based on the contact email -->
+                        <tr>
+                            <td><apex:inputHidden value="{!DealReg.Primary_Contact__c}" id="primary-contact-hidden" /></td>                            
+                        </tr>
+                    </table>
+                    <table width="48%" cellspacing="10">
+                        <tr>
+                            <td class="requiredCol"><apex:inputField value="{!PrimaryContact.FirstName}" html-placeholder="Contact First Name" styleClass="ad-input required" id="contact-firstname" /></td>
+                        </tr>
+                        <tr>
+                            <td class="requiredCol"><apex:inputField value="{!PrimaryContact.LastName}" html-placeholder="Contact Last Name" required="false" styleClass="ad-input required" id="contact-lastname" /></td>
+                        </tr>
+                        <tr>
+                            <td class="requiredCol"><apex:inputField value="{!PrimaryContact.Title}" html-placeholder="Title" styleClass="ad-input required" id="contact-title" /></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Client Organization -->
+            <div class="ad-section" id="client-org">
+                <div class="ad-section-header">Client Organization</div>
+                <div class="ad-section-content">
+                    <table width="100%" cellspacing="10">                        
+                        <tr>
+                            <td class="ad-left-td">{!$ObjectType.Opportunity.fields.DR_Existing_Client__c.inlineHelpText}</td>
+                            <td class="requiredCol"><apex:inputField value="{!DealReg.DR_Existing_Client__c}" styleClass="ad-input required" /></td>
+                        </tr>        
+                        <tr>
+                            <td class="ad-left-td">{!$ObjectType.Opportunity.fields.DR_Primary_APM_Solution__c.inlineHelpText}</td>
+                            <td class="requiredCol"><apex:inputField value="{!DealReg.DR_Primary_APM_Solution__c}" styleClass="ad-input required" /></td>
+                        </tr>        
+                        <tr>
+                            <td class="ad-left-td">{!$ObjectType.Opportunity.fields.DR_Executive_Approval__c.inlineHelpText}</td>
+                            <td class="requiredCol"><apex:inputField value="{!DealReg.DR_Executive_Approval__c}" styleClass="ad-input required" /></td>
+                        </tr>        
+                        <tr>
+                            <td class="ad-left-td">{!$ObjectType.Opportunity.fields.AD_Employee_Engaged__c.inlineHelpText}</td>
+                            <td class="requiredCol"><apex:inputField value="{!DealReg.AD_Employee_Engaged__c}" styleClass="ad-input required" id="ad-employee-engaged" /></td>
+                        </tr>       
+                        <tr>
+                            <td class="ad-left-td">Employee Name</td>
+                            <td><apex:inputField value="{!DealReg.AD_Partner_Engaged_Employee__c}" styleClass="ad-input required" id="ad-employee-name" /></td>
+                        </tr>       
+                        <tr>
+                            <td colspan="2">{!$ObjectType.Opportunity.fields.Application_Stack__c.inlineHelpText}</td>                            
+                        </tr>                                                  
+                        <tr>
+                            <td colspan="2" class="ad-checkbox-td requiredCol">                                  
+                                <apex:repeat value="{!ApplicationStackOptions}" var="option">
+                                    <div class="ad-checkbox-component">
+                                        <input type="checkbox" class="ad-checkbox-input required" name="ad-application-stack" value="{!option}" />
+                                        <span class="ad-checkbox-label">{!option}</span>
+                                    </div>                                    
+                                </apex:repeat>                            
+                                <div style="clear: both"><label for="ad-application-stack" class="error">This field is required.</label></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="ad-left-td">{!$ObjectType.Opportunity.fields.DR_Number_of_Agents__c.inlineHelpText}</td>
+                            <td class="requiredCol"><apex:inputField value="{!DealReg.DR_Number_of_Agents__c}" styleClass="ad-input required" /></td>
+                        </tr>        
+                        <tr>
+                            <td colspan="2">{!$ObjectType.Opportunity.fields.DR_Products_Pursing__c.inlineHelpText}</td>                            
+                        </tr>                               
+                        <tr>
+                            <td colspan="2" class="ad-checkbox-td requiredCol">  
+                                <apex:repeat value="{!PursingProductOptions}" var="option">
+                                    <div class="ad-checkbox-component">
+                                        <input type="checkbox" class="ad-checkbox-input required" name="ad-product-pursing" value="{!option}" />
+                                        <span class="ad-checkbox-label">{!option}</span>
+                                    </div>                                    
+                                </apex:repeat>     
+                                <div style="clear: both;"><label for="ad-product-pursing" class="error">This field is required.</label></div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Opportunity Details -->
+            <div class="ad-section" id="opp-detail">
+                <div class="ad-section-header">Opportunity Details</div>
+                <div class="ad-section-content">
+                    <table width="48%" cellspacing="10" style="float: left;">
+                        <tr>
+                            <td class="requiredCol"><apex:inputField value="{!DealReg.Amount}" html-placeholder="Approximate Amount" styleClass="ad-input required" /></td>
+                        </tr>
+                        <tr>
+                            <td class="requiredCol">
+                                <apex:inputField value="{!DealReg.CloseDate}" html-placeholder="Expected Close Date" styleClass="ad-input required" required="false" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="requiredCol"><apex:inputField value="{!DealReg.Type}" styleClass="ad-input required" /></td>
+                        </tr>
+                        <tr>
+                            <td class="requiredCol"><apex:inputField value="{!DealReg.Deal_Type__c}" html-placeholder="--Deal Type--" styleClass="ad-input required" /></td>
+                        </tr>
+                        <tr>
+                            <td class="requiredCol"><apex:inputField value="{!DealReg.Opportunity_Type__c}" html-placeholder="--Opportunity Type--" styleClass="ad-input required" /></td>
+                        </tr> 
+                        <tr>
+                            <td class="requiredCol"><apex:inputField value="{!DealReg.Project_Country__c}" html-placeholder="--Project Country--" styleClass="ad-input required" /></td>
+                        </tr>                                           
+                    </table>
+                    <table width="48%" cellspacing="10"> 
+                        <tr>                        
+                            <td class="requiredCol"><apex:inputField value="{!DealReg.CurrencyIsoCode}" styleClass="ad-input required" required="false" /></td>
+                        </tr>                       
+                        <tr>                        
+                            <td class="requiredCol"><apex:inputField value="{!DealReg.DR_Primary_Competitor__c}" html-placeholder="--Competitor--" styleClass="ad-input required" /></td>
+                        </tr>
+                        <tr>                        
+                            <td class="requiredCol"><apex:inputField value="{!DealReg.DR_Deal_Timeframe__c}" html-placeholder="--Deal Timeframe--" styleClass="ad-input required" /></td>
+                        </tr>
+                        <tr>                        
+                            <td class="requiredCol"><apex:inputField value="{!DealReg.Next_Steps__c}" html-placeholder="Sales Next Step" styleClass="ad-input required" /></td>
+                        </tr>                        
+                    </table>
+                    <table width="100%" cellspacing="10" id="opp-description">                        
+                        <tr>                        
+                            <td class="requiredCol"><apex:inputField value="{!DealReg.Description}" html-placeholder="Opportunity Description" styleClass="ad-input required" /></td>
+                        </tr>                       
+                    </table>
+                </div>
+            </div>
+
+            <!-- Bottom Buttons -->
+            <div class="ad-bottom-buttons">
+                <apex:commandButton value="Submit" action="{!save}" id="submit" />
+                <apex:commandButton value="Cancel" action="{!cancel}" styleClass="cancel" />
+            </div>
+        </div>
+    </apex:form>
+
+    <!-- Dialog Confirm -->
+    <div id="dialog-confirm" title="Company Not Found?">
+        <p>Dunn &amp; Bradstreet contains 200 million companies, are you positive that company doesn&apos;t exist?</p>
+    </div>
+</apex:page>

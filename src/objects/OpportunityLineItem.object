@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>AddProduct</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>ChoosePricebook</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>EditAllProduct</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>Celigo_Product_Group_Internal_Order__c</fullName>
+        <externalId>false</externalId>
+        <label>Celigo Product Group Internal Order</label>
+        <precision>4</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Celigo_Product_Group_Quantity__c</fullName>
+        <externalId>false</externalId>
+        <label>Product Group Quantity</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Celigo_Product_Group__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Celigo Product Group</label>
+        <referenceTo>Product_Group__c</referenceTo>
+        <relationshipLabel>Opportunity Product</relationshipLabel>
+        <relationshipName>Opportunity_Product</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Description</fullName>
+    </fields>
+    <fields>
+        <fullName>Description__c</fullName>
+        <description>Longer Description</description>
+        <externalId>false</externalId>
+        <label>Description</label>
+        <length>32000</length>
+        <type>LongTextArea</type>
+        <visibleLines>20</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Discount</fullName>
+    </fields>
+    <fields>
+        <fullName>Distributor_Margin_Calc_Amount__c</fullName>
+        <description>Old Value:
+
+IF(TotalPrice &lt;= 0, 0, 
+
+IF(OR(Product_Family__c = &quot;Hosting&quot;, Product_Family__c = &quot;Other&quot;, Product_Family__c = &quot;Discount&quot;, Product_Family__c = &quot;User Conference&quot;),0, 
+
+IF( Opportunity.Partner_Margin_Discount_Calc_Total_Price__c = 0, 0, 
+
+IF( 
+AND( 
+Product_Family__c &lt;&gt;&quot;Hosting&quot;, 
+Product_Family__c &lt;&gt;&quot;Other&quot;, 
+Product_Family__c &lt;&gt;&quot;User Conference&quot;, 
+Product_Family__c &lt;&gt;&quot;Discount&quot;),(( TotalPrice / Opportunity.Partner_Margin_Discount_Calc_Total_Price__c) * ( Opportunity.Federal_Distributor_Margin_Amount__c )), 
+
+0))))</description>
+        <externalId>false</externalId>
+        <formula>IF(TotalPrice &lt;= 0, 0, 
+
+IF(Product_Family__c = &quot;Discount&quot;,0, 
+
+IF( Opportunity.Gross_Total_Price__c = 0, 0, 
+
+IF( Product_Family__c &lt;&gt; &quot;Discount&quot;,
+(( TotalPrice / Opportunity.Gross_Total_Price__c) * ( Opportunity.Federal_Distributor_Margin_Amount__c)), 
+
+0))))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Distributor Margin Calc Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>10</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Ignore_this_product_for_NS_sync__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF( Product_Name__c == &apos;Partner Margin Discount&apos;, true,  IF(Product_Name__c == &apos;One Time Discount&apos;, true, IF(Product_Name__c == &apos;Federal Distributor Margin Discount&apos;, true, false)) )</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Ignore this product for NS sync</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>ListPrice</fullName>
+    </fields>
+    <fields>
+        <fullName>List_Price2__c</fullName>
+        <description>IF(ISPICKVAL( PricebookEntry.Product2.Perpetual_Support_Type__c , &quot;Renewal&quot;), Perpetual_Support_Renewal_Price__c ,
+IF(ISPICKVAL(PricebookEntry.Product2.Perpetual_Support_Type__c, &quot;New Order&quot;), UnitPrice,
+PricebookEntry.UnitPrice))</description>
+        <externalId>false</externalId>
+        <formula>IF(ISPICKVAL( PricebookEntry.Product2.Perpetual_Support_Type__c , &quot;Renewal&quot;), Perpetual_Support_Renewal_Price__c ,
+IF(ISPICKVAL(PricebookEntry.Product2.Perpetual_Support_Type__c, &quot;New Order&quot;), UnitPrice,
+PricebookEntry.UnitPrice))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>List Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Months__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter a value in this field only if the Product is Monthly.</inlineHelpText>
+        <label>Months</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Net_List_Price__c</fullName>
+        <externalId>false</externalId>
+        <formula>Net_Total_Price__c / Quantity</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Net List Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Net_Total_Price__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF( 
+OR(TotalPrice &lt;= 0,Product_Family__c = &quot;Discount&quot;), 0, 
+TotalPrice - One_Time_Discount_Calc_Amount__c - Partner_Margin_Calc_Amount__c - Distributor_Margin_Calc_Amount__c)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Net Total Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>New_Or_Renewal__c</fullName>
+        <externalId>false</externalId>
+        <label>New Or Renewal</label>
+        <picklist>
+            <picklistValues>
+                <fullName>New Business</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Renewal Business</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>One_Time_Discount_Calc_Amount__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF( 
+OR(Product_Family__c = &quot;Discount&quot;, TotalPrice &lt;= 0), 0, 
+
+((TotalPrice/Opportunity.Gross_Total_Price__c) * Opportunity.One_Time_Discount_Amount__c)
+
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>One Time Discount Calc Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>10</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>One_Time_Discount__c</fullName>
+        <defaultValue>0</defaultValue>
+        <externalId>false</externalId>
+        <label>One Time Discount %</label>
+        <precision>11</precision>
+        <required>false</required>
+        <scale>8</scale>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>OpportunityId</fullName>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Partner_Margin_Calc_Amount__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(TotalPrice &lt;= 0, 0, 
+
+IF(OR(Product_Family__c = &quot;Hosting&quot;, Product_Family__c = &quot;Other&quot;, Product_Family__c = &quot;Discount&quot;, Product_Family__c = &quot;User Conference&quot;),0,
+ 
+IF( Opportunity.Partner_Margin_Discount_Calc_Total_Price__c = 0, 0,
+
+IF( 
+AND(  
+Product_Family__c &lt;&gt;&quot;Hosting&quot;, 
+Product_Family__c &lt;&gt;&quot;Other&quot;,  
+Product_Family__c &lt;&gt;&quot;User Conference&quot;, 
+Product_Family__c &lt;&gt;&quot;Discount&quot;),(( TotalPrice / Opportunity.Partner_Margin_Discount_Calc_Total_Price__c) * (  Opportunity.Total_Partner_Margin_Amount__c )), 
+
+0))))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Partner Margin Calc Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>10</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Partner_Margin__c</fullName>
+        <defaultValue>0</defaultValue>
+        <externalId>false</externalId>
+        <label>Partner Margin Discount %</label>
+        <precision>11</precision>
+        <required>false</required>
+        <scale>8</scale>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Perpetual_Support_Renewal_Price__c</fullName>
+        <externalId>false</externalId>
+        <label>Perpetual Support Renewal Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Premium_Sub_Support_Product__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(ISPICKVAL(PricebookEntry.Product2.Family, &apos;Premium Subscription Support&apos;), 1, 0)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Premium Sub Support Product</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Product2Id</fullName>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>ProductCode</fullName>
+    </fields>
+    <fields>
+        <fullName>Product_Code__c</fullName>
+        <externalId>false</externalId>
+        <formula>PricebookEntry.Product2.ProductCode</formula>
+        <label>Product Code</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Product_Family__c</fullName>
+        <externalId>false</externalId>
+        <label>Product Family</label>
+        <length>80</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Product_Name__c</fullName>
+        <externalId>false</externalId>
+        <formula>PricebookEntry.Product2.Name</formula>
+        <label>Product Name</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>QConfig__Model_Name__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF(QConfig__Model__c != null, QConfig__Model__r.QConfig__Display_Name__c, &apos;&apos;)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Configuration Name</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>QConfig__Model__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Configuration</label>
+        <referenceTo>QConfig__Model__c</referenceTo>
+        <relationshipLabel>Opportunity Product</relationshipLabel>
+        <relationshipName>Opportunity_Product</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>QConfig__Product_Key__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Used by configuration to link configured items</description>
+        <externalId>false</externalId>
+        <inlineHelpText>This field is automatically populated.</inlineHelpText>
+        <label>Product Key</label>
+        <referenceTo>QConfig__Prescribed_Product__c</referenceTo>
+        <relationshipLabel>Opportunity Product</relationshipLabel>
+        <relationshipName>Opportunity_Product</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Quantity</fullName>
+    </fields>
+    <fields>
+        <fullName>ServiceDate</fullName>
+    </fields>
+    <fields>
+        <fullName>Subscription_Duration__c</fullName>
+        <externalId>false</externalId>
+        <formula>TEXT(PricebookEntry.Product2.Subscription_Duration__c)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Subscription Duration</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Subtotal</fullName>
+    </fields>
+    <fields>
+        <fullName>TotalPrice</fullName>
+    </fields>
+    <fields>
+        <fullName>Total_Price_Net_Fed_Dist_Margin__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(
+OR(TotalPrice &lt;= 0,Product_Family__c = &quot;Discount&quot;), 0, 
+TotalPrice - One_Time_Discount_Calc_Amount__c - Partner_Margin_Calc_Amount__c - Distributor_Margin_Calc_Amount__c)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Total Price Net Fed Dist Margin</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Total_Price_Net_One_Time_Discount__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(
+OR(TotalPrice &lt;= 0,Product_Family__c = &quot;Discount&quot;),
+0,
+TotalPrice - One_Time_Discount_Calc_Amount__c
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Total Price Net One Time Discount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Total_Price_Net_Partner_Margin__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(
+
+OR(TotalPrice &lt;= 0,Product_Family__c = &quot;Discount&quot;),0,
+
+TotalPrice -  One_Time_Discount_Calc_Amount__c  -  Partner_Margin_Calc_Amount__c)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Total Price Net Partner Margin</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Training_Unit__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Training Unit</label>
+        <referenceTo>Training_Unit__c</referenceTo>
+        <relationshipLabel>Opportunity Product</relationshipLabel>
+        <relationshipName>Opportunity_Product</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>UnitPrice</fullName>
+    </fields>
+    <fields>
+        <fullName>Volume_Discount__c</fullName>
+        <defaultValue>0</defaultValue>
+        <externalId>false</externalId>
+        <label>Volume Discount %</label>
+        <precision>5</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>remove__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>remove</label>
+        <type>Checkbox</type>
+    </fields>
+    <validationRules>
+        <fullName>No_Discount_on_Microservices</fullName>
+        <active>true</active>
+        <errorConditionFormula>AND (Product2.No_Discount__c  = TRUE,
+OR ( (  Partner_Margin__c  &gt; 0 ),
+ ( One_Time_Discount__c &gt; 0 ),
+ ( Volume_Discount__c &gt; 0 )))</errorConditionFormula>
+        <errorDisplayField>Discount</errorDisplayField>
+        <errorMessage>Microservices cannot be discounted</errorMessage>
+    </validationRules>
+</CustomObject>
