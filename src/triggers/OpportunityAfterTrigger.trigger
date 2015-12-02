@@ -1,7 +1,7 @@
 trigger OpportunityAfterTrigger on Opportunity (after insert, after update) {
     // Added by eric@touchpointcrm.com on 2014-6-11
     
-    // Creates the map from the opportunity to their primary contact
+    // Create the map from the opportunity to their primary contact
     Map<String, String> primaryContactIds = new Map<String, String>();
     for(Opportunity oppt : Trigger.new){
         if(oppt.Primary_Contact__c != null && (Trigger.isInsert || Trigger.oldMap.get(oppt.Id).Primary_Contact__c == null)){
