@@ -19,6 +19,12 @@
 						<apex:actionSupport event="onchange" rerender="licenseDetails,licenseProducts"/>
 						<apex:selectOptions value="{!editionSelectOptions}"></apex:selectOptions>
 					</apex:selectList> -->
+					<!-- apex:selectList value="{!licenseObj.edition}"
+						id="productType" styleClass="product_type" multiselect="false"
+						size="1">
+						<apex:actionSupport event="onchange" rerender="licenseDetails,licenseProducts"/>
+						<apex:selectOptions value="{!editionSelectOptions}"></apex:selectOptions>
+					</apex:selectList> -->
 				</apex:pageBlockSectionItem>
 				
 				<apex:pageBlockSectionItem id="deploymentSection">
@@ -78,9 +84,10 @@
 						id="macValId" />
 				</apex:PageBlockSectionItem>
 			</apex:pageBlockSection>
+
 			<apex:pageBlockSection id="licenseProducts" title="License Products" collapsible="false"
 				columns="1">
-				<apex:repeat id="agentsRepeat" value="{!productCategories}"
+				<apex:repeat id="agentsRepeat" value="{!productCategories}" 
 					var="agentCategory">
 					<div class="hideCurrDate">
 						<apex:pageBlockSection id="agentsSection"
